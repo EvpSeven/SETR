@@ -76,7 +76,7 @@ double vSum(int *vect){
  * \author André Brandão
  * 
  * \param[in] array array with SIZE elements
- * \return average of the array
+ * \return double average of the array
 */
 int vAvg(int *array)
 {
