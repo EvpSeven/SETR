@@ -1,5 +1,17 @@
+/** \file main.c
+ * \brief Program to manipulate array
+ * 
+ * Initializes an array of SIZE elements with natural numbers starting from 1 to SIZE.
+ * Computes and prints sum and average of the array;
+ * 
+ *	\author André Brandão
+ *	\author Emanuel Pereira
+ *	\date 15/03/2022
+*/
+
 #include <stdio.h>
 
+/** \brief Size of the vector*/
 #define SIZE 10
 
 void vInit(int*);  
@@ -43,7 +55,13 @@ double vSum(int *vect){
     return sum;
 }
 
-// Computes Average
+/** \brief Computes the average of the array
+ * 
+ * \author André Brandão
+ * 
+ * \param[in] array array with SIZE elements
+ * \return average of the array
+*/
 int vAvg(int *array)
 {
 	int sum = 0;
