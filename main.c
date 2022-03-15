@@ -32,6 +32,12 @@ int main(void)
 
 }
 
+/** \brief This function initialize array with N numbers each position increase one more compare with last position
+*
+*
+* \author evp
+* \param[in] vect Blank array with N numbers
+*/
 void vInit(int *vect){
 
 	printf("V = ");
@@ -44,6 +50,16 @@ void vInit(int *vect){
 	printf("\n");
 }
 
+
+/** \brief Sum of array with N numbers
+*
+* 
+*
+* \author evp
+* \param[in] vect Array with N numbers
+* \param[out] sum Array Sum
+* \return double sum
+*/
 double vSum(int *vect){
 
     double sum=0;
@@ -73,4 +89,3 @@ int vAvg(int *array)
 
 	return sum / SIZE;
 }
-
