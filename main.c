@@ -1,8 +1,8 @@
 /** \file main.c
  * \brief Program to manipulate array
  * 
- * Initializes an array of SIZE elements with natural numbers starting from 1 to SIZE.
- * Computes and prints sum and average of the array;
+ * Initializes an array of \ref SIZE elements with natural numbers starting from 1 to SIZE.\n 
+ * Computes and prints sum and average of the array.
  * 
  *	\author André Brandão
  *	\author Emanuel Pereira
@@ -11,12 +11,14 @@
 
 #include <stdio.h>
 
-/** \brief Size of the vector*/
+/** \brief Size of the vector
+ * \def SIZE
+*/
 #define SIZE 10
 
 void vInit(int*);  
 double vSum(int*);
-int vAvg(int*);
+double vAvg(int*);
 
 int main(void)
 {
@@ -32,11 +34,10 @@ int main(void)
 
 }
 
-/** \brief This function initialize array with N numbers each position increase one more compare with last position
+/** \brief This function initialize array with \ref SIZE natural numbers starting from 1 to \ref SIZE
 *
-*
-* \author evp
-* \param[in] vect Blank array with N numbers
+* \author Emanuel Pereira
+* \param[in] vect Blank array with \ref SIZE numbers
 */
 void vInit(int *vect){
 
@@ -51,14 +52,12 @@ void vInit(int *vect){
 }
 
 
-/** \brief Sum of array with N numbers
+/** \brief Sum of array with \ref SIZE numbers
 *
-* 
+* \author Emanuel Pereira
 *
-* \author evp
-* \param[in] vect Array with N numbers
-* \param[out] sum Array Sum
-* \return double sum
+* \param[in] vect Array with \ref SIZE numbers
+* \return sum of the array
 */
 double vSum(int *vect){
 
@@ -75,10 +74,10 @@ double vSum(int *vect){
  * 
  * \author André Brandão
  * 
- * \param[in] array array with SIZE elements
- * \return double average of the array
+ * \param[in] array array with \ref SIZE elements
+ * \return average of the array
 */
-int vAvg(int *array)
+double vAvg(int *array)
 {
 	int sum = 0;
 

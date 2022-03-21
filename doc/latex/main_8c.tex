@@ -23,10 +23,10 @@ Include dependency graph for main.\+c\+:\nopagebreak
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{main_8c_a7b9b1bc2f0aedf997bc16934d313576c}{v\+Init}} (int $\ast$vect)
-\begin{DoxyCompactList}\small\item\em This function initialize array with N numbers each position increase one more compare with last position. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em This function initialize array with \mbox{\hyperlink{main_8c_a70ed59adcb4159ac551058053e649640}{S\+I\+ZE}} natural numbers starting from 1 to \mbox{\hyperlink{main_8c_a70ed59adcb4159ac551058053e649640}{S\+I\+ZE}}. \end{DoxyCompactList}\item 
 double \mbox{\hyperlink{main_8c_a28ae5e17f98c1fbf257a915e67abd9fb}{v\+Sum}} (int $\ast$vect)
-\begin{DoxyCompactList}\small\item\em Sum of array with N numbers. \end{DoxyCompactList}\item 
-int \mbox{\hyperlink{main_8c_a7085a1441829dae18fc54feb0222f006}{v\+Avg}} (int $\ast$array)
+\begin{DoxyCompactList}\small\item\em Sum of array with \mbox{\hyperlink{main_8c_a70ed59adcb4159ac551058053e649640}{S\+I\+ZE}} numbers. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{main_8c_a3e78f2779b88426bbb7bb483107a8813}{v\+Avg}} (int $\ast$array)
 \begin{DoxyCompactList}\small\item\em Computes the average of the array. \end{DoxyCompactList}\item 
 \mbox{\Hypertarget{main_8c_a840291bc02cba5474a4cb46a9b9566fe}\label{main_8c_a840291bc02cba5474a4cb46a9b9566fe}} 
 int {\bfseries main} (void)
@@ -36,7 +36,8 @@ int {\bfseries main} (void)
 \doxysubsection{Detailed Description}
 Program to manipulate array. 
 
-Initializes an array of S\+I\+ZE elements with natural numbers starting from 1 to S\+I\+ZE. Computes and prints sum and average of the array;
+Initializes an array of \mbox{\hyperlink{main_8c_a70ed59adcb4159ac551058053e649640}{S\+I\+ZE}} elements with natural numbers starting from 1 to S\+I\+ZE.~\newline
+ Computes and prints sum and average of the array.
 
 \begin{DoxyAuthor}{Author}
 André Brandão 
@@ -49,11 +50,11 @@ Emanuel Pereira
 
 
 \doxysubsection{Function Documentation}
-\mbox{\Hypertarget{main_8c_a7085a1441829dae18fc54feb0222f006}\label{main_8c_a7085a1441829dae18fc54feb0222f006}} 
+\mbox{\Hypertarget{main_8c_a3e78f2779b88426bbb7bb483107a8813}\label{main_8c_a3e78f2779b88426bbb7bb483107a8813}} 
 \index{main.c@{main.c}!vAvg@{vAvg}}
 \index{vAvg@{vAvg}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{vAvg()}{vAvg()}}
-{\footnotesize\ttfamily int v\+Avg (\begin{DoxyParamCaption}\item[{int $\ast$}]{array }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily double v\+Avg (\begin{DoxyParamCaption}\item[{int $\ast$}]{array }\end{DoxyParamCaption})}
 
 
 
@@ -64,11 +65,11 @@ André Brandão
 \end{DoxyAuthor}
 
 \begin{DoxyParams}[1]{Parameters}
-\mbox{\texttt{ in}}  & {\em array} & array with S\+I\+ZE elements \\
+\mbox{\texttt{ in}}  & {\em array} & array with \mbox{\hyperlink{main_8c_a70ed59adcb4159ac551058053e649640}{S\+I\+ZE}} elements \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-double average of the array 
+average of the array 
 \end{DoxyReturn}
 \mbox{\Hypertarget{main_8c_a7b9b1bc2f0aedf997bc16934d313576c}\label{main_8c_a7b9b1bc2f0aedf997bc16934d313576c}} 
 \index{main.c@{main.c}!vInit@{vInit}}
@@ -78,14 +79,14 @@ double average of the array
 
 
 
-This function initialize array with N numbers each position increase one more compare with last position. 
+This function initialize array with \mbox{\hyperlink{main_8c_a70ed59adcb4159ac551058053e649640}{S\+I\+ZE}} natural numbers starting from 1 to \mbox{\hyperlink{main_8c_a70ed59adcb4159ac551058053e649640}{S\+I\+ZE}}. 
 
 \begin{DoxyAuthor}{Author}
-evp 
+Emanuel Pereira 
 \end{DoxyAuthor}
 
 \begin{DoxyParams}[1]{Parameters}
-\mbox{\texttt{ in}}  & {\em vect} & Blank array with N numbers \\
+\mbox{\texttt{ in}}  & {\em vect} & Blank array with \mbox{\hyperlink{main_8c_a70ed59adcb4159ac551058053e649640}{S\+I\+ZE}} numbers \\
 \hline
 \end{DoxyParams}
 \mbox{\Hypertarget{main_8c_a28ae5e17f98c1fbf257a915e67abd9fb}\label{main_8c_a28ae5e17f98c1fbf257a915e67abd9fb}} 
@@ -96,18 +97,16 @@ evp
 
 
 
-Sum of array with N numbers. 
+Sum of array with \mbox{\hyperlink{main_8c_a70ed59adcb4159ac551058053e649640}{S\+I\+ZE}} numbers. 
 
 \begin{DoxyAuthor}{Author}
-evp 
+Emanuel Pereira
 \end{DoxyAuthor}
 
 \begin{DoxyParams}[1]{Parameters}
-\mbox{\texttt{ in}}  & {\em vect} & Array with N numbers \\
-\hline
-\mbox{\texttt{ out}}  & {\em sum} & Array Sum \\
+\mbox{\texttt{ in}}  & {\em vect} & Array with \mbox{\hyperlink{main_8c_a70ed59adcb4159ac551058053e649640}{S\+I\+ZE}} numbers \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-double sum 
+sum of the array 
 \end{DoxyReturn}
