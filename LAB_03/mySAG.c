@@ -23,11 +23,11 @@ int MySAGInit(int N)
 {
 	if(N > MAXSIZE)
 	{
-		printf("Error Initializing array - N bigger than 100\n");
+		printf("Error Initializing array - N bigger than %d\n", MAXSIZE);
 		return -1;
 	}
 
-	for(unsigned int i=0; i<N; i++)
+	for(unsigned int i=0; i < N; i++)
 	{
 		stream[i] = 0;
 	}
@@ -93,7 +93,7 @@ int MySAGMin()
  * 
  * \return returns average value of stream
 */
-double MySAGAvg()
+int MySAGAvg()
 {
 	int sum = 0;
 

@@ -1,5 +1,5 @@
 /** \file main.c
- * 	\brief This file tests the module mySAG.h
+ * 	\brief This file tests the module mySAG
  * 
  * \author André Brandão
  * \date 22/03/2022
