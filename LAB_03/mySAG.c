@@ -1,32 +1,44 @@
-#include "mySAG.h"
+#include <stdio.h>
 #include <limits.h>
+#include "mySAG.h"
 
-int* MySAGInit(int N)
+int stream[MAXSIZE];
+int size = 0;
+int n_elements = 0;
+int pos = 0;
+
+int MySAGInit(int N)
 {
-	int stream[N];
-	
+	if(N > MAXSIZE)
+	{
+		printf("Error Initializing array - N bigger than 100\n");
+		return -1;
+	}
 	for(unsigned int i=0; i<N; i++)
 	{
 		stream[i] = 0;
 	}
 
-	return stream;
+	size = N;
+
+	return 0;
 }
 
-int MySAGInsert(int *stream, int N, int val)
+void MySAGInsert(int val)
 {
-	static int pos = 0;
-
 	stream[pos] = val;
 	
-	pos = (pos + 1) % N;
+	if(n_elements < size)
+		n_elements++;
+	
+	pos = (pos + 1) % size;
 }
 
-int MySAGMax(int *stream, int N)
+int MySAGMax()
 {
 	int max = INT_MIN;
 
-	for(unsigned int i=0; i < N; i++)
+	for(unsigned int i=0; i < n_elements; i++)
 	{
 		if(stream[i] > max)
 			max = stream[i];
@@ -35,11 +47,11 @@ int MySAGMax(int *stream, int N)
 	return max;
 }
 
-int MySAGMin(int *stream, int N)
+int MySAGMin()
 {
 	int min = INT_MAX;
 
-	for(unsigned int i=0; i < N; i++)
+	for(unsigned int i=0; i < n_elements; i++)
 	{
 		if(stream[i] < min)
 			min = stream[i];
@@ -48,23 +60,23 @@ int MySAGMin(int *stream, int N)
 	return min;
 }
 
-double MySAGAvg(int *stream, int N)
+double MySAGAvg()
 {
 	int sum = 0;
 
-	for(unsigned int i=0; i < N; i++)
+	for(unsigned int i=0; i < n_elements; i++)
 	{
 		sum += stream[i];
 	}
 
-	return sum / N;
+	return sum / n_elements;
 }
 
-int MySAGFreq(int *stream, int N, int val)
+int MySAGFreq(int val)
 {
 	int count = 0;
 
-	for(unsigned int i=0; i < N; i++)
+	for(unsigned int i=0; i < n_elements; i++)
 	{
 		if(stream[i] == val)
 			count++;
