@@ -1,0 +1,176 @@
+\hypertarget{mySAG_8c}{}\doxysection{my\+S\+A\+G.\+c File Reference}
+\label{mySAG_8c}\index{mySAG.c@{mySAG.c}}
+
+
+Module to manipulate stream of integers.  
+
+
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$limits.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}my\+S\+A\+G.\+h\char`\"{}}\newline
+Include dependency graph for my\+S\+A\+G.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=282pt]{mySAG_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{mySAG_8c_aef9d39df961f50371f8ebea936232aa1}{My\+S\+A\+G\+Init}} (int \mbox{\hyperlink{main_8c_a0240ac851181b84ac374872dc5434ee4}{N}})
+\begin{DoxyCompactList}\small\item\em Function to initialize stream with zeros. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{mySAG_8c_a2a3f0e819b9655d1f7adac7b10e9c200}{My\+S\+A\+G\+Insert}} (int val)
+\begin{DoxyCompactList}\small\item\em Function to insert value in stream. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{mySAG_8c_a98b14d8f9feeff08435cc04cf8ec22dd}{My\+S\+A\+G\+Max}} ()
+\begin{DoxyCompactList}\small\item\em Function to compute M\+AX value of stream. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{mySAG_8c_a3cb8f994b3d6881fbaa4d706971f9bb3}{My\+S\+A\+G\+Min}} ()
+\begin{DoxyCompactList}\small\item\em Function to compute M\+IN value of stream. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{mySAG_8c_af7f13e0fe191131d03f745e5ba8be410}{My\+S\+A\+G\+Avg}} ()
+\begin{DoxyCompactList}\small\item\em Function to compute average value of stream. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{mySAG_8c_a23f1e6bf252d00dd7c5e6aaba7922d65}{My\+S\+A\+G\+Freq}} (int val)
+\begin{DoxyCompactList}\small\item\em This function gives the number of times a value is contained in the stream. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{mySAG_8c_a61f1439fcb3825c65cf3b48e8f25bfa8}\label{mySAG_8c_a61f1439fcb3825c65cf3b48e8f25bfa8}} 
+int {\bfseries stream} \mbox{[}\mbox{\hyperlink{mySAG_8h_a2a37b4217917105aac7557862ccc19c3}{M\+A\+X\+S\+I\+ZE}}\mbox{]}
+\item 
+int \mbox{\hyperlink{mySAG_8c_a439227feff9d7f55384e8780cfc2eb82}{size}} = 0
+\item 
+int \mbox{\hyperlink{mySAG_8c_a15d5d8a970ab3cc126a0d85be7412742}{n\+\_\+elements}} = 0
+\item 
+int \mbox{\hyperlink{mySAG_8c_a1910d262855b71da353ed0d07a6c7823}{pos}} = 0
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Module to manipulate stream of integers. 
+
+\begin{DoxyAuthor}{Author}
+André Brandão 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+22/03/2022 
+\end{DoxyDate}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{mySAG_8c_af7f13e0fe191131d03f745e5ba8be410}\label{mySAG_8c_af7f13e0fe191131d03f745e5ba8be410}} 
+\index{mySAG.c@{mySAG.c}!MySAGAvg@{MySAGAvg}}
+\index{MySAGAvg@{MySAGAvg}!mySAG.c@{mySAG.c}}
+\doxysubsubsection{\texorpdfstring{MySAGAvg()}{MySAGAvg()}}
+{\footnotesize\ttfamily double My\+S\+A\+G\+Avg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Function to compute average value of stream. 
+
+\begin{DoxyReturn}{Returns}
+returns average value of stream 
+\end{DoxyReturn}
+\mbox{\Hypertarget{mySAG_8c_a23f1e6bf252d00dd7c5e6aaba7922d65}\label{mySAG_8c_a23f1e6bf252d00dd7c5e6aaba7922d65}} 
+\index{mySAG.c@{mySAG.c}!MySAGFreq@{MySAGFreq}}
+\index{MySAGFreq@{MySAGFreq}!mySAG.c@{mySAG.c}}
+\doxysubsubsection{\texorpdfstring{MySAGFreq()}{MySAGFreq()}}
+{\footnotesize\ttfamily int My\+S\+A\+G\+Freq (\begin{DoxyParamCaption}\item[{int}]{val }\end{DoxyParamCaption})}
+
+
+
+This function gives the number of times a value is contained in the stream. 
+
+\begin{DoxyReturn}{Returns}
+returns number of times the value appear 
+\end{DoxyReturn}
+\mbox{\Hypertarget{mySAG_8c_aef9d39df961f50371f8ebea936232aa1}\label{mySAG_8c_aef9d39df961f50371f8ebea936232aa1}} 
+\index{mySAG.c@{mySAG.c}!MySAGInit@{MySAGInit}}
+\index{MySAGInit@{MySAGInit}!mySAG.c@{mySAG.c}}
+\doxysubsubsection{\texorpdfstring{MySAGInit()}{MySAGInit()}}
+{\footnotesize\ttfamily int My\+S\+A\+G\+Init (\begin{DoxyParamCaption}\item[{int}]{N }\end{DoxyParamCaption})}
+
+
+
+Function to initialize stream with zeros. 
+
+\begin{quote}
+Next position to insert the value in the stream \end{quote}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em N} & Size of stream\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+returns -\/1 if error initializing stream or 0 otherwise 
+\end{DoxyReturn}
+\mbox{\Hypertarget{mySAG_8c_a2a3f0e819b9655d1f7adac7b10e9c200}\label{mySAG_8c_a2a3f0e819b9655d1f7adac7b10e9c200}} 
+\index{mySAG.c@{mySAG.c}!MySAGInsert@{MySAGInsert}}
+\index{MySAGInsert@{MySAGInsert}!mySAG.c@{mySAG.c}}
+\doxysubsubsection{\texorpdfstring{MySAGInsert()}{MySAGInsert()}}
+{\footnotesize\ttfamily void My\+S\+A\+G\+Insert (\begin{DoxyParamCaption}\item[{int}]{val }\end{DoxyParamCaption})}
+
+
+
+Function to insert value in stream. 
+
+Inserts a value in the first available position.~\newline
+If stream is full overwrites oldest value~\newline
+The stream is treated as a circular array
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em val} & value to insert \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{mySAG_8c_a98b14d8f9feeff08435cc04cf8ec22dd}\label{mySAG_8c_a98b14d8f9feeff08435cc04cf8ec22dd}} 
+\index{mySAG.c@{mySAG.c}!MySAGMax@{MySAGMax}}
+\index{MySAGMax@{MySAGMax}!mySAG.c@{mySAG.c}}
+\doxysubsubsection{\texorpdfstring{MySAGMax()}{MySAGMax()}}
+{\footnotesize\ttfamily int My\+S\+A\+G\+Max (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Function to compute M\+AX value of stream. 
+
+\begin{DoxyReturn}{Returns}
+returns maximum value of stream 
+\end{DoxyReturn}
+\mbox{\Hypertarget{mySAG_8c_a3cb8f994b3d6881fbaa4d706971f9bb3}\label{mySAG_8c_a3cb8f994b3d6881fbaa4d706971f9bb3}} 
+\index{mySAG.c@{mySAG.c}!MySAGMin@{MySAGMin}}
+\index{MySAGMin@{MySAGMin}!mySAG.c@{mySAG.c}}
+\doxysubsubsection{\texorpdfstring{MySAGMin()}{MySAGMin()}}
+{\footnotesize\ttfamily int My\+S\+A\+G\+Min (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Function to compute M\+IN value of stream. 
+
+\begin{DoxyReturn}{Returns}
+returns minimum value of stream 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{mySAG_8c_a15d5d8a970ab3cc126a0d85be7412742}\label{mySAG_8c_a15d5d8a970ab3cc126a0d85be7412742}} 
+\index{mySAG.c@{mySAG.c}!n\_elements@{n\_elements}}
+\index{n\_elements@{n\_elements}!mySAG.c@{mySAG.c}}
+\doxysubsubsection{\texorpdfstring{n\_elements}{n\_elements}}
+{\footnotesize\ttfamily int n\+\_\+elements = 0}
+
+\begin{quote}
+Size of the stream gyven by user \end{quote}
+\mbox{\Hypertarget{mySAG_8c_a1910d262855b71da353ed0d07a6c7823}\label{mySAG_8c_a1910d262855b71da353ed0d07a6c7823}} 
+\index{mySAG.c@{mySAG.c}!pos@{pos}}
+\index{pos@{pos}!mySAG.c@{mySAG.c}}
+\doxysubsubsection{\texorpdfstring{pos}{pos}}
+{\footnotesize\ttfamily int pos = 0}
+
+\begin{quote}
+Number of elements present in the stream \end{quote}
+\mbox{\Hypertarget{mySAG_8c_a439227feff9d7f55384e8780cfc2eb82}\label{mySAG_8c_a439227feff9d7f55384e8780cfc2eb82}} 
+\index{mySAG.c@{mySAG.c}!size@{size}}
+\index{size@{size}!mySAG.c@{mySAG.c}}
+\doxysubsubsection{\texorpdfstring{size}{size}}
+{\footnotesize\ttfamily int size = 0}
+
+\begin{quote}
+Stream to store data \end{quote}
