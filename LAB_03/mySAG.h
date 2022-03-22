@@ -3,8 +3,6 @@
 
 int MySAGMax(int*, int);
 int MySAGMin(int*, int);
-
-MySAGAvg
-
+double MySAGAvg(int*, int);
 
 #endif _MYSAG_H

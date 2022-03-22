@@ -27,7 +27,7 @@ int MySAGMin(int *stream, int N)
 	return min;
 }
 
-int MySAGAvg(int *stream, int N)
+double MySAGAvg(int *stream, int N)
 {
 
 	int sum = 0;
