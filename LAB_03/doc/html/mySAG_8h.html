@@ -97,7 +97,7 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="center"><img src="mySAG_8h__dep__incl.png" border="0" usemap="#mySAG_8hdep" alt=""/></div>
 <map name="mySAG_8hdep" id="mySAG_8hdep">
 <area shape="rect" title="Module to manipulate stream of integers." alt="" coords="47,5,129,32"/>
-<area shape="rect" href="main_8c.html" title="This file tests the module mySAG.h." alt="" coords="5,80,72,107"/>
+<area shape="rect" href="main_8c.html" title="This file tests the module mySAG." alt="" coords="5,80,72,107"/>
 <area shape="rect" href="mySAG_8c.html" title="Module to manipulate stream of integers." alt="" coords="96,80,179,107"/>
 </map>
 </div>
@@ -123,11 +123,11 @@ Functions</h2></td></tr>
 <tr class="memitem:a3cb8f994b3d6881fbaa4d706971f9bb3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mySAG_8h.html#a3cb8f994b3d6881fbaa4d706971f9bb3">MySAGMin</a> ()</td></tr>
 <tr class="memdesc:a3cb8f994b3d6881fbaa4d706971f9bb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to compute MIN value of stream.  <a href="mySAG_8h.html#a3cb8f994b3d6881fbaa4d706971f9bb3">More...</a><br /></td></tr>
 <tr class="separator:a3cb8f994b3d6881fbaa4d706971f9bb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7f13e0fe191131d03f745e5ba8be410"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mySAG_8h.html#af7f13e0fe191131d03f745e5ba8be410">MySAGAvg</a> ()</td></tr>
-<tr class="memdesc:af7f13e0fe191131d03f745e5ba8be410"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to compute average value of stream.  <a href="mySAG_8h.html#af7f13e0fe191131d03f745e5ba8be410">More...</a><br /></td></tr>
-<tr class="separator:af7f13e0fe191131d03f745e5ba8be410"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51c7479755a520d379bd8d064b0220d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mySAG_8h.html#a51c7479755a520d379bd8d064b0220d6">MySAGAvg</a> ()</td></tr>
+<tr class="memdesc:a51c7479755a520d379bd8d064b0220d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to compute average value of stream.  <a href="mySAG_8h.html#a51c7479755a520d379bd8d064b0220d6">More...</a><br /></td></tr>
+<tr class="separator:a51c7479755a520d379bd8d064b0220d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c3b869d8a8e78acb501410aa4b6680f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mySAG_8h.html#a5c3b869d8a8e78acb501410aa4b6680f">MySAGFreq</a> (int)</td></tr>
-<tr class="memdesc:a5c3b869d8a8e78acb501410aa4b6680f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function gives the number of times a value is contained in the stream.  <a href="mySAG_8h.html#a5c3b869d8a8e78acb501410aa4b6680f">More...</a><br /></td></tr>
+<tr class="memdesc:a5c3b869d8a8e78acb501410aa4b6680f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function compute the number of times a value is contained in the stream.  <a href="mySAG_8h.html#a5c3b869d8a8e78acb501410aa4b6680f">More...</a><br /></td></tr>
 <tr class="separator:a5c3b869d8a8e78acb501410aa4b6680f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -151,14 +151,14 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="af7f13e0fe191131d03f745e5ba8be410"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af7f13e0fe191131d03f745e5ba8be410">&#9670;&nbsp;</a></span>MySAGAvg()</h2>
+<a id="a51c7479755a520d379bd8d064b0220d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51c7479755a520d379bd8d064b0220d6">&#9670;&nbsp;</a></span>MySAGAvg()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double MySAGAvg </td>
+          <td class="memname">int MySAGAvg </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -187,7 +187,13 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>This function gives the number of times a value is contained in the stream. </p>
+<p>This function compute the number of times a value is contained in the stream. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>value to search </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>returns number of times the value appear </dd></dl>
 
 </div>

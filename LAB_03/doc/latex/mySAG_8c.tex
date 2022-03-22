@@ -18,7 +18,7 @@ Include dependency graph for my\+S\+A\+G.\+c\+:\nopagebreak
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-int \mbox{\hyperlink{mySAG_8c_aef9d39df961f50371f8ebea936232aa1}{My\+S\+A\+G\+Init}} (int \mbox{\hyperlink{main_8c_a0240ac851181b84ac374872dc5434ee4}{N}})
+int \mbox{\hyperlink{mySAG_8c_aef9d39df961f50371f8ebea936232aa1}{My\+S\+A\+G\+Init}} (int N)
 \begin{DoxyCompactList}\small\item\em Function to initialize stream with zeros. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{mySAG_8c_a2a3f0e819b9655d1f7adac7b10e9c200}{My\+S\+A\+G\+Insert}} (int val)
 \begin{DoxyCompactList}\small\item\em Function to insert value in stream. \end{DoxyCompactList}\item 
@@ -26,10 +26,10 @@ int \mbox{\hyperlink{mySAG_8c_a98b14d8f9feeff08435cc04cf8ec22dd}{My\+S\+A\+G\+Ma
 \begin{DoxyCompactList}\small\item\em Function to compute M\+AX value of stream. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{mySAG_8c_a3cb8f994b3d6881fbaa4d706971f9bb3}{My\+S\+A\+G\+Min}} ()
 \begin{DoxyCompactList}\small\item\em Function to compute M\+IN value of stream. \end{DoxyCompactList}\item 
-double \mbox{\hyperlink{mySAG_8c_af7f13e0fe191131d03f745e5ba8be410}{My\+S\+A\+G\+Avg}} ()
+int \mbox{\hyperlink{mySAG_8c_a51c7479755a520d379bd8d064b0220d6}{My\+S\+A\+G\+Avg}} ()
 \begin{DoxyCompactList}\small\item\em Function to compute average value of stream. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{mySAG_8c_a23f1e6bf252d00dd7c5e6aaba7922d65}{My\+S\+A\+G\+Freq}} (int val)
-\begin{DoxyCompactList}\small\item\em This function gives the number of times a value is contained in the stream. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em This function compute the number of times a value is contained in the stream. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Variables}
 \begin{DoxyCompactItemize}
 \item 
@@ -49,6 +49,8 @@ Module to manipulate stream of integers.
 
 \begin{DoxyAuthor}{Author}
 André Brandão 
+
+Emanuel Pereira 
 \end{DoxyAuthor}
 \begin{DoxyDate}{Date}
 22/03/2022 
@@ -56,11 +58,11 @@ André Brandão
 
 
 \doxysubsection{Function Documentation}
-\mbox{\Hypertarget{mySAG_8c_af7f13e0fe191131d03f745e5ba8be410}\label{mySAG_8c_af7f13e0fe191131d03f745e5ba8be410}} 
+\mbox{\Hypertarget{mySAG_8c_a51c7479755a520d379bd8d064b0220d6}\label{mySAG_8c_a51c7479755a520d379bd8d064b0220d6}} 
 \index{mySAG.c@{mySAG.c}!MySAGAvg@{MySAGAvg}}
 \index{MySAGAvg@{MySAGAvg}!mySAG.c@{mySAG.c}}
 \doxysubsubsection{\texorpdfstring{MySAGAvg()}{MySAGAvg()}}
-{\footnotesize\ttfamily double My\+S\+A\+G\+Avg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int My\+S\+A\+G\+Avg (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
@@ -77,8 +79,13 @@ returns average value of stream
 
 
 
-This function gives the number of times a value is contained in the stream. 
+This function compute the number of times a value is contained in the stream. 
 
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em val} & value to search \\
+\hline
+\end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 returns number of times the value appear 
 \end{DoxyReturn}

@@ -1,6 +1,6 @@
 var mySAG_8c =
 [
-    [ "MySAGAvg", "mySAG_8c.html#af7f13e0fe191131d03f745e5ba8be410", null ],
+    [ "MySAGAvg", "mySAG_8c.html#a51c7479755a520d379bd8d064b0220d6", null ],
     [ "MySAGFreq", "mySAG_8c.html#a23f1e6bf252d00dd7c5e6aaba7922d65", null ],
     [ "MySAGInit", "mySAG_8c.html#aef9d39df961f50371f8ebea936232aa1", null ],
     [ "MySAGInsert", "mySAG_8c.html#a2a3f0e819b9655d1f7adac7b10e9c200", null ],

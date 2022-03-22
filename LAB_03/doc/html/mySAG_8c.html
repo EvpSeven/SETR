@@ -108,7 +108,7 @@ Include dependency graph for mySAG.c:</div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aef9d39df961f50371f8ebea936232aa1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mySAG_8c.html#aef9d39df961f50371f8ebea936232aa1">MySAGInit</a> (int <a class="el" href="main_8c.html#a0240ac851181b84ac374872dc5434ee4">N</a>)</td></tr>
+<tr class="memitem:aef9d39df961f50371f8ebea936232aa1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mySAG_8c.html#aef9d39df961f50371f8ebea936232aa1">MySAGInit</a> (int N)</td></tr>
 <tr class="memdesc:aef9d39df961f50371f8ebea936232aa1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to initialize stream with zeros.  <a href="mySAG_8c.html#aef9d39df961f50371f8ebea936232aa1">More...</a><br /></td></tr>
 <tr class="separator:aef9d39df961f50371f8ebea936232aa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a3f0e819b9655d1f7adac7b10e9c200"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mySAG_8c.html#a2a3f0e819b9655d1f7adac7b10e9c200">MySAGInsert</a> (int val)</td></tr>
@@ -120,11 +120,11 @@ Functions</h2></td></tr>
 <tr class="memitem:a3cb8f994b3d6881fbaa4d706971f9bb3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mySAG_8c.html#a3cb8f994b3d6881fbaa4d706971f9bb3">MySAGMin</a> ()</td></tr>
 <tr class="memdesc:a3cb8f994b3d6881fbaa4d706971f9bb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to compute MIN value of stream.  <a href="mySAG_8c.html#a3cb8f994b3d6881fbaa4d706971f9bb3">More...</a><br /></td></tr>
 <tr class="separator:a3cb8f994b3d6881fbaa4d706971f9bb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7f13e0fe191131d03f745e5ba8be410"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mySAG_8c.html#af7f13e0fe191131d03f745e5ba8be410">MySAGAvg</a> ()</td></tr>
-<tr class="memdesc:af7f13e0fe191131d03f745e5ba8be410"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to compute average value of stream.  <a href="mySAG_8c.html#af7f13e0fe191131d03f745e5ba8be410">More...</a><br /></td></tr>
-<tr class="separator:af7f13e0fe191131d03f745e5ba8be410"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51c7479755a520d379bd8d064b0220d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mySAG_8c.html#a51c7479755a520d379bd8d064b0220d6">MySAGAvg</a> ()</td></tr>
+<tr class="memdesc:a51c7479755a520d379bd8d064b0220d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to compute average value of stream.  <a href="mySAG_8c.html#a51c7479755a520d379bd8d064b0220d6">More...</a><br /></td></tr>
+<tr class="separator:a51c7479755a520d379bd8d064b0220d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23f1e6bf252d00dd7c5e6aaba7922d65"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="mySAG_8c.html#a23f1e6bf252d00dd7c5e6aaba7922d65">MySAGFreq</a> (int val)</td></tr>
-<tr class="memdesc:a23f1e6bf252d00dd7c5e6aaba7922d65"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function gives the number of times a value is contained in the stream.  <a href="mySAG_8c.html#a23f1e6bf252d00dd7c5e6aaba7922d65">More...</a><br /></td></tr>
+<tr class="memdesc:a23f1e6bf252d00dd7c5e6aaba7922d65"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function compute the number of times a value is contained in the stream.  <a href="mySAG_8c.html#a23f1e6bf252d00dd7c5e6aaba7922d65">More...</a><br /></td></tr>
 <tr class="separator:a23f1e6bf252d00dd7c5e6aaba7922d65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
@@ -141,17 +141,19 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>stream</b> [<a class="
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Module to manipulate stream of integers. </p>
-<dl class="section author"><dt>Author</dt><dd>André Brandão </dd></dl>
+<dl class="section author"><dt>Author</dt><dd>André Brandão </dd>
+<dd>
+Emanuel Pereira </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>22/03/2022 </dd></dl>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="af7f13e0fe191131d03f745e5ba8be410"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af7f13e0fe191131d03f745e5ba8be410">&#9670;&nbsp;</a></span>MySAGAvg()</h2>
+<a id="a51c7479755a520d379bd8d064b0220d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a51c7479755a520d379bd8d064b0220d6">&#9670;&nbsp;</a></span>MySAGAvg()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">double MySAGAvg </td>
+          <td class="memname">int MySAGAvg </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -180,7 +182,13 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>stream</b> [<a class="
       </table>
 </div><div class="memdoc">
 
-<p>This function gives the number of times a value is contained in the stream. </p>
+<p>This function compute the number of times a value is contained in the stream. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>value to search </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>returns number of times the value appear </dd></dl>
 
 </div>
