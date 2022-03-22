@@ -2,6 +2,7 @@
  * 	\brief Module to manipulate stream of integers
  * 
  * \author André Brandão
+ * \author Emanuel Pereira
  * \date 22/03/2022
  */
 #include <stdio.h>
@@ -105,8 +106,8 @@ int MySAGAvg()
 	return sum / n_elements;
 }
 
-/** \brief This function gives the number of times a value is contained in the stream
- * 
+/** \brief This function compute the number of times a value is contained in the stream
+ * \param[in] val value to search
  * \return returns number of times the value appear
 */
 int MySAGFreq(int val)

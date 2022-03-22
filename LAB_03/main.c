@@ -2,31 +2,41 @@
  * 	\brief This file tests the module mySAG
  * 
  * \author André Brandão
+ * \author Emanuel Pereira
  * \date 22/03/2022
  */
 #include <stdio.h>
 #include "mySAG.h"
 
-/** Size of the Stream
- * \def N
- */ 
-#define N 5
 
 int main(void)
 {
-	int val = 5;
-
+	int N=10; //value of array size
+	int val = 2; 
+	printf("Using array SIZE, N= %d: \n", N);
+	// Inits the module
 	if(MySAGInit(N) == -1)
 		return 1;
-
-	for(unsigned int i=0; i<3; i++)
-		MySAGInsert(i);
-
-	printf("Min = %d\n", MySAGMin());
-	printf("Max = %d\n", MySAGMax());
-	printf("Average = %lf\n", MySAGAvg());
-
-	printf("Frequency of %d = %d\n", val, MySAGFreq(val));
 	
+	printf("vector=[ ");
+	// Adds an element to the stream
+	for(unsigned int i=0; i<N; i++){
+		MySAGInsert(i);
+		printf("%d ", i);
+	}
+	printf("]\n");
+
+	printf("Min = %d\n", MySAGMin()); //minimum value of the stream window
+	printf("Max = %d\n", MySAGMax()); //maximum value of the stream window
+	printf("Average = %d\n", MySAGAvg()); //average of the values of the stream window
+	printf("Frequency of %d = %d\n", val, MySAGFreq(val)); //number of times that val appears
+	
+	printf("################################\n");
+	N=200;
+	printf("Using bigger array SIZE then allowed, N= %d \n", N);
+	if(MySAGInit(N) == -1)
+		return 1;
+	
+
 	return 0;
 }

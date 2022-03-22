@@ -18,7 +18,7 @@ void MySAGInsert(int);
 
 int MySAGMax();
 int MySAGMin();
-double MySAGAvg();
+int MySAGAvg();
 
 int MySAGFreq(int);
 
