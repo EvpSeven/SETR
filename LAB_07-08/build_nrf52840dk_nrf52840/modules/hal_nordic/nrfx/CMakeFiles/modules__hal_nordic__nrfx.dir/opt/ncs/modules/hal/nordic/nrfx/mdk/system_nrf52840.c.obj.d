@@ -1,0 +1,24 @@
+modules/hal_nordic/nrfx/CMakeFiles/modules__hal_nordic__nrfx.dir/opt/ncs/modules/hal/nordic/nrfx/mdk/system_nrf52840.c.obj: \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/system_nrf52840.c \
+ /home/andrembrandao/Desktop/SETR/LAB_07-08/build_nrf52840dk_nrf52840/zephyr/include/generated/autoconf.h \
+ /opt/ncs/zephyr/include/toolchain/zephyr_stdint.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/system_nrf52.c \
+ /opt/ncs/zephyr/lib/libc/minimal/include/stdint.h \
+ /opt/ncs/zephyr/lib/libc/minimal/include/stdbool.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/nrf.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/nrf52840.h \
+ /opt/ncs/modules/hal/cmsis/CMSIS/Core/Include/core_cm4.h \
+ /opt/ncs/modules/hal/cmsis/CMSIS/Core/Include/cmsis_version.h \
+ /opt/ncs/modules/hal/cmsis/CMSIS/Core/Include/cmsis_compiler.h \
+ /opt/ncs/modules/hal/cmsis/CMSIS/Core/Include/cmsis_gcc.h \
+ /opt/ncs/modules/hal/cmsis/CMSIS/Core/Include/mpu_armv7.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/system_nrf52840.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/nrf52840_bitfields.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/nrf51_to_nrf52840.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/nrf52_to_nrf52840.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/compiler_abstraction.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/nrf_peripherals.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/nrf52840_peripherals.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/nrf52_erratas.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/system_nrf52.h \
+ /opt/ncs/modules/hal/nordic/nrfx/mdk/system_nrf52_approtect.h
