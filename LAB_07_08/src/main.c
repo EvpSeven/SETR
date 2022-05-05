@@ -119,7 +119,7 @@ void main(void) {
             case WAIT:
                 
                 
-                printf("\rProduct: %s, Cost: %3.2f , Credit: %f", products[product],price[product],credit);
+                printk("\rProduct: %s, Cost: %3.2f , Credit: %f", products[product],price[product],credit);
                 
                 if(coin_detected == 1)
                     state = UPDATE_CREDIT;
