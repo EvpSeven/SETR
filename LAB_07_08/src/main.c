@@ -114,13 +114,14 @@ void main(void) {
                     state = UPDATE_CREDIT;
                 
                 else if(button_pressed == UP || button_pressed == DOWN)
-                    state == UPDATE_PRODUCT;
+                    state = UPDATE_PRODUCT;
 
                 else if(button_pressed == RETURN)
                 {
                     float2int(credit,&whole, &remainder);
-                    printk("%d.%d EUR return", whole,remainder);
+                    printk("\n%d.%d EUR return\n", whole,remainder);
                     credit = 0;
+                    button_pressed = NONE;
                     
                 }
                 else if(button_pressed == SELECT)
@@ -144,10 +145,16 @@ void main(void) {
                 else if(button_pressed == DOWN)
                 {
                     product = (product - 1) % NPRODUCTS;  // Previous Product
+
+                    if(product < 0)
+                        product = NPRODUCTS - 1;
+
                     button_pressed = NONE;
                 }
+                
+                printk("\33[2K");   // clear line
 
-                state == WAIT;
+                state = WAIT;
                 
                 break;
 
@@ -156,17 +163,18 @@ void main(void) {
                 {
                     credit = credit - price[product];
                     float2int(credit,&whole, &remainder);
-                    printk("Product %s dispensed, remaining credit %d.%d",products[product] ,whole,remainder);
+                    printk("\nProduct %s dispensed, remaining credit %d.%d\n",products[product] ,whole,remainder);
                 }
 
                 else
                 {
                     float2int(price[product],&whole, &remainder);
-                    printk("Not enough credit, Product %s costs %d.%d, ", products[product],whole,remainder);
+                    printk("\nNot enough credit, Product %s costs %d.%d, ", products[product],whole,remainder);
                     float2int(credit,&whole, &remainder);
-                    printk("credit is %d.%d", products[product],whole,remainder);
+                    printk("credit is %d.%d\n", whole,remainder);
                 }
                 
+                button_pressed = NONE;
                 state = WAIT;
 
                 break;
