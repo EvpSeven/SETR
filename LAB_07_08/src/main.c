@@ -55,6 +55,9 @@ volatile float coin = 0;  // value of coin inserted
 volatile int coin_detected = 0; // Sinalize inserted coin
 volatile int button_pressed = 0;    // Sinalize panel button pressed
 
+void input_output_config(void);
+void float2int(float,int*,int*);
+
 void but1press_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
     coin = 0.10;  // 10 cents
@@ -109,6 +112,10 @@ void main(void) {
     int state = WAIT;
     float credit = 0;
     int product = 0;
+    
+    /* Adjust Vars */
+    int* whole;
+    int* remainder;
 
     input_output_config();
 
@@ -118,8 +125,11 @@ void main(void) {
         {
             case WAIT:
                 
-                
-                printk("\rProduct: %s, Cost: %3.2f , Credit: %f", products[product],price[product],credit);
+                float2int(price[product], &whole, &remainder);
+                printk("\rProduct: %s, Cost: %d.%d", products[product], whole, remainder);
+
+                float2int(credit,&whole, &remainder);
+                printk(" Credit: %d.%d", whole, remainder);
                 
                 if(coin_detected == 1)
                     state = UPDATE_CREDIT;
@@ -129,7 +139,8 @@ void main(void) {
 
                 else if(button_pressed == RETURN)
                 {
-                    printk("%f EUR return", credit);
+                    float2int(credit,&whole, &remainder);
+                    printk("%d.%d EUR return", whole,remainder);
                     credit = 0;
                     
                 }
@@ -165,12 +176,16 @@ void main(void) {
                 if(credit >= price[product])
                 {
                     credit = credit - price[product];
-                    printk("Product %s dispensed, remaining credit %f",products[product] ,credit);
+                    float2int(credit,&whole, &remainder);
+                    printk("Product %s dispensed, remaining credit %d.%d",products[product] ,whole,remainder);
                 }
 
                 else
                 {
-                    printk("Not enough credit, Product %s costs %f, credit is %f", products[product],price[NPRODUCTS], credit);
+                    float2int(price[product],&whole, &remainder);
+                    printk("Not enough credit, Product %s costs %d.%d, ", products[product],whole,remainder);
+                    float2int(credit,&whole, &remainder);
+                    printk("credit is %d.%d", products[product],whole,remainder);
                 }
                 
                 state = WAIT;
@@ -180,6 +195,11 @@ void main(void) {
     }
       
     return;
+}
+
+void float2int(float arg,int* whole,int* remainder){
+    *whole = arg;
+    *remainder = (arg - *whole) * 100;
 }
 
 void input_output_config(void)
