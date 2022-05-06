@@ -38,15 +38,9 @@
 #define BUTRETURN 0
 
 // Buttons callback structures
-static struct gpio_callback but1_cb_data;
-static struct gpio_callback but2_cb_data;
-static struct gpio_callback but3_cb_data;
-static struct gpio_callback but4_cb_data;
+static struct gpio_callback butcoin_cb_data;
+static struct gpio_callback butpanel_cb_data;
 
-static struct gpio_callback butup_cb_data;
-static struct gpio_callback butdown_cb_data;
-static struct gpio_callback butselect_cb_data;
-static struct gpio_callback butreturn_cb_data;
 
 static char *products[NPRODUCTS] = {"Beer", "Tuna Sandwich", "Coffee"};
 static float price[NPRODUCTS] = {1.5, 1.0, 0.5};
@@ -58,51 +52,36 @@ volatile int button_pressed = 0;    // Sinalize panel button pressed
 void input_output_config(void);
 void float2int(float,int*,int*);
 
-void but1press_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+void butcoinpress_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
-    coin = 0.10;  // 10 cents
     coin_detected = 1;
+    
+    if(BIT(BOARDBUT1) & pins)
+        coin = 0.10;  // 10 cents
+
+    if(BIT(BOARDBUT2) & pins)
+        coin = 0.20;  // 20 cents
+
+    if(BIT(BOARDBUT3) & pins)
+        coin = 0.50;  // 50 cents
+
+    if(BIT(BOARDBUT4) & pins)
+        coin = 1.00;  // 1 euro
 }
 
-void but2press_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+void butpanelpress_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
-    coin = 0.20;  // 20 cents
-    coin_detected = 1;
-}
+    if(BIT(BUTUP) & pins)
+        button_pressed = UP;    // Up arrow button
 
-void but3press_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
-{
-    coin = 0.50;  // 50 cents
-    coin_detected = 1;
-}
+    if(BIT(BUTDOWN) & pins)
+        button_pressed = DOWN;  // Down arrow button
 
-void but4press_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
-{
-    coin = 1.0;  // 1 euro
-    coin_detected = 1;
-}
+    if(BIT(BUTSELECT) & pins)
+        button_pressed = SELECT;  // Select button
 
-// Up arrow button
-void butuppress_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
-{
-    button_pressed = UP;
-}
-
-// Down arrow button
-void butdownpress_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
-{
-    button_pressed = DOWN;
-}
-
-// Select button
-void butselectpress_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
-{
-    button_pressed = SELECT;
-}
-
-void butreturnpress_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
-{
-    button_pressed = RETURN;
+    if(BIT(BUTRETURN) & pins)
+        button_pressed = RETURN;  // Return arrow button
 }
 
 /* Main function */
@@ -233,27 +212,9 @@ void input_output_config(void)
     gpio_pin_interrupt_configure(gpio0_dev, BUTRETURN, GPIO_INT_EDGE_TO_ACTIVE);
     
     /* Set callback */
-    gpio_init_callback(&but1_cb_data, but1press_cbfunction, BIT(BOARDBUT1));
-    gpio_add_callback(gpio0_dev, &but1_cb_data);
+    gpio_init_callback(&butcoin_cb_data, butcoinpress_cbfunction, BIT(BOARDBUT1)| BIT(BOARDBUT2)| BIT(BOARDBUT3) | BIT(BOARDBUT4));
+    gpio_add_callback(gpio0_dev, &butcoin_cb_data);
 
-    gpio_init_callback(&but2_cb_data, but2press_cbfunction, BIT(BOARDBUT2));
-    gpio_add_callback(gpio0_dev, &but2_cb_data);
-
-    gpio_init_callback(&but3_cb_data, but3press_cbfunction, BIT(BOARDBUT3));
-    gpio_add_callback(gpio0_dev, &but3_cb_data);
-
-    gpio_init_callback(&but4_cb_data, but4press_cbfunction, BIT(BOARDBUT4));
-    gpio_add_callback(gpio0_dev, &but4_cb_data);
-
-    gpio_init_callback(&butup_cb_data, butuppress_cbfunction, BIT(BUTUP));
-    gpio_add_callback(gpio0_dev, &butup_cb_data);
-
-    gpio_init_callback(&butdown_cb_data, butdownpress_cbfunction, BIT(BUTDOWN));
-    gpio_add_callback(gpio0_dev, &butup_cb_data);
-
-    gpio_init_callback(&butselect_cb_data, butselectpress_cbfunction, BIT(BUTSELECT));
-    gpio_add_callback(gpio0_dev, &butup_cb_data);
-
-    gpio_init_callback(&butreturn_cb_data, butreturnpress_cbfunction, BIT(BUTRETURN));
-    gpio_add_callback(gpio0_dev, &butreturn_cb_data);
+    gpio_init_callback(&butpanel_cb_data, butpanelpress_cbfunction, BIT(BUTUP)| BIT(BUTDOWN)| BIT(BUTSELECT) | BIT(BUTRETURN));
+    gpio_add_callback(gpio0_dev, &butpanel_cb_data);
 }
