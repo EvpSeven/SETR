@@ -93,8 +93,8 @@ void main(void) {
     int product = 0;
     
     /* Adjust Vars */
-    int* whole;
-    int* remainder;
+    int whole = 0;
+    int remainder = 0;
 
     input_output_config();
 
@@ -107,7 +107,7 @@ void main(void) {
                 float2int(price[product], &whole, &remainder);
                 printk("\rProduct: %s, Cost: %d.%d", products[product], whole, remainder);
 
-                float2int(credit,&whole, &remainder);
+                float2int(credit, &whole, &remainder);
                 printk(" Credit: %d.%d", whole, remainder);
                 
                 if(coin_detected == 1)
@@ -118,8 +118,8 @@ void main(void) {
 
                 else if(button_pressed == RETURN)
                 {
-                    float2int(credit,&whole, &remainder);
-                    printk("\n%d.%d EUR return\n", whole,remainder);
+                    float2int(credit, &whole, &remainder);
+                    printk("\n%d.%d EUR return\n", whole, remainder);
                     credit = 0;
                     button_pressed = NONE;
                     
@@ -162,16 +162,16 @@ void main(void) {
                 if(credit >= price[product])
                 {
                     credit = credit - price[product];
-                    float2int(credit,&whole, &remainder);
-                    printk("\nProduct %s dispensed, remaining credit %d.%d\n",products[product] ,whole,remainder);
+                    float2int(credit, &whole, &remainder);
+                    printk("\nProduct %s dispensed, remaining credit %d.%d\n", products[product], whole, remainder);
                 }
 
                 else
                 {
-                    float2int(price[product],&whole, &remainder);
-                    printk("\nNot enough credit, Product %s costs %d.%d, ", products[product],whole,remainder);
-                    float2int(credit,&whole, &remainder);
-                    printk("credit is %d.%d\n", whole,remainder);
+                    float2int(price[product], &whole, &remainder);
+                    printk("\nNot enough credit, Product %s costs %d.%d, ", products[product], whole, remainder);
+                    float2int(credit, &whole, &remainder);
+                    printk("credit is %d.%d\n", whole, remainder);
                 }
                 
                 button_pressed = NONE;
@@ -184,7 +184,8 @@ void main(void) {
     return;
 }
 
-void float2int(float arg,int* whole,int* remainder){
+void float2int(float arg, int* whole, int* remainder)
+{
     *whole = arg;
     *remainder = (arg - *whole) * 100;
 }
