@@ -10,7 +10,7 @@
 #include <float.h>
 
 #define NPRODUCTS 3 // Number of products
-
+#define SLEEP_MS 250  // Sleep period (ms) 
 // States
 #define WAIT 0
 #define UPDATE_CREDIT 1
@@ -32,10 +32,10 @@
 #define BOARDBUT3 0x18 /* Pin at which BUT3 is connected. Addressing is direct (i.e., pin number) */
 #define BOARDBUT4 0x19 /* Pin at which BUT4 is connected. Addressing is direct (i.e., pin number) */
 
-#define BUTUP 0
-#define BUTDOWN 0
-#define BUTSELECT 0
-#define BUTRETURN 0
+#define BUTUP 0x03
+#define BUTDOWN 0x04
+#define BUTSELECT 0x1c
+#define BUTRETURN 0x1d
 
 // Buttons callback structures
 static struct gpio_callback butcoin_cb_data;
@@ -105,11 +105,14 @@ void main(void) {
             case WAIT:
                 
                 float2int(price[product], &whole, &remainder);
-                printk("\rProduct: %s, Cost: %d.%d", products[product], whole, remainder);
-
-                float2int(credit, &whole, &remainder);
-                printk(" Credit: %d.%d", whole, remainder);
+                printk("\rProduct: %s, Cost: %d.%d €", products[product], whole, remainder);
                 
+                float2int(credit, &whole, &remainder);
+                printk(" Credit: %d.%d €", whole, remainder);
+                
+                /* Pause  */ 
+                k_msleep(SLEEP_MS);  
+
                 if(coin_detected == 1)
                     state = UPDATE_CREDIT;
                 
@@ -131,6 +134,7 @@ void main(void) {
             
             case UPDATE_CREDIT:
                 coin_detected = 0;
+                //printk("\n %d\n", (int)(coin*1000));
                 credit += coin;
                 state = WAIT;
                        
@@ -187,7 +191,7 @@ void main(void) {
 void float2int(float arg, int* whole, int* remainder)
 {
     *whole = arg;
-    *remainder = (arg - *whole) * 100;
+    *remainder = (arg - *whole) * 10;
 }
 
 void input_output_config(void)
@@ -215,10 +219,10 @@ void input_output_config(void)
     gpio_pin_interrupt_configure(gpio0_dev, BOARDBUT3, GPIO_INT_EDGE_TO_ACTIVE);
     gpio_pin_interrupt_configure(gpio0_dev, BOARDBUT4, GPIO_INT_EDGE_TO_ACTIVE);
 
-    gpio_pin_interrupt_configure(gpio0_dev, BUTUP, GPIO_INT_EDGE_TO_ACTIVE);
-    gpio_pin_interrupt_configure(gpio0_dev, BUTDOWN, GPIO_INT_EDGE_TO_ACTIVE);
-    gpio_pin_interrupt_configure(gpio0_dev, BUTSELECT, GPIO_INT_EDGE_TO_ACTIVE);
-    gpio_pin_interrupt_configure(gpio0_dev, BUTRETURN, GPIO_INT_EDGE_TO_ACTIVE);
+    gpio_pin_interrupt_configure(gpio0_dev, BUTUP, GPIO_INT_EDGE_TO_INACTIVE);
+    gpio_pin_interrupt_configure(gpio0_dev, BUTDOWN, GPIO_INT_EDGE_TO_INACTIVE);
+    gpio_pin_interrupt_configure(gpio0_dev, BUTSELECT, GPIO_INT_EDGE_TO_INACTIVE);
+    gpio_pin_interrupt_configure(gpio0_dev, BUTRETURN, GPIO_INT_EDGE_TO_INACTIVE);
     
     /* Set callback */
     gpio_init_callback(&butcoin_cb_data, butcoinpress_cbfunction, BIT(BOARDBUT1)| BIT(BOARDBUT2)| BIT(BOARDBUT3) | BIT(BOARDBUT4));
