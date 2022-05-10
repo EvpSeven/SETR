@@ -10,7 +10,8 @@
 #include <float.h>
 
 #define NPRODUCTS 3 // Number of products
-#define SLEEP_MS 250  // Sleep period (ms) 
+#define SLEEP_MS 250  // Sleep period (ms)
+
 // States
 #define WAIT 0
 #define UPDATE_CREDIT 1
@@ -105,7 +106,7 @@ void main(void) {
             case WAIT:
                 
                 float2int(price[product], &whole, &remainder);
-                printk("\rProduct: %s, Cost: %d.%d €", products[product], whole, remainder);
+                printk("\rProduct: %s, Cost: %d.%d €,", products[product], whole, remainder);
                 
                 float2int(credit, &whole, &remainder);
                 printk(" Credit: %d.%d €", whole, remainder);
@@ -134,7 +135,6 @@ void main(void) {
             
             case UPDATE_CREDIT:
                 coin_detected = 0;
-                //printk("\n %d\n", (int)(coin*1000));
                 credit += coin;
                 state = WAIT;
                        
@@ -143,16 +143,12 @@ void main(void) {
             case UPDATE_PRODUCT:
                 if(button_pressed == UP)
                 {
-                    product = (product + 1) % NPRODUCTS;  // Next Product
+                    product = (product + 1 + NPRODUCTS) % NPRODUCTS;  // Next Product
                     button_pressed = NONE;
                 }
                 else if(button_pressed == DOWN)
                 {
-                    product = (product - 1) % NPRODUCTS;  // Previous Product
-
-                    if(product < 0)
-                        product = NPRODUCTS - 1;
-
+                    product = (product - 1 + NPRODUCTS) % NPRODUCTS;  // Previous Product
                     button_pressed = NONE;
                 }
                 
@@ -167,15 +163,15 @@ void main(void) {
                 {
                     credit = credit - price[product];
                     float2int(credit, &whole, &remainder);
-                    printk("\nProduct %s dispensed, remaining credit %d.%d\n", products[product], whole, remainder);
+                    printk("\nProduct %s dispensed, remaining credit %d.%d €\n", products[product], whole, remainder);
                 }
 
                 else
                 {
                     float2int(price[product], &whole, &remainder);
-                    printk("\nNot enough credit, Product %s costs %d.%d, ", products[product], whole, remainder);
+                    printk("\nNot enough credit, Product %s costs %d.%d €, ", products[product], whole, remainder);
                     float2int(credit, &whole, &remainder);
-                    printk("credit is %d.%d\n", whole, remainder);
+                    printk("credit is %d.%d €\n", whole, remainder);
                 }
                 
                 button_pressed = NONE;
