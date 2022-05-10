@@ -1,3 +1,15 @@
+/** \file main.C
+ * 	\brief Programm that have State Machine of a vending machine.
+ *
+ *  Programm accepts a subset of coins and allows the user to browse available
+products, buy one product and return the credit. The inputs are push-buttons and the output is done
+via UART/Terminal.
+ * 
+ * \author André Brandão
+ * \author Emanuel Pereira
+ * \date 10/05/2022
+ */
+
 #include <zephyr.h>
 #include <device.h>
 #include <devicetree.h>
@@ -53,6 +65,17 @@ volatile int button_pressed = 0;    // Sinalize panel button pressed
 void input_output_config(void);
 void float2int(float,int*,int*);
 
+
+/** \brief Function of interrupt to four buttons
+ * 
+ * Function of interrupt to four buttons emulate the insertion of coins, whose values are: 10 cents, 20 cents, 50
+cents and 1 EUR
+ *
+ * \param[out] coin value of coin
+ * \param[out] coin_detected flag signal coin was inserted
+ * 
+ *
+*/
 void butcoinpress_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
     coin_detected = 1;
@@ -70,6 +93,20 @@ void butcoinpress_cbfunction(const struct device *dev, struct gpio_callback *cb,
         coin = 1.00;  // 1 euro
 }
 
+/** \brief Function of interrupt then four buttons are for control.
+ * 
+ * Function of interrupt then four buttons are for control: Browse Up (Browse Up should display the the next product, its cost and the available
+credit), Browse Down (Browse Down should display the the previous product, its cost and the available
+credit), Select Product (should print the message “Product x dispensed, remaining credit y”, if the
+credit is enough, or “Not enough credit, Product x costs y, credit is z” if credit is not
+enough to buy the product) and
+Return Credit (Return Credit should print the message “x EUR return”, in which “x” is the available
+credit. The credit is set to 0).
+ *
+ * \param[out] button_pressed Was pressed button
+ * 
+ *
+*/
 void butpanelpress_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
     if(BIT(BUTUP) & pins)
@@ -86,6 +123,12 @@ void butpanelpress_cbfunction(const struct device *dev, struct gpio_callback *cb
 }
 
 /* Main function */
+/** \brief Main function of programme
+ * 
+ * The main function has the implementation of a state diagram of a vending machine.
+ * 
+ *
+*/
 void main(void) {
 
     /* Local vars */    
@@ -184,12 +227,30 @@ void main(void) {
     return;
 }
 
+/** \brief Function of trasnformer decimal number two integral numbers
+ * 
+ * That function change a float number para dois numeros inteiros, sendo um deles a parte inteira e o outro a parte decimal do float number.
+ *
+ * \param[in] arg Value of float number
+ * \param[in,out] whole Unitis of float number
+ * \param[in,out] remainder Decimal of float number
+ * 
+ *
+*/
 void float2int(float arg, int* whole, int* remainder)
 {
     *whole = arg;
     *remainder = (arg - *whole) * 10;
 }
 
+
+
+/** \brief Configuration Function.
+ * 
+ * This function configure Output and Input pins of microcontroller.
+ * 
+ *
+*/
 void input_output_config(void)
 {
     const struct device *gpio0_dev;         /* Pointer to GPIO device structure */
