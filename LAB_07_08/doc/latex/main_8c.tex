@@ -1,0 +1,331 @@
+\hypertarget{main_8c}{}\doxysection{src/main.c File Reference}
+\label{main_8c}\index{src/main.c@{src/main.c}}
+
+
+Program that implements the State Machine of a vending machine.  
+
+
+{\ttfamily \#include $<$zephyr.\+h$>$}\newline
+{\ttfamily \#include $<$device.\+h$>$}\newline
+{\ttfamily \#include $<$devicetree.\+h$>$}\newline
+{\ttfamily \#include $<$drivers/gpio.\+h$>$}\newline
+{\ttfamily \#include $<$sys/printk.\+h$>$}\newline
+{\ttfamily \#include $<$sys/\+\_\+\+\_\+assert.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$timing/timing.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$float.\+h$>$}\newline
+Include dependency graph for main.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{main_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{main_8c_a34e2504f779a76bb8ee19df1bbaa14a2}{N\+P\+R\+O\+D\+U\+C\+TS}}~3
+\item 
+\#define \mbox{\hyperlink{main_8c_a3a47b19b66290aa414c508fe6f5039c4}{S\+L\+E\+E\+P\+\_\+\+MS}}~250
+\item 
+\#define \mbox{\hyperlink{main_8c_aef72fe86b7c60b1a86920496456edeac}{W\+A\+IT}}~0
+\item 
+\#define \mbox{\hyperlink{main_8c_acedf3113022062c142e67f4e03468a70}{U\+P\+D\+A\+T\+E\+\_\+\+C\+R\+E\+D\+IT}}~1
+\item 
+\#define \mbox{\hyperlink{main_8c_ae7029b739f2392ac365e0addec2b3089}{U\+P\+D\+A\+T\+E\+\_\+\+P\+R\+O\+D\+U\+CT}}~2
+\item 
+\#define \mbox{\hyperlink{main_8c_a38b9cc1a2b4dd44844b60864e122daf9}{C\+H\+E\+C\+K\+\_\+\+C\+R\+E\+D\+IT}}~3
+\item 
+\#define \mbox{\hyperlink{main_8c_a655c84af1b0034986ff56e12e84f983d}{N\+O\+NE}}~0
+\item 
+\#define \mbox{\hyperlink{main_8c_a1965eaca47dbf3f87acdafc2208f04eb}{UP}}~1
+\item 
+\#define \mbox{\hyperlink{main_8c_a4193cd1c8c2e6ebd0e056fa2364a663f}{D\+O\+WN}}~2
+\item 
+\#define \mbox{\hyperlink{main_8c_a53dc4af00adc7b3b4d12eafb71596dfc}{S\+E\+L\+E\+CT}}~3
+\item 
+\#define \mbox{\hyperlink{main_8c_a6a0e6b80dd3d5ca395cf58151749f5e2}{R\+E\+T\+U\+RN}}~4
+\item 
+\#define \mbox{\hyperlink{main_8c_a4c0e6f34369bef1deb3a9efae6ac14fb}{G\+P\+I\+O0\+\_\+\+N\+ID}}~D\+T\+\_\+\+N\+O\+D\+E\+L\+A\+B\+EL(gpio0)
+\item 
+\#define \mbox{\hyperlink{main_8c_ad3c05b8933cd253785fdd123f6dbfc18}{B\+O\+A\+R\+D\+B\+U\+T1}}~0xb
+\item 
+\#define \mbox{\hyperlink{main_8c_a590d906828bd5948fafbef47dc1c3b0c}{B\+O\+A\+R\+D\+B\+U\+T2}}~0xc
+\item 
+\#define \mbox{\hyperlink{main_8c_a2e82ac21050552495e5a8551178bf258}{B\+O\+A\+R\+D\+B\+U\+T3}}~0x18
+\item 
+\#define \mbox{\hyperlink{main_8c_abee96e1280405ff973ee2b6b07eec104}{B\+O\+A\+R\+D\+B\+U\+T4}}~0x19
+\item 
+\#define \mbox{\hyperlink{main_8c_a51df65f6b8a8c48cbec3c9fed14c1b0a}{B\+U\+T\+UP}}~0x03
+\item 
+\#define \mbox{\hyperlink{main_8c_af3ff019b0ba300edea3866aab05c5f32}{B\+U\+T\+D\+O\+WN}}~0x04
+\item 
+\#define \mbox{\hyperlink{main_8c_a87b5b6d26412c75c3e3016078354662e}{B\+U\+T\+S\+E\+L\+E\+CT}}~0x1c
+\item 
+\#define \mbox{\hyperlink{main_8c_aac026ff88ff97a4510fd9c9a69afcc15}{B\+U\+T\+R\+E\+T\+U\+RN}}~0x1d
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{main_8c_a0145d2779f99dabdb58535a77d802575}{input\+\_\+output\+\_\+config}} (void)
+\begin{DoxyCompactList}\small\item\em Configuration Function. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_adf4f25cec93a1b71a82f3f3e9851b779}{float2int}} (float arg, int $\ast$whole, int $\ast$remainder)
+\begin{DoxyCompactList}\small\item\em Function to transform float number in two integer numbers. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_aacb920cba80b4bc4b2b7cdb44f516cc6}{butcoinpress\+\_\+cbfunction}} (const struct device $\ast$dev, struct gpio\+\_\+callback $\ast$cb, uint32\+\_\+t pins)
+\begin{DoxyCompactList}\small\item\em Callback function of the interrupt from the four board buttons. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a7c05989a2d3eeb24dbbd8ac9b005abe0}{butpanelpress\+\_\+cbfunction}} (const struct device $\ast$dev, struct gpio\+\_\+callback $\ast$cb, uint32\+\_\+t pins)
+\begin{DoxyCompactList}\small\item\em Callback function of the interrupt from the four panel control buttons. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a6288eba0f8e8ad3ab1544ad731eb7667}{main}} (void)
+\begin{DoxyCompactList}\small\item\em Main function of program. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+volatile float \mbox{\hyperlink{main_8c_a19c255bf49fc3ac23d3b62e25a5ce365}{coin}} = 0
+\item 
+volatile int \mbox{\hyperlink{main_8c_ac34533d63de3056364aa3eb56553fe1a}{coin\+\_\+detected}} = 0
+\item 
+volatile int \mbox{\hyperlink{main_8c_a398c25065c498b1c2e76b8047825bcbc}{button\+\_\+pressed}} = \mbox{\hyperlink{main_8c_a655c84af1b0034986ff56e12e84f983d}{N\+O\+NE}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Program that implements the State Machine of a vending machine. 
+
+The program accepts a subset of coins and allows the user to browse through the available products, buy one product and return the credit. The inputs are push-\/buttons and the output is done via U\+A\+R\+T/\+Terminal. It was implemented using the board Nordic nrf52840-\/dk
+
+\begin{DoxyAuthor}{Author}
+André Brandão 
+
+Emanuel Pereira 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+10/05/2022 
+\end{DoxyDate}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{main_8c_ad3c05b8933cd253785fdd123f6dbfc18}\label{main_8c_ad3c05b8933cd253785fdd123f6dbfc18}} 
+\index{main.c@{main.c}!BOARDBUT1@{BOARDBUT1}}
+\index{BOARDBUT1@{BOARDBUT1}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{BOARDBUT1}{BOARDBUT1}}
+{\footnotesize\ttfamily \#define B\+O\+A\+R\+D\+B\+U\+T1~0xb}
+
+Address of Board button 1 used for coin 10 cents \mbox{\Hypertarget{main_8c_a590d906828bd5948fafbef47dc1c3b0c}\label{main_8c_a590d906828bd5948fafbef47dc1c3b0c}} 
+\index{main.c@{main.c}!BOARDBUT2@{BOARDBUT2}}
+\index{BOARDBUT2@{BOARDBUT2}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{BOARDBUT2}{BOARDBUT2}}
+{\footnotesize\ttfamily \#define B\+O\+A\+R\+D\+B\+U\+T2~0xc}
+
+Address of Board button 2 used for coin 20 cents \mbox{\Hypertarget{main_8c_a2e82ac21050552495e5a8551178bf258}\label{main_8c_a2e82ac21050552495e5a8551178bf258}} 
+\index{main.c@{main.c}!BOARDBUT3@{BOARDBUT3}}
+\index{BOARDBUT3@{BOARDBUT3}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{BOARDBUT3}{BOARDBUT3}}
+{\footnotesize\ttfamily \#define B\+O\+A\+R\+D\+B\+U\+T3~0x18}
+
+Address of Board button 3 used for coin 50 cents \mbox{\Hypertarget{main_8c_abee96e1280405ff973ee2b6b07eec104}\label{main_8c_abee96e1280405ff973ee2b6b07eec104}} 
+\index{main.c@{main.c}!BOARDBUT4@{BOARDBUT4}}
+\index{BOARDBUT4@{BOARDBUT4}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{BOARDBUT4}{BOARDBUT4}}
+{\footnotesize\ttfamily \#define B\+O\+A\+R\+D\+B\+U\+T4~0x19}
+
+Address of Board button 4 used for coin 1 euro \mbox{\Hypertarget{main_8c_af3ff019b0ba300edea3866aab05c5f32}\label{main_8c_af3ff019b0ba300edea3866aab05c5f32}} 
+\index{main.c@{main.c}!BUTDOWN@{BUTDOWN}}
+\index{BUTDOWN@{BUTDOWN}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{BUTDOWN}{BUTDOWN}}
+{\footnotesize\ttfamily \#define B\+U\+T\+D\+O\+WN~0x04}
+
+Address of G\+P\+IO where button D\+O\+WN is connected \mbox{\Hypertarget{main_8c_aac026ff88ff97a4510fd9c9a69afcc15}\label{main_8c_aac026ff88ff97a4510fd9c9a69afcc15}} 
+\index{main.c@{main.c}!BUTRETURN@{BUTRETURN}}
+\index{BUTRETURN@{BUTRETURN}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{BUTRETURN}{BUTRETURN}}
+{\footnotesize\ttfamily \#define B\+U\+T\+R\+E\+T\+U\+RN~0x1d}
+
+Address of G\+P\+IO where button R\+E\+T\+U\+RN is connected \mbox{\Hypertarget{main_8c_a87b5b6d26412c75c3e3016078354662e}\label{main_8c_a87b5b6d26412c75c3e3016078354662e}} 
+\index{main.c@{main.c}!BUTSELECT@{BUTSELECT}}
+\index{BUTSELECT@{BUTSELECT}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{BUTSELECT}{BUTSELECT}}
+{\footnotesize\ttfamily \#define B\+U\+T\+S\+E\+L\+E\+CT~0x1c}
+
+Address of G\+P\+IO where button S\+E\+L\+E\+CT is connected \mbox{\Hypertarget{main_8c_a51df65f6b8a8c48cbec3c9fed14c1b0a}\label{main_8c_a51df65f6b8a8c48cbec3c9fed14c1b0a}} 
+\index{main.c@{main.c}!BUTUP@{BUTUP}}
+\index{BUTUP@{BUTUP}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{BUTUP}{BUTUP}}
+{\footnotesize\ttfamily \#define B\+U\+T\+UP~0x03}
+
+Address of G\+P\+IO where button UP is connected \mbox{\Hypertarget{main_8c_a38b9cc1a2b4dd44844b60864e122daf9}\label{main_8c_a38b9cc1a2b4dd44844b60864e122daf9}} 
+\index{main.c@{main.c}!CHECK\_CREDIT@{CHECK\_CREDIT}}
+\index{CHECK\_CREDIT@{CHECK\_CREDIT}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{CHECK\_CREDIT}{CHECK\_CREDIT}}
+{\footnotesize\ttfamily \#define C\+H\+E\+C\+K\+\_\+\+C\+R\+E\+D\+IT~3}
+
+State Check Credit definition \mbox{\Hypertarget{main_8c_a4193cd1c8c2e6ebd0e056fa2364a663f}\label{main_8c_a4193cd1c8c2e6ebd0e056fa2364a663f}} 
+\index{main.c@{main.c}!DOWN@{DOWN}}
+\index{DOWN@{DOWN}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{DOWN}{DOWN}}
+{\footnotesize\ttfamily \#define D\+O\+WN~2}
+
+Flag to signal Down button was pressed \mbox{\Hypertarget{main_8c_a4c0e6f34369bef1deb3a9efae6ac14fb}\label{main_8c_a4c0e6f34369bef1deb3a9efae6ac14fb}} 
+\index{main.c@{main.c}!GPIO0\_NID@{GPIO0\_NID}}
+\index{GPIO0\_NID@{GPIO0\_NID}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{GPIO0\_NID}{GPIO0\_NID}}
+{\footnotesize\ttfamily \#define G\+P\+I\+O0\+\_\+\+N\+ID~D\+T\+\_\+\+N\+O\+D\+E\+L\+A\+B\+EL(gpio0)}
+
+G\+P\+IO 0 Node Label from device tree (refer to dts file) \mbox{\Hypertarget{main_8c_a655c84af1b0034986ff56e12e84f983d}\label{main_8c_a655c84af1b0034986ff56e12e84f983d}} 
+\index{main.c@{main.c}!NONE@{NONE}}
+\index{NONE@{NONE}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{NONE}{NONE}}
+{\footnotesize\ttfamily \#define N\+O\+NE~0}
+
+Flag that indicates no button was pressed \mbox{\Hypertarget{main_8c_a34e2504f779a76bb8ee19df1bbaa14a2}\label{main_8c_a34e2504f779a76bb8ee19df1bbaa14a2}} 
+\index{main.c@{main.c}!NPRODUCTS@{NPRODUCTS}}
+\index{NPRODUCTS@{NPRODUCTS}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{NPRODUCTS}{NPRODUCTS}}
+{\footnotesize\ttfamily \#define N\+P\+R\+O\+D\+U\+C\+TS~3}
+
+Number of products available \mbox{\Hypertarget{main_8c_a6a0e6b80dd3d5ca395cf58151749f5e2}\label{main_8c_a6a0e6b80dd3d5ca395cf58151749f5e2}} 
+\index{main.c@{main.c}!RETURN@{RETURN}}
+\index{RETURN@{RETURN}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{RETURN}{RETURN}}
+{\footnotesize\ttfamily \#define R\+E\+T\+U\+RN~4}
+
+Flag to signal Return button was pressed \mbox{\Hypertarget{main_8c_a53dc4af00adc7b3b4d12eafb71596dfc}\label{main_8c_a53dc4af00adc7b3b4d12eafb71596dfc}} 
+\index{main.c@{main.c}!SELECT@{SELECT}}
+\index{SELECT@{SELECT}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{SELECT}{SELECT}}
+{\footnotesize\ttfamily \#define S\+E\+L\+E\+CT~3}
+
+Flag to signal Select button was pressed \mbox{\Hypertarget{main_8c_a3a47b19b66290aa414c508fe6f5039c4}\label{main_8c_a3a47b19b66290aa414c508fe6f5039c4}} 
+\index{main.c@{main.c}!SLEEP\_MS@{SLEEP\_MS}}
+\index{SLEEP\_MS@{SLEEP\_MS}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{SLEEP\_MS}{SLEEP\_MS}}
+{\footnotesize\ttfamily \#define S\+L\+E\+E\+P\+\_\+\+MS~250}
+
+Sleep period (ms) \mbox{\Hypertarget{main_8c_a1965eaca47dbf3f87acdafc2208f04eb}\label{main_8c_a1965eaca47dbf3f87acdafc2208f04eb}} 
+\index{main.c@{main.c}!UP@{UP}}
+\index{UP@{UP}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{UP}{UP}}
+{\footnotesize\ttfamily \#define UP~1}
+
+Flag to signal Up button was pressed \mbox{\Hypertarget{main_8c_acedf3113022062c142e67f4e03468a70}\label{main_8c_acedf3113022062c142e67f4e03468a70}} 
+\index{main.c@{main.c}!UPDATE\_CREDIT@{UPDATE\_CREDIT}}
+\index{UPDATE\_CREDIT@{UPDATE\_CREDIT}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{UPDATE\_CREDIT}{UPDATE\_CREDIT}}
+{\footnotesize\ttfamily \#define U\+P\+D\+A\+T\+E\+\_\+\+C\+R\+E\+D\+IT~1}
+
+State Update Credit definition \mbox{\Hypertarget{main_8c_ae7029b739f2392ac365e0addec2b3089}\label{main_8c_ae7029b739f2392ac365e0addec2b3089}} 
+\index{main.c@{main.c}!UPDATE\_PRODUCT@{UPDATE\_PRODUCT}}
+\index{UPDATE\_PRODUCT@{UPDATE\_PRODUCT}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{UPDATE\_PRODUCT}{UPDATE\_PRODUCT}}
+{\footnotesize\ttfamily \#define U\+P\+D\+A\+T\+E\+\_\+\+P\+R\+O\+D\+U\+CT~2}
+
+State Update Product definition \mbox{\Hypertarget{main_8c_aef72fe86b7c60b1a86920496456edeac}\label{main_8c_aef72fe86b7c60b1a86920496456edeac}} 
+\index{main.c@{main.c}!WAIT@{WAIT}}
+\index{WAIT@{WAIT}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{WAIT}{WAIT}}
+{\footnotesize\ttfamily \#define W\+A\+IT~0}
+
+State Wait definition 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{main_8c_aacb920cba80b4bc4b2b7cdb44f516cc6}\label{main_8c_aacb920cba80b4bc4b2b7cdb44f516cc6}} 
+\index{main.c@{main.c}!butcoinpress\_cbfunction@{butcoinpress\_cbfunction}}
+\index{butcoinpress\_cbfunction@{butcoinpress\_cbfunction}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{butcoinpress\_cbfunction()}{butcoinpress\_cbfunction()}}
+{\footnotesize\ttfamily void butcoinpress\+\_\+cbfunction (\begin{DoxyParamCaption}\item[{const struct device $\ast$}]{dev,  }\item[{struct gpio\+\_\+callback $\ast$}]{cb,  }\item[{uint32\+\_\+t}]{pins }\end{DoxyParamCaption})}
+
+
+
+Callback function of the interrupt from the four board buttons. 
+
+Interrupt function of four buttons that emulates the insertion of coins, whose values are\+: 10 cents, 20 cents, 50 cents and 1 E\+UR. This function executes when a board button is pressed and signals that a coin was inserted and returns the value of the inserted coin ~\newline
+
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ out}}  & {\em coin} & value of coin \\
+\hline
+\mbox{\texttt{ out}}  & {\em coin\+\_\+detected} & flag to signal the insertion of a coin \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8c_a7c05989a2d3eeb24dbbd8ac9b005abe0}\label{main_8c_a7c05989a2d3eeb24dbbd8ac9b005abe0}} 
+\index{main.c@{main.c}!butpanelpress\_cbfunction@{butpanelpress\_cbfunction}}
+\index{butpanelpress\_cbfunction@{butpanelpress\_cbfunction}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{butpanelpress\_cbfunction()}{butpanelpress\_cbfunction()}}
+{\footnotesize\ttfamily void butpanelpress\+\_\+cbfunction (\begin{DoxyParamCaption}\item[{const struct device $\ast$}]{dev,  }\item[{struct gpio\+\_\+callback $\ast$}]{cb,  }\item[{uint32\+\_\+t}]{pins }\end{DoxyParamCaption})}
+
+
+
+Callback function of the interrupt from the four panel control buttons. 
+
+This function executes when a panel button is pressed and updates which button was pressed. ~\newline
+
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ out}}  & {\em button\+\_\+pressed} & which button was pressed \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8c_adf4f25cec93a1b71a82f3f3e9851b779}\label{main_8c_adf4f25cec93a1b71a82f3f3e9851b779}} 
+\index{main.c@{main.c}!float2int@{float2int}}
+\index{float2int@{float2int}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{float2int()}{float2int()}}
+{\footnotesize\ttfamily void float2int (\begin{DoxyParamCaption}\item[{float}]{arg,  }\item[{int $\ast$}]{whole,  }\item[{int $\ast$}]{remainder }\end{DoxyParamCaption})}
+
+
+
+Function to transform float number in two integer numbers. 
+
+This function converts a float number to two integral numbers, one of them being the integer part and the other the decimal part of the float number. The variables to store the integer and decimal part of the float number must be passed as pointers on the arguments of the function.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em arg} & Value of float number to convert \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em whole} & Pointer to variable to store integer part of float number \\
+\hline
+\mbox{\texttt{ in,out}}  & {\em remainder} & Pointer to variable to store decimal part of float number \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8c_a0145d2779f99dabdb58535a77d802575}\label{main_8c_a0145d2779f99dabdb58535a77d802575}} 
+\index{main.c@{main.c}!input\_output\_config@{input\_output\_config}}
+\index{input\_output\_config@{input\_output\_config}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{input\_output\_config()}{input\_output\_config()}}
+{\footnotesize\ttfamily void input\+\_\+output\+\_\+config (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Configuration Function. 
+
+This function makes all the hardware configuration. Configures the input pins and the interruptions of the microcontroller. \mbox{\Hypertarget{main_8c_a6288eba0f8e8ad3ab1544ad731eb7667}\label{main_8c_a6288eba0f8e8ad3ab1544ad731eb7667}} 
+\index{main.c@{main.c}!main@{main}}
+\index{main@{main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily void main (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Main function of program. 
+
+The main function has the implementation of the state machine of the vending machine. 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{main_8c_a398c25065c498b1c2e76b8047825bcbc}\label{main_8c_a398c25065c498b1c2e76b8047825bcbc}} 
+\index{main.c@{main.c}!button\_pressed@{button\_pressed}}
+\index{button\_pressed@{button\_pressed}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{button\_pressed}{button\_pressed}}
+{\footnotesize\ttfamily volatile int button\+\_\+pressed = \mbox{\hyperlink{main_8c_a655c84af1b0034986ff56e12e84f983d}{N\+O\+NE}}}
+
+Flag which indicates which panel button was pressed \mbox{\Hypertarget{main_8c_a19c255bf49fc3ac23d3b62e25a5ce365}\label{main_8c_a19c255bf49fc3ac23d3b62e25a5ce365}} 
+\index{main.c@{main.c}!coin@{coin}}
+\index{coin@{coin}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{coin}{coin}}
+{\footnotesize\ttfamily volatile float coin = 0}
+
+Value of coin inserted \mbox{\Hypertarget{main_8c_ac34533d63de3056364aa3eb56553fe1a}\label{main_8c_ac34533d63de3056364aa3eb56553fe1a}} 
+\index{main.c@{main.c}!coin\_detected@{coin\_detected}}
+\index{coin\_detected@{coin\_detected}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{coin\_detected}{coin\_detected}}
+{\footnotesize\ttfamily volatile int coin\+\_\+detected = 0}
+
+Flag to signal that a coin was inserted 
