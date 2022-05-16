@@ -3,7 +3,10 @@
  *
  *  The program accepts a subset of coins and allows the user to browse through the available products,
  * buy one product and return the credit. The inputs are push-buttons and the output is done
- * via UART/Terminal. It was implemented using the board Nordic nrf52840-dk
+ * via UART/Terminal. It was implemented using the board Nordic nrf52840-dk. The state machine is on the
+ * next Statechart.
+ * 
+ * \image html UML_Statechart.png
  * 
  * \author André Brandão
  * \author Emanuel Pereira
