@@ -24,6 +24,7 @@
 #define thread_processing_prio 1
 #define thread_actuation_prio 1
 
+#define GPIO0_NID DT_NODELABEL(gpio0) 
 #define PWM0_NID DT_NODELABEL(pwm0) 
 #define BOARDLED_PIN 0x0e
 
@@ -62,7 +63,7 @@ void thread_processing(void *argA, void *argB, void *argC);
 void thread_actuation(void *argA, void *argB, void *argC);
 
 int filter(uint16_t*);
-float array_average(int*, int);
+int array_average(int*, int);
 
 
 /* Main function */
@@ -104,11 +105,11 @@ void thread_sampling(void *argA , void *argB, void *argC)
     {
         sample_buffer.data[sample_buffer.head] = adc_sample();
         
-        printk("%d", sample_buffer.data[sample_buffer.head]);
+        printk("%d\n", sample_buffer.data[sample_buffer.head]);
 
         sample_buffer.head = (sample_buffer.head + 1) % SIZE;
         
-        k_sem_give(&sem_adc);
+       k_sem_give(&sem_adc);
         
         /* Wait for next release instant */ 
         fin_time = k_uptime_get();
@@ -139,26 +140,29 @@ void thread_actuation(void *argA , void *argB, void *argC)
     unsigned int pwmPeriod_us = 1000;       /* PWM priod in us */
 
     pwm0_dev = device_get_binding(DT_LABEL(PWM0_NID));
+    int t1=0;
 
     while(1)
     {
         k_sem_take(&sem_proc, K_FOREVER);
-        
-        pwm_pin_set_usec(pwm0_dev, BOARDLED_PIN, pwmPeriod_us,(unsigned int)((pwmPeriod_us*average)/100), PWM_POLARITY_NORMAL);
+        t1=((average*1000)/3000);
+        printk("t1=%d\n",t1);
+        printk("avg=%d\n",average);
+        pwm_pin_set_usec(pwm0_dev, BOARDLED_PIN, pwmPeriod_us,t1, PWM_POLARITY_NORMAL);
     }
 }
 
 int filter(uint16_t *data)
 {
     unsigned int i, j=0;
-    float avg = 0, high_limit, low_limit;
+    int avg = 0, high_limit, low_limit;
     uint16_t new_data[BUFFER_SIZE];
 
     avg = array_average(data, BUFFER_SIZE);
     high_limit = avg * 1.1;
     low_limit = avg * 0.9;
     
-    for(i = 0; i < BUFFER_SIZE; i++)
+    /*for(i = 0; i < BUFFER_SIZE; i++)
     {
         if(data[i] > low_limit && data[i] < high_limit)
         {
@@ -166,11 +170,13 @@ int filter(uint16_t *data)
             j++;
         }
     }
+    */
     
-    return array_average(new_data, j); 
+    //return array_average(new_data, j); 
+    return avg;
 }
 
-float array_average(int *data, int size)
+int array_average(int *data, int size)
 {
     float sum = 0;
 
