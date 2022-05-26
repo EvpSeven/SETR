@@ -12,7 +12,7 @@
 #include <ADC.h>
 
 /* Sampling Thread periodicity (in ms)*/
-#define SAMP_PERIOD_MS  1000
+#define SAMP_PERIOD_MS  500
 
 #define SIZE 10
 
@@ -43,7 +43,7 @@ k_tid_t thread_sampling_tid;
 k_tid_t thread_processing_tid;
 k_tid_t thread_actuation_tid;
 
-/* Global vars (shared memory between tasks A/B and B/C, resp) */
+/* Global vars (shared memory between tasks) */
 typedef struct {
     uint16_t data[SIZE];
     int head;
@@ -63,7 +63,8 @@ void thread_processing(void *argA, void *argB, void *argC);
 void thread_actuation(void *argA, void *argB, void *argC);
 
 int filter(uint16_t*);
-int array_average(int*, int);
+void array_init(uint16_t*, int);
+int array_average(uint16_t*, int);
 
 
 /* Main function */
@@ -95,6 +96,7 @@ void thread_sampling(void *argA , void *argB, void *argC)
     /* Timing variables to control task periodicity */
     int64_t fin_time=0, release_time=0;
     
+    array_init(sample_buffer.data, SIZE);
     adc_config();
     
     /* Compute next release instant */
@@ -105,7 +107,8 @@ void thread_sampling(void *argA , void *argB, void *argC)
     {
         sample_buffer.data[sample_buffer.head] = adc_sample();
         
-        printk("%d\n", sample_buffer.data[sample_buffer.head]);
+        printk("\n----------------------------\n");
+        printk("\nsample = %d\n", sample_buffer.data[sample_buffer.head]);
 
         sample_buffer.head = (sample_buffer.head + 1) % SIZE;
         
@@ -129,6 +132,8 @@ void thread_processing(void *argA , void *argB, void *argC)
         k_sem_take(&sem_adc,  K_FOREVER);
         
         average = filter(sample_buffer.data);
+        
+        printk("\nnew average = %d\n",average);
 
         k_sem_give(&sem_proc);  
     }
@@ -140,48 +145,68 @@ void thread_actuation(void *argA , void *argB, void *argC)
     unsigned int pwmPeriod_us = 1000;       /* PWM priod in us */
 
     pwm0_dev = device_get_binding(DT_LABEL(PWM0_NID));
-    int t1=0;
+    int ton=0;
 
     while(1)
     {
         k_sem_take(&sem_proc, K_FOREVER);
-        t1=((average*1000)/3000);
-        printk("t1=%d\n",t1);
-        printk("avg=%d\n",average);
-        pwm_pin_set_usec(pwm0_dev, BOARDLED_PIN, pwmPeriod_us,t1, PWM_POLARITY_NORMAL);
+        
+        ton = ((average*1000)/3000);
+        
+        printk("ton = %d\n",ton);
+        
+        pwm_pin_set_usec(pwm0_dev, BOARDLED_PIN, pwmPeriod_us, ton, PWM_POLARITY_NORMAL);
     }
 }
 
 int filter(uint16_t *data)
 {
-    unsigned int i, j=0;
+    int i, j=0;
     int avg = 0, high_limit, low_limit;
-    uint16_t new_data[BUFFER_SIZE];
+    uint16_t new_data[SIZE];
+    
+    array_init(new_data, SIZE);
 
-    avg = array_average(data, BUFFER_SIZE);
+    printk("samples: ");
+    avg = array_average(data, SIZE);
+    
+    printk("\navg = %d\n",avg);
+    
     high_limit = avg * 1.1;
     low_limit = avg * 0.9;
     
-    /*for(i = 0; i < BUFFER_SIZE; i++)
+    printk("\n%d %d\n", high_limit, low_limit);
+    for(i = 0; i < SIZE; i++)
     {
-        if(data[i] > low_limit && data[i] < high_limit)
+        if(data[i] >= low_limit && data[i] <= high_limit)
         {
             new_data[j] = data[i];
             j++;
         }
     }
-    */
+
+    if(j == 0)
+        j = 1;
     
-    //return array_average(new_data, j); 
-    return avg;
+    printk("filtered: ");
+
+    return array_average(new_data, j);;
 }
 
-int array_average(int *data, int size)
+void array_init(uint16_t *data, int size)
 {
-    float sum = 0;
+    for(unsigned int i = 0; i < size; i++)
+        data[i] = 0;
+}
+
+int array_average(uint16_t *data, int size)
+{
+    int sum = 0;
 
     for(unsigned int i = 0; i < size; i++)
+    {
         sum += data[i];
-
+        printk("%d ", data[i]);
+    }
     return sum / size;
 }
