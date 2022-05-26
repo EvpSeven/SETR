@@ -1,3 +1,21 @@
+/** \file main.c
+ * 	\brief Program implementing the application using shared memory and
+semaphores for input values of ADC
+ *
+ *  Main of implementing a Input sensor Emulated by a 10 kΩ potentiometer the application, using shared memory and
+semaphores.
+ Application of Digital filter then moving average filter, with a window size of 10 samples. Removes the
+outliers (10% or high deviation from average) and computes the average of the remaining
+samples.
+Should do Output of pwm signal applied to one of the DevKit leds.
+It was implemented using the board Nordic nrf52840-dk.
+ * 
+ * 
+ * \author André Brandão
+ * \author Emanuel Pereira
+ * \date 26/05/2022
+ */
+
 #include <zephyr.h>
 #include <device.h>
 #include <drivers/gpio.h>
@@ -9,15 +27,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/* import ADC file */
 #include <ADC.h>
 
 /* Sampling Thread periodicity (in ms)*/
-#define SAMP_PERIOD_MS  500
+#define SAMP_PERIOD_MS  500 /**< Sample period (ms) */
 
-#define SIZE 10
+#define SIZE 10 /**< Window Size of samples */
 
 /* Size of stack area used by each thread (can be thread specific, if necessary)*/
-#define STACK_SIZE 1024
+#define STACK_SIZE 1024 /**< Stack Size */
 
 /* Thread scheduling priority */
 #define thread_sampling_prio 1
@@ -165,7 +184,7 @@ int filter(uint16_t *data)
     int avg = 0, high_limit, low_limit;
     uint16_t new_data[SIZE];
     
-    array_init(new_data, SIZE);
+    array_init(new_data, SIZE); // OneTime init of ADC 
 
     printk("samples: ");
     avg = array_average(data, SIZE);

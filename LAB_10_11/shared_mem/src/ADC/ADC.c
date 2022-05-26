@@ -1,9 +1,27 @@
+/** \file ADC.c
+ * 	\brief Program that implements ADC to nRF52840DK_nRF52840 board
+ *
+ * Periodically reads ADC input and return the corresponding raw and voltage value
+ * 
+ * 
+ * \author André Brandão
+ * \author Emanuel Pereira
+ * \date 26/05/2022
+ */
+ 
 #include "ADC.h"
 
 /* Global vars */
-const struct device *adc_dev = NULL;
-static uint16_t adc_sample_buffer[BUFFER_SIZE];
+const struct device *adc_dev = NULL; 
+static uint16_t adc_sample_buffer[BUFFER_SIZE]; /**< Buffer to store the adc sample */
 
+/** \brief Function to configuration ADC
+ *   
+ *  ADC driver's configuration structure.
+ * 
+ *  \see adc_sample()
+ *  
+*/
 void adc_config()
 {
 	int err;
@@ -21,7 +39,24 @@ void adc_config()
     NRF_SAADC->TASKS_CALIBRATEOFFSET = 1;
 }
 
-/* Takes one sample */
+/* Takes one sample */ 
+// Sample the analog output from the Potenciometer
+/** \brief Function to get a sample from ADC
+ *   
+ *  ThisFunction to perform an ADC conversion.
+Function to perform a single channel sample conversion. 
+ *
+ *
+ *  \pre adc_read() has been called
+ * 
+ *  \param[in,out] adc_sample_buffer
+ *
+ *
+ *  \returns one sample in microvolts from ADC.
+ *
+ *
+ *  \see ADC::adc_config()
+*/
 uint16_t adc_sample(void)
 {
 	int ret;
@@ -46,5 +81,5 @@ uint16_t adc_sample(void)
          if(adc_sample_buffer[0] > 1023)
                 adc_sample_buffer[0] = 0;
 
-	return (uint16_t)(1000*adc_sample_buffer[0]*((float)3/1023));
+	return (uint16_t)(1000*adc_sample_buffer[0]*((float)3/1023)); // Convert the sample to microvolts
 }
