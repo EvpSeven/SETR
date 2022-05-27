@@ -1,0 +1,89 @@
+\hypertarget{ADC_8c}{}\doxysection{src/\+A\+D\+C/\+A\+DC.c File Reference}
+\label{ADC_8c}\index{src/ADC/ADC.c@{src/ADC/ADC.c}}
+
+
+Module that implements A\+DC operations in n\+R\+F52840\+D\+K\+\_\+n\+R\+F52840 board.  
+
+
+{\ttfamily \#include \char`\"{}A\+D\+C.\+h\char`\"{}}\newline
+Include dependency graph for A\+D\+C.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=270pt]{ADC_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{ADC_8c_a72e978258f999c12c65075da36a63175}{adc\+\_\+config}} ()
+\begin{DoxyCompactList}\small\item\em Function to configure A\+DC. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{ADC_8c_a5f5884b69950f439de5d6c472366c3af}{adc\+\_\+sample}} (void)
+\begin{DoxyCompactList}\small\item\em Function to get samples from A\+DC. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const struct device $\ast$ \mbox{\hyperlink{ADC_8c_a445f79326d40128ece59a749adff6894}{adc\+\_\+dev}} = N\+U\+LL
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Module that implements A\+DC operations in n\+R\+F52840\+D\+K\+\_\+n\+R\+F52840 board. 
+
+\begin{DoxyAuthor}{Author}
+André Brandão 
+
+Emanuel Pereira 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+26/05/2022 
+\end{DoxyDate}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ADC_8c_a72e978258f999c12c65075da36a63175}\label{ADC_8c_a72e978258f999c12c65075da36a63175}} 
+\index{ADC.c@{ADC.c}!adc\_config@{adc\_config}}
+\index{adc\_config@{adc\_config}!ADC.c@{ADC.c}}
+\doxysubsubsection{\texorpdfstring{adc\_config()}{adc\_config()}}
+{\footnotesize\ttfamily void adc\+\_\+config (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Function to configure A\+DC. 
+
+A\+DC driver\textquotesingle{}s configuration
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{ADC_8c_a5f5884b69950f439de5d6c472366c3af}{adc\+\_\+sample()}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{ADC_8c_a5f5884b69950f439de5d6c472366c3af}\label{ADC_8c_a5f5884b69950f439de5d6c472366c3af}} 
+\index{ADC.c@{ADC.c}!adc\_sample@{adc\_sample}}
+\index{adc\_sample@{adc\_sample}!ADC.c@{ADC.c}}
+\doxysubsubsection{\texorpdfstring{adc\_sample()}{adc\_sample()}}
+{\footnotesize\ttfamily uint16\+\_\+t adc\+\_\+sample (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Function to get samples from A\+DC. 
+
+This function performs an A\+DC conversion and converts it to the corresponfing tension.
+
+\begin{DoxyPrecond}{Precondition}
+adc\+\_\+read() has been called
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+tension in milivolts from A\+DC.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+A\+D\+C\+::adc\+\_\+config() 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{ADC_8c_a445f79326d40128ece59a749adff6894}\label{ADC_8c_a445f79326d40128ece59a749adff6894}} 
+\index{ADC.c@{ADC.c}!adc\_dev@{adc\_dev}}
+\index{adc\_dev@{adc\_dev}!ADC.c@{ADC.c}}
+\doxysubsubsection{\texorpdfstring{adc\_dev}{adc\_dev}}
+{\footnotesize\ttfamily const struct device$\ast$ adc\+\_\+dev = N\+U\+LL}
+
+Pointer to A\+DC device structure 
