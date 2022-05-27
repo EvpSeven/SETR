@@ -107,6 +107,8 @@ void main(void) {
  * It's a periodic thread that reads the adc with period SAMP_PERIOD_MS and stores it in the sample buffer.
  * After sampling triggers the processing task.
  * 
+ * \pre adc_sample()
+ * 
  * \see SAMP_PERIOD_MS
  */
 void thread_sampling(void *argA , void *argB, void *argC)
@@ -149,6 +151,9 @@ void thread_sampling(void *argA , void *argB, void *argC)
  * It filters the data samples and updates the average of the filtered data samples.
  * It's a sporadic thread triggered by the end of sampling (sampling thread). After processing
  * triggers the actuation task.
+ * 
+ * \see filter(uint16_t *data)
+ * 
  */
 void thread_processing(void *argA , void *argB, void *argC)
 {
@@ -206,6 +211,7 @@ int filter(uint16_t *data)
     int avg = 0, high_limit, low_limit;
     uint16_t new_data[SIZE];
     
+    // Array empty init
     array_init(new_data, SIZE);
 
     printk("samples: ");
@@ -213,6 +219,7 @@ int filter(uint16_t *data)
     
     printk("\navg = %d\n",avg);
     
+    // Outliers Calculation
     high_limit = avg * 1.1;
     low_limit = avg * 0.9;
     

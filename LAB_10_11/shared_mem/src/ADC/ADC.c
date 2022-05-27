@@ -43,7 +43,7 @@ void adc_config()
  *
  *  \returns tension in milivolts from ADC.
  * 
- *  \see ADC::adc_config()
+ *  \see adc_config()
 */
 uint16_t adc_sample(void)
 {

@@ -1,9 +1,22 @@
+/** \file ADC.c
+ * 	\brief Module that implements ADC operations in nRF52840DK_nRF52840 board
+ * 
+ * \author André Brandão
+ * \author Emanuel Pereira
+ * \date 29/05/2022
+ */
 #include "ADC.h"
 
 /* Global vars */
-const struct device *adc_dev = NULL;
-static uint16_t adc_sample_buffer[BUFFER_SIZE];
+const struct device *adc_dev = NULL; /**< Pointer to ADC device structure */
+static uint16_t adc_sample_buffer[BUFFER_SIZE]; /**< Buffer to store the adc samples */
 
+/** \brief Function to configure ADC
+ *   
+ *  ADC driver's configuration
+ * 
+ *  \see adc_sample()
+*/
 void adc_config()
 {
 	int err;
@@ -21,7 +34,16 @@ void adc_config()
     NRF_SAADC->TASKS_CALIBRATEOFFSET = 1;
 }
 
-/* Takes one sample */
+/** \brief Function to get samples from ADC
+ *   
+ *  This function performs an ADC conversion and converts it to the corresponfing tension.
+ *
+ *  \pre adc_read() has been called
+ *
+ *  \returns tension in milivolts from ADC.
+ * 
+ *  \see adc_config()
+*/
 uint16_t adc_sample(void)
 {
 	int ret;

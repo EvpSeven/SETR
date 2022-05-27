@@ -1,26 +1,33 @@
+/** \file ADC.h
+ * 	\brief Module that implements ADC operations in nRF52840DK_nRF52840 board
+ *
+ * \author André Brandão
+ * \author Emanuel Pereira
+ * \date 29/05/2022
+ */
 #ifndef _ADC_H
 #define _ADC_H
 
-#include <drivers/adc.h>
+#include <drivers/adc.h> //Import ADC Drivers definitions
 
 /*ADC definitions and includes*/
 #include <hal/nrf_saadc.h>
 
-#define ADC_NID DT_NODELABEL(adc) 
-#define ADC_RESOLUTION 10
-#define ADC_GAIN ADC_GAIN_1_4
-#define ADC_REFERENCE ADC_REF_VDD_1_4
-#define ADC_ACQUISITION_TIME ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 40)
-#define ADC_CHANNEL_ID 1
+#define ADC_NID DT_NODELABEL(adc) /**<  ADC Node Label from device tree (refer to dts file)*/
+#define ADC_RESOLUTION 10 /**< ADC Resolution */
+#define ADC_GAIN ADC_GAIN_1_4 /**< ADC Gain */
+#define ADC_REFERENCE ADC_REF_VDD_1_4 /**< ADC Reference Tension */
+#define ADC_ACQUISITION_TIME ADC_ACQ_TIME(ADC_ACQ_TIME_MICROSECONDS, 40) /**< ADC Acquisition Time */
+#define ADC_CHANNEL_ID 1 /**< ADC Channel ID */
 
 /* This is the actual nRF ANx input to use. Note that a channel can be assigned to any ANx. In fact a channel can */
 /*    be assigned to two ANx, when differential reading is set (one ANx for the positive signal and the other one for the negative signal) */  
 /* Note also that the configuration of differnt channels is completely independent (gain, resolution, ref voltage, ...) */
-#define ADC_CHANNEL_INPUT NRF_SAADC_INPUT_AIN1 
+#define ADC_CHANNEL_INPUT NRF_SAADC_INPUT_AIN1 /**< ADC INPUT PIN */
 
-#define BUFFER_SIZE 1
+#define BUFFER_SIZE 1 /**< ADC sampling Buffer Size */
 
-/* ADC channel configuration */
+/**< ADC channel configuration */
 static const struct adc_channel_cfg my_channel_cfg = {
 	.gain = ADC_GAIN,
 	.reference = ADC_REFERENCE,
