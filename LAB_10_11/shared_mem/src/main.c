@@ -27,7 +27,7 @@
 /* import ADC file */
 #include <ADC.h>
 
-#define SAMP_PERIOD_MS  500 /**< Sample period (ms) */
+#define SAMP_PERIOD_MS  1000 /**< Sample period (ms) */
 
 #define SIZE 10 /**< Window Size of samples (digital filter) */
 
@@ -116,8 +116,8 @@ void thread_sampling(void *argA , void *argB, void *argC)
     /* Timing variables to control task periodicity */
     int64_t fin_time=0, release_time=0;
     
-    array_init(sample_buffer.data, SIZE);
-    adc_config();
+    array_init(sample_buffer.data, SIZE);   // Initialize array with zeros
+    adc_config();   // Configure adc
     
     /* Compute next release instant */
     release_time = k_uptime_get() + SAMP_PERIOD_MS;
@@ -125,14 +125,14 @@ void thread_sampling(void *argA , void *argB, void *argC)
     /* Thread loop */
     while(1)
     {
-        sample_buffer.data[sample_buffer.head] = adc_sample();
+        sample_buffer.data[sample_buffer.head] = adc_sample();  // Get adc sample and store it in sample buffer
         
         printk("\n----------------------------\n");
         printk("\nsample = %d\n", sample_buffer.data[sample_buffer.head]);
 
-        sample_buffer.head = (sample_buffer.head + 1) % SIZE;
+        sample_buffer.head = (sample_buffer.head + 1) % SIZE;   // Increment position to store data
         
-       k_sem_give(&sem_adc);
+       k_sem_give(&sem_adc);    // Signal new sample
         
         /* Wait for next release instant */ 
         fin_time = k_uptime_get();
@@ -159,13 +159,13 @@ void thread_processing(void *argA , void *argB, void *argC)
 {
     while(1)
     {
-        k_sem_take(&sem_adc,  K_FOREVER);
+        k_sem_take(&sem_adc,  K_FOREVER);   // Wait for new sample
         
-        average = filter(sample_buffer.data);
+        average = filter(sample_buffer.data);   // Filter data
         
         printk("\nnew average = %d\n",average);
 
-        k_sem_give(&sem_proc);  
+        k_sem_give(&sem_proc);  // Signal new processed data
     }
 }
 
@@ -178,20 +178,22 @@ void thread_processing(void *argA , void *argB, void *argC)
 void thread_actuation(void *argA , void *argB, void *argC)
 {
     const struct device *pwm0_dev;          /* Pointer to PWM device structure */
-    unsigned int pwmPeriod_us = 1000;       /* PWM priod in us */
+    unsigned int pwmPeriod_us = 1000;       /* PWM period in us */
+
+    int ton=0;  // PWM ton
 
     pwm0_dev = device_get_binding(DT_LABEL(PWM0_NID));
-    int ton=0;
+    
 
     while(1)
     {
-        k_sem_take(&sem_proc, K_FOREVER);
+        k_sem_take(&sem_proc, K_FOREVER);   // Wait for new processed data
         
-        ton = ((average*1000)/3000);
+        ton = ((average*1000)/3000);    // Compute ton of PWM
         
         printk("ton = %d\n",ton);
         
-        pwm_pin_set_usec(pwm0_dev, BOARDLED_PIN, pwmPeriod_us, ton, PWM_POLARITY_NORMAL);
+        pwm_pin_set_usec(pwm0_dev, BOARDLED_PIN, pwmPeriod_us, ton, PWM_POLARITY_NORMAL);   // Update PWM
     }
 }
 
@@ -215,7 +217,7 @@ int filter(uint16_t *data)
     array_init(new_data, SIZE);
 
     printk("samples: ");
-    avg = array_average(data, SIZE);
+    avg = array_average(data, SIZE);     // Get array average
     
     printk("\navg = %d\n",avg);
     
@@ -223,22 +225,22 @@ int filter(uint16_t *data)
     high_limit = avg * 1.1;
     low_limit = avg * 0.9;
     
-    printk("\n%d %d\n", high_limit, low_limit);
     for(i = 0; i < SIZE; i++)
     {
-        if(data[i] >= low_limit && data[i] <= high_limit)
+        if(data[i] >= low_limit && data[i] <= high_limit)   // More then average*1.1 and less then average*0.9 IGNORE
         {
             new_data[j] = data[i];
             j++;
         }
     }
 
+    // If empty data array set size to one to not generate error calculating average
     if(j == 0)
         j = 1;
     
     printk("filtered: ");
 
-    return array_average(new_data, j);;
+    return array_average(new_data, j);  // return average of filtered data
 }
 
 /** \brief Function to initialize integer array

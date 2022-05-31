@@ -41,7 +41,7 @@ void adc_config()
  *
  *  \pre adc_read() has been called
  *
- *  \returns tension in milivolts from ADC.
+ *  \returns tension in millivolts from ADC.
  * 
  *  \see adc_config()
 */
@@ -60,14 +60,14 @@ uint16_t adc_sample(void)
             return -1;
 	}
 
-	ret = adc_read(adc_dev, &sequence);
+	ret = adc_read(adc_dev, &sequence);	// Get adc sample
 
 	if (ret) {
             printk("adc_read() failed with code %d\n", ret);
 	}	
 	
-         if(adc_sample_buffer[0] > 1023)
+         if(adc_sample_buffer[0] > 1023)	// Out of range
                 adc_sample_buffer[0] = 0;
 
-	return (uint16_t)(1000*adc_sample_buffer[0]*((float)3/1023)); // Convert the sample to microvolts
+	return (uint16_t)(1000*adc_sample_buffer[0]*((float)3/1023)); // Convert the sample to millivolts
 }

@@ -26,11 +26,9 @@
 /* import ADC file */
 #include <ADC.h>
 
-
-#define SAMP_PERIOD_MS  5 /**< Sample period (ms) */
+#define SAMP_PERIOD_MS  1000 /**< Sample period (ms) */
 
 #define SIZE 10 /**< Window Size of samples (digital filter) */
-
 
 #define STACK_SIZE 1024 /**< Size of stack area used by each thread */
 
@@ -126,7 +124,7 @@ void thread_sampling(void *argA , void *argB, void *argC)
     /* Create/Init fifos */
     k_fifo_init(&fifo_sample);
     
-    adc_config();
+    adc_config(); // Configure adc
     
     /* Compute next release instant */
     release_time = k_uptime_get() + SAMP_PERIOD_MS;
@@ -134,12 +132,12 @@ void thread_sampling(void *argA , void *argB, void *argC)
     /* Thread loop */
     while(1)
     {
-        sample.data = adc_sample();
+        sample.data = adc_sample(); // Get adc sample
         
         printk("\n----------------------------\n");
         printk("\nsample = %d\n", sample.data);
 
-        k_fifo_put(&fifo_sample, &sample);        
+        k_fifo_put(&fifo_sample, &sample);  // Store sample on FIFO
        
         
         /* Wait for next release instant */ 
@@ -174,15 +172,15 @@ void thread_processing(void *argA , void *argB, void *argC)
     
     while(1)
     {
-       data_samples = k_fifo_get(&fifo_sample, K_FOREVER);
-       buffer.data[buffer.head] = data_samples->data;
+        data_samples = k_fifo_get(&fifo_sample, K_FOREVER);  // Get sample from FIFO
+        buffer.data[buffer.head] = data_samples->data;   // Append to sample array
        
-       buffer.head = (buffer.head + 1) % SIZE;
+        buffer.head = (buffer.head + 1) % SIZE;     // Increment position to store data
         
-        average.data = filter(buffer.data);
+        average.data = filter(buffer.data);     // Filter data
         
         printk("\nnew average = %d\n",average.data);
-        k_fifo_put(&fifo_average, &average);
+        k_fifo_put(&fifo_average, &average);    // Store average on FIFO
          
     }
 }
@@ -204,13 +202,13 @@ void thread_actuation(void *argA , void *argB, void *argC)
 
     while(1)
     {
-         average = k_fifo_get(&fifo_average, K_FOREVER);
+        average = k_fifo_get(&fifo_average, K_FOREVER); // Get average from FIFO
         
-        ton = ((average->data*1000)/3000);
+        ton = ((average->data*1000)/3000);  // Compute ton of PWM
         
         printk("ton = %d\n",ton);
         
-        pwm_pin_set_usec(pwm0_dev, BOARDLED_PIN, pwmPeriod_us, ton, PWM_POLARITY_NORMAL);
+        pwm_pin_set_usec(pwm0_dev, BOARDLED_PIN, pwmPeriod_us, ton, PWM_POLARITY_NORMAL);   // Update PWM
     }
 }
 
@@ -234,7 +232,7 @@ int filter(uint16_t *data)
     array_init(new_data, SIZE);
 
     printk("samples: ");
-    avg = array_average(data, SIZE);
+    avg = array_average(data, SIZE);    // Get array average
     
     printk("\navg = %d\n",avg);
     
@@ -251,12 +249,13 @@ int filter(uint16_t *data)
         }
     }
 
+    // If empty data array set size to one to not generate error calculating average
     if(j == 0)
         j = 1;
     
     printk("filtered: ");
 
-    return array_average(new_data, j);;
+    return array_average(new_data, j);  // return average of filtered data
 }
 
 /** \brief Function to initialize integer array

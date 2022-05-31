@@ -1,0 +1,5 @@
+<map id="src/ADC/ADC.h" name="src/ADC/ADC.h">
+<area shape="rect" id="node1" title="Module that implements ADC operations in nRF52840DK_nRF52840 board." alt="" coords="67,5,185,32"/>
+<area shape="rect" id="node2" href="$ADC_8c.html" title="Module that implements ADC operations in nRF52840DK_nRF52840 board." alt="" coords="5,80,121,107"/>
+<area shape="rect" id="node3" href="$main_8c.html" title="Program implementing an application using FIFO and threads for processing input values from ADC." alt="" coords="145,80,235,107"/>
+</map>

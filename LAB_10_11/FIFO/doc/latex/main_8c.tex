@@ -1,0 +1,349 @@
+\hypertarget{main_8c}{}\doxysection{src/main.c File Reference}
+\label{main_8c}\index{src/main.c@{src/main.c}}
+
+
+Program implementing an application using F\+I\+FO and threads for processing input values from A\+DC.  
+
+
+{\ttfamily \#include $<$zephyr.\+h$>$}\newline
+{\ttfamily \#include $<$device.\+h$>$}\newline
+{\ttfamily \#include $<$drivers/gpio.\+h$>$}\newline
+{\ttfamily \#include $<$drivers/pwm.\+h$>$}\newline
+{\ttfamily \#include $<$sys/printk.\+h$>$}\newline
+{\ttfamily \#include $<$sys/\+\_\+\+\_\+assert.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$timing/timing.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include $<$A\+D\+C.\+h$>$}\newline
+Include dependency graph for main.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{main_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structdata__item__t}{data\+\_\+item\+\_\+t}}
+\item 
+struct \mbox{\hyperlink{structbuffer}{buffer}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{main_8c_a7829e7c5c37ea8a78e879aa2028dfb21}{S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS}}~1000
+\item 
+\#define \mbox{\hyperlink{main_8c_a70ed59adcb4159ac551058053e649640}{S\+I\+ZE}}~10
+\item 
+\#define \mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}}~1024
+\item 
+\#define \mbox{\hyperlink{main_8c_a91585133db96440dc6b21718535c5e6b}{thread\+\_\+sampling\+\_\+prio}}~1
+\item 
+\#define \mbox{\hyperlink{main_8c_a5620c118b737fef676e57cb77cc36d64}{thread\+\_\+processing\+\_\+prio}}~1
+\item 
+\#define \mbox{\hyperlink{main_8c_ad74d90eda75d0ad6e39cbd57bd69f194}{thread\+\_\+actuation\+\_\+prio}}~1
+\item 
+\#define \mbox{\hyperlink{main_8c_ab48b150a8660d0152dfde25b42c1755f}{P\+W\+M0\+\_\+\+N\+ID}}~D\+T\+\_\+\+N\+O\+D\+E\+L\+A\+B\+EL(pwm0)
+\item 
+\#define \mbox{\hyperlink{main_8c_a66e62e873d067860b696a1f47b60916a}{B\+O\+A\+R\+D\+L\+E\+D\+\_\+\+P\+IN}}~0x0e
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{main_8c_aed504b09e3fbdcd75329b4f263f87180}{K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE}} (thread\+\_\+sampling\+\_\+stack, \mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}})
+\item 
+\mbox{\hyperlink{main_8c_a60b0d6ae7ba79d10f65ff3dc5ecd1b4a}{K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE}} (thread\+\_\+processing\+\_\+stack, \mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}})
+\item 
+\mbox{\hyperlink{main_8c_a548d30e3288a3adc33006169b3023238}{K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE}} (thread\+\_\+actuation\+\_\+stack, \mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}})
+\item 
+void \mbox{\hyperlink{main_8c_a9dd5adc8098fcc8d9bd5eeb53ad776b3}{thread\+\_\+sampling}} (void $\ast$argA, void $\ast$argB, void $\ast$argC)
+\begin{DoxyCompactList}\small\item\em Sampling thread. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_ac6cd5cbb553e2ad23e28ad0a1074c8b0}{thread\+\_\+processing}} (void $\ast$argA, void $\ast$argB, void $\ast$argC)
+\begin{DoxyCompactList}\small\item\em Processing thread. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a116f5dda3e3079992fc8cb4f8f59e11f}{thread\+\_\+actuation}} (void $\ast$argA, void $\ast$argB, void $\ast$argC)
+\begin{DoxyCompactList}\small\item\em Actuation thread. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{main_8c_a483c2ceff406d289c99c650cda7a7790}{filter}} (uint16\+\_\+t $\ast$data)
+\begin{DoxyCompactList}\small\item\em Function to implement a digital filter. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a88f039a18f99e4ced4fa913e96e3500f}{array\+\_\+init}} (uint16\+\_\+t $\ast$data, int size)
+\begin{DoxyCompactList}\small\item\em Function to initialize integer array. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{main_8c_aa5ba7fecc06d28ecb4b6b383d839453c}{array\+\_\+average}} (uint16\+\_\+t $\ast$data, int size)
+\begin{DoxyCompactList}\small\item\em Function to compute the average of an array. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_a6288eba0f8e8ad3ab1544ad731eb7667}{main}} (void)
+\begin{DoxyCompactList}\small\item\em Main function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+struct k\+\_\+thread \mbox{\hyperlink{main_8c_a0e7f1b0a6ba03822803b25f00d855550}{thread\+\_\+sampling\+\_\+data}}
+\item 
+struct k\+\_\+thread \mbox{\hyperlink{main_8c_a0d5266f8e4ee9131f1499bc89f35146a}{thread\+\_\+processing\+\_\+data}}
+\item 
+struct k\+\_\+thread \mbox{\hyperlink{main_8c_a9a0bf1249db244ace268c06987aa8bc3}{thread\+\_\+actuation\+\_\+data}}
+\item 
+k\+\_\+tid\+\_\+t \mbox{\hyperlink{main_8c_affec45d15496ae9963fe20d598aee1ef}{thread\+\_\+sampling\+\_\+tid}}
+\item 
+k\+\_\+tid\+\_\+t \mbox{\hyperlink{main_8c_ad695b944931709e9377a32f2f67579ae}{thread\+\_\+processing\+\_\+tid}}
+\item 
+k\+\_\+tid\+\_\+t \mbox{\hyperlink{main_8c_a3dec149768a6eae4f33afb78a0fba16a}{thread\+\_\+actuation\+\_\+tid}}
+\item 
+struct k\+\_\+fifo \mbox{\hyperlink{main_8c_a64d04cedb2696155f0efbfd6c6c04f69}{fifo\+\_\+sample}}
+\item 
+struct k\+\_\+fifo \mbox{\hyperlink{main_8c_a3580b4cf19b448d8a42bd9b0357ab70f}{fifo\+\_\+average}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Program implementing an application using F\+I\+FO and threads for processing input values from A\+DC. 
+
+The system implements a basic processing of an analog signal. It reads the input voltage from an analog sensor (emulated by a 10 kΩ potentiometer), digitally filters the signal and outputs it (P\+WM signal). The Digital filter consists in a moving average filter that removes the outliers (10\% or high deviation from average) and outputs the average of the remaining samples. This average is computed into a pulse width of a pwm signal that is applied to one of the Dev\+Kit leds. It was implemented recuuring to threads and fifo. It was implemented using the board Nordic nrf52840-\/dk.
+
+\begin{DoxyAuthor}{Author}
+André Brandão 
+
+Emanuel Pereira 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/05/2022 
+\end{DoxyDate}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{main_8c_a66e62e873d067860b696a1f47b60916a}\label{main_8c_a66e62e873d067860b696a1f47b60916a}} 
+\index{main.c@{main.c}!BOARDLED\_PIN@{BOARDLED\_PIN}}
+\index{BOARDLED\_PIN@{BOARDLED\_PIN}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{BOARDLED\_PIN}{BOARDLED\_PIN}}
+{\footnotesize\ttfamily \#define B\+O\+A\+R\+D\+L\+E\+D\+\_\+\+P\+IN~0x0e}
+
+Address of the L\+ED pin used to output pwm \mbox{\Hypertarget{main_8c_ab48b150a8660d0152dfde25b42c1755f}\label{main_8c_ab48b150a8660d0152dfde25b42c1755f}} 
+\index{main.c@{main.c}!PWM0\_NID@{PWM0\_NID}}
+\index{PWM0\_NID@{PWM0\_NID}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{PWM0\_NID}{PWM0\_NID}}
+{\footnotesize\ttfamily \#define P\+W\+M0\+\_\+\+N\+ID~D\+T\+\_\+\+N\+O\+D\+E\+L\+A\+B\+EL(pwm0)}
+
+pwm0 Node Label from device tree (refer to dts file) \mbox{\Hypertarget{main_8c_a7829e7c5c37ea8a78e879aa2028dfb21}\label{main_8c_a7829e7c5c37ea8a78e879aa2028dfb21}} 
+\index{main.c@{main.c}!SAMP\_PERIOD\_MS@{SAMP\_PERIOD\_MS}}
+\index{SAMP\_PERIOD\_MS@{SAMP\_PERIOD\_MS}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{SAMP\_PERIOD\_MS}{SAMP\_PERIOD\_MS}}
+{\footnotesize\ttfamily \#define S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS~1000}
+
+Sample period (ms) \mbox{\Hypertarget{main_8c_a70ed59adcb4159ac551058053e649640}\label{main_8c_a70ed59adcb4159ac551058053e649640}} 
+\index{main.c@{main.c}!SIZE@{SIZE}}
+\index{SIZE@{SIZE}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{SIZE}{SIZE}}
+{\footnotesize\ttfamily \#define S\+I\+ZE~10}
+
+Window Size of samples (digital filter) \mbox{\Hypertarget{main_8c_a6423a880df59733d2d9b509c7718d3a9}\label{main_8c_a6423a880df59733d2d9b509c7718d3a9}} 
+\index{main.c@{main.c}!STACK\_SIZE@{STACK\_SIZE}}
+\index{STACK\_SIZE@{STACK\_SIZE}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{STACK\_SIZE}{STACK\_SIZE}}
+{\footnotesize\ttfamily \#define S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE~1024}
+
+Size of stack area used by each thread \mbox{\Hypertarget{main_8c_ad74d90eda75d0ad6e39cbd57bd69f194}\label{main_8c_ad74d90eda75d0ad6e39cbd57bd69f194}} 
+\index{main.c@{main.c}!thread\_actuation\_prio@{thread\_actuation\_prio}}
+\index{thread\_actuation\_prio@{thread\_actuation\_prio}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_actuation\_prio}{thread\_actuation\_prio}}
+{\footnotesize\ttfamily \#define thread\+\_\+actuation\+\_\+prio~1}
+
+Scheduling actuation of sampling thread \mbox{\Hypertarget{main_8c_a5620c118b737fef676e57cb77cc36d64}\label{main_8c_a5620c118b737fef676e57cb77cc36d64}} 
+\index{main.c@{main.c}!thread\_processing\_prio@{thread\_processing\_prio}}
+\index{thread\_processing\_prio@{thread\_processing\_prio}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_processing\_prio}{thread\_processing\_prio}}
+{\footnotesize\ttfamily \#define thread\+\_\+processing\+\_\+prio~1}
+
+Scheduling priority of processing thread \mbox{\Hypertarget{main_8c_a91585133db96440dc6b21718535c5e6b}\label{main_8c_a91585133db96440dc6b21718535c5e6b}} 
+\index{main.c@{main.c}!thread\_sampling\_prio@{thread\_sampling\_prio}}
+\index{thread\_sampling\_prio@{thread\_sampling\_prio}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_sampling\_prio}{thread\_sampling\_prio}}
+{\footnotesize\ttfamily \#define thread\+\_\+sampling\+\_\+prio~1}
+
+Scheduling priority of sampling thread 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{main_8c_aa5ba7fecc06d28ecb4b6b383d839453c}\label{main_8c_aa5ba7fecc06d28ecb4b6b383d839453c}} 
+\index{main.c@{main.c}!array\_average@{array\_average}}
+\index{array\_average@{array\_average}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{array\_average()}{array\_average()}}
+{\footnotesize\ttfamily int array\+\_\+average (\begin{DoxyParamCaption}\item[{uint16\+\_\+t $\ast$}]{data,  }\item[{int}]{size }\end{DoxyParamCaption})}
+
+
+
+Function to compute the average of an array. 
+
+This function computes the average of an array of integers.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em data} & pointer to array \\
+\hline
+\mbox{\texttt{ in}}  & {\em size} & number of elements of the array\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+average of the array (integer type) 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8c_a88f039a18f99e4ced4fa913e96e3500f}\label{main_8c_a88f039a18f99e4ced4fa913e96e3500f}} 
+\index{main.c@{main.c}!array\_init@{array\_init}}
+\index{array\_init@{array\_init}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{array\_init()}{array\_init()}}
+{\footnotesize\ttfamily void array\+\_\+init (\begin{DoxyParamCaption}\item[{uint16\+\_\+t $\ast$}]{data,  }\item[{int}]{size }\end{DoxyParamCaption})}
+
+
+
+Function to initialize integer array. 
+
+This function fills an integer array with zeros
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em data} & pointer to array \\
+\hline
+\mbox{\texttt{ in}}  & {\em size} & number of elements of the array \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{main_8c_a483c2ceff406d289c99c650cda7a7790}\label{main_8c_a483c2ceff406d289c99c650cda7a7790}} 
+\index{main.c@{main.c}!filter@{filter}}
+\index{filter@{filter}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{filter()}{filter()}}
+{\footnotesize\ttfamily int filter (\begin{DoxyParamCaption}\item[{uint16\+\_\+t $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Function to implement a digital filter. 
+
+This function implements a digital filter that removes the outliers (10\% or high deviation from average) from a set of data and computes the average of the remaining samples. ~\newline
+
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em data} & pointer to array\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+average of the data without the outliers 
+\end{DoxyReturn}
+\mbox{\Hypertarget{main_8c_a548d30e3288a3adc33006169b3023238}\label{main_8c_a548d30e3288a3adc33006169b3023238}} 
+\index{main.c@{main.c}!K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}}
+\index{K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{K\_THREAD\_STACK\_DEFINE()}{K\_THREAD\_STACK\_DEFINE()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE (\begin{DoxyParamCaption}\item[{thread\+\_\+actuation\+\_\+stack}]{,  }\item[{\mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}}}]{ }\end{DoxyParamCaption})}
+
+Create actuation thread stack space \mbox{\Hypertarget{main_8c_a60b0d6ae7ba79d10f65ff3dc5ecd1b4a}\label{main_8c_a60b0d6ae7ba79d10f65ff3dc5ecd1b4a}} 
+\index{main.c@{main.c}!K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}}
+\index{K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{K\_THREAD\_STACK\_DEFINE()}{K\_THREAD\_STACK\_DEFINE()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE (\begin{DoxyParamCaption}\item[{thread\+\_\+processing\+\_\+stack}]{,  }\item[{\mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}}}]{ }\end{DoxyParamCaption})}
+
+Create processing thread stack space \mbox{\Hypertarget{main_8c_aed504b09e3fbdcd75329b4f263f87180}\label{main_8c_aed504b09e3fbdcd75329b4f263f87180}} 
+\index{main.c@{main.c}!K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}}
+\index{K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{K\_THREAD\_STACK\_DEFINE()}{K\_THREAD\_STACK\_DEFINE()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE (\begin{DoxyParamCaption}\item[{thread\+\_\+sampling\+\_\+stack}]{,  }\item[{\mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}}}]{ }\end{DoxyParamCaption})}
+
+Create sampling thread stack space \mbox{\Hypertarget{main_8c_a6288eba0f8e8ad3ab1544ad731eb7667}\label{main_8c_a6288eba0f8e8ad3ab1544ad731eb7667}} 
+\index{main.c@{main.c}!main@{main}}
+\index{main@{main}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily void main (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Main function. 
+
+The main function initializes the fifo and creates the threads \mbox{\Hypertarget{main_8c_a116f5dda3e3079992fc8cb4f8f59e11f}\label{main_8c_a116f5dda3e3079992fc8cb4f8f59e11f}} 
+\index{main.c@{main.c}!thread\_actuation@{thread\_actuation}}
+\index{thread\_actuation@{thread\_actuation}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_actuation()}{thread\_actuation()}}
+{\footnotesize\ttfamily void thread\+\_\+actuation (\begin{DoxyParamCaption}\item[{void $\ast$}]{argA,  }\item[{void $\ast$}]{argB,  }\item[{void $\ast$}]{argC }\end{DoxyParamCaption})}
+
+
+
+Actuation thread. 
+
+This thread implements the task of actuation. It computes the pulse width of the pwm signal from the average (computed on the processing task) and updates the pwm signal. It\textquotesingle{}s a sporadic thread triggered by the end of processing (processing thread). \mbox{\Hypertarget{main_8c_ac6cd5cbb553e2ad23e28ad0a1074c8b0}\label{main_8c_ac6cd5cbb553e2ad23e28ad0a1074c8b0}} 
+\index{main.c@{main.c}!thread\_processing@{thread\_processing}}
+\index{thread\_processing@{thread\_processing}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_processing()}{thread\_processing()}}
+{\footnotesize\ttfamily void thread\+\_\+processing (\begin{DoxyParamCaption}\item[{void $\ast$}]{argA,  }\item[{void $\ast$}]{argB,  }\item[{void $\ast$}]{argC }\end{DoxyParamCaption})}
+
+
+
+Processing thread. 
+
+This thread implements the task of processing. It filters the data samples and updates the average of the filtered data samples. It\textquotesingle{}s a sporadic thread triggered by the end of sampling (sampling thread). After processing triggers the actuation task.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{main_8c_a483c2ceff406d289c99c650cda7a7790}{filter(uint16\+\_\+t $\ast$data)}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{main_8c_a9dd5adc8098fcc8d9bd5eeb53ad776b3}\label{main_8c_a9dd5adc8098fcc8d9bd5eeb53ad776b3}} 
+\index{main.c@{main.c}!thread\_sampling@{thread\_sampling}}
+\index{thread\_sampling@{thread\_sampling}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_sampling()}{thread\_sampling()}}
+{\footnotesize\ttfamily void thread\+\_\+sampling (\begin{DoxyParamCaption}\item[{void $\ast$}]{argA,  }\item[{void $\ast$}]{argB,  }\item[{void $\ast$}]{argC }\end{DoxyParamCaption})}
+
+
+
+Sampling thread. 
+
+This thread implements the sampling task. It\textquotesingle{}s a periodic thread that reads the adc with period S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS and stores it in the sample buffer. After sampling triggers the processing task.
+
+\begin{DoxyPrecond}{Precondition}
+\mbox{\hyperlink{ADC_8c_a5f5884b69950f439de5d6c472366c3af}{adc\+\_\+sample()}} 
+
+\mbox{\hyperlink{ADC_8c_a72e978258f999c12c65075da36a63175}{adc\+\_\+config()}}
+\end{DoxyPrecond}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{main_8c_a7829e7c5c37ea8a78e879aa2028dfb21}{S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS}} 
+\end{DoxySeeAlso}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{main_8c_a3580b4cf19b448d8a42bd9b0357ab70f}\label{main_8c_a3580b4cf19b448d8a42bd9b0357ab70f}} 
+\index{main.c@{main.c}!fifo\_average@{fifo\_average}}
+\index{fifo\_average@{fifo\_average}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{fifo\_average}{fifo\_average}}
+{\footnotesize\ttfamily struct k\+\_\+fifo fifo\+\_\+average}
+
+Fifo average data \mbox{\Hypertarget{main_8c_a64d04cedb2696155f0efbfd6c6c04f69}\label{main_8c_a64d04cedb2696155f0efbfd6c6c04f69}} 
+\index{main.c@{main.c}!fifo\_sample@{fifo\_sample}}
+\index{fifo\_sample@{fifo\_sample}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{fifo\_sample}{fifo\_sample}}
+{\footnotesize\ttfamily struct k\+\_\+fifo fifo\+\_\+sample}
+
+Fifo sample data \mbox{\Hypertarget{main_8c_a9a0bf1249db244ace268c06987aa8bc3}\label{main_8c_a9a0bf1249db244ace268c06987aa8bc3}} 
+\index{main.c@{main.c}!thread\_actuation\_data@{thread\_actuation\_data}}
+\index{thread\_actuation\_data@{thread\_actuation\_data}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_actuation\_data}{thread\_actuation\_data}}
+{\footnotesize\ttfamily struct k\+\_\+thread thread\+\_\+actuation\+\_\+data}
+
+Actuation thread data \mbox{\Hypertarget{main_8c_a3dec149768a6eae4f33afb78a0fba16a}\label{main_8c_a3dec149768a6eae4f33afb78a0fba16a}} 
+\index{main.c@{main.c}!thread\_actuation\_tid@{thread\_actuation\_tid}}
+\index{thread\_actuation\_tid@{thread\_actuation\_tid}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_actuation\_tid}{thread\_actuation\_tid}}
+{\footnotesize\ttfamily k\+\_\+tid\+\_\+t thread\+\_\+actuation\+\_\+tid}
+
+Actuation thread task ID \mbox{\Hypertarget{main_8c_a0d5266f8e4ee9131f1499bc89f35146a}\label{main_8c_a0d5266f8e4ee9131f1499bc89f35146a}} 
+\index{main.c@{main.c}!thread\_processing\_data@{thread\_processing\_data}}
+\index{thread\_processing\_data@{thread\_processing\_data}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_processing\_data}{thread\_processing\_data}}
+{\footnotesize\ttfamily struct k\+\_\+thread thread\+\_\+processing\+\_\+data}
+
+Processing thread data \mbox{\Hypertarget{main_8c_ad695b944931709e9377a32f2f67579ae}\label{main_8c_ad695b944931709e9377a32f2f67579ae}} 
+\index{main.c@{main.c}!thread\_processing\_tid@{thread\_processing\_tid}}
+\index{thread\_processing\_tid@{thread\_processing\_tid}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_processing\_tid}{thread\_processing\_tid}}
+{\footnotesize\ttfamily k\+\_\+tid\+\_\+t thread\+\_\+processing\+\_\+tid}
+
+Processing thread task ID \mbox{\Hypertarget{main_8c_a0e7f1b0a6ba03822803b25f00d855550}\label{main_8c_a0e7f1b0a6ba03822803b25f00d855550}} 
+\index{main.c@{main.c}!thread\_sampling\_data@{thread\_sampling\_data}}
+\index{thread\_sampling\_data@{thread\_sampling\_data}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_sampling\_data}{thread\_sampling\_data}}
+{\footnotesize\ttfamily struct k\+\_\+thread thread\+\_\+sampling\+\_\+data}
+
+Sampling thread data \mbox{\Hypertarget{main_8c_affec45d15496ae9963fe20d598aee1ef}\label{main_8c_affec45d15496ae9963fe20d598aee1ef}} 
+\index{main.c@{main.c}!thread\_sampling\_tid@{thread\_sampling\_tid}}
+\index{thread\_sampling\_tid@{thread\_sampling\_tid}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_sampling\_tid}{thread\_sampling\_tid}}
+{\footnotesize\ttfamily k\+\_\+tid\+\_\+t thread\+\_\+sampling\+\_\+tid}
+
+Sampling thread task ID 

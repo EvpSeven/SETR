@@ -31,7 +31,7 @@ struct \mbox{\hyperlink{structbuffer}{buffer}}
 \doxysubsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
-\#define \mbox{\hyperlink{main_8c_a7829e7c5c37ea8a78e879aa2028dfb21}{S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS}}~500
+\#define \mbox{\hyperlink{main_8c_a7829e7c5c37ea8a78e879aa2028dfb21}{S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS}}~1000
 \item 
 \#define \mbox{\hyperlink{main_8c_a70ed59adcb4159ac551058053e649640}{S\+I\+ZE}}~10
 \item 
@@ -127,7 +127,7 @@ pwm0 Node Label from device tree (refer to dts file) \mbox{\Hypertarget{main_8c_
 \index{main.c@{main.c}!SAMP\_PERIOD\_MS@{SAMP\_PERIOD\_MS}}
 \index{SAMP\_PERIOD\_MS@{SAMP\_PERIOD\_MS}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{SAMP\_PERIOD\_MS}{SAMP\_PERIOD\_MS}}
-{\footnotesize\ttfamily \#define S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS~500}
+{\footnotesize\ttfamily \#define S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS~1000}
 
 Sample period (ms) \mbox{\Hypertarget{main_8c_a70ed59adcb4159ac551058053e649640}\label{main_8c_a70ed59adcb4159ac551058053e649640}} 
 \index{main.c@{main.c}!SIZE@{SIZE}}
@@ -272,7 +272,12 @@ This thread implements the task of actuation. It computes the pulse width of the
 
 Processing thread. 
 
-This thread implements the task of processing. It filters the data samples and updates the average of the filtered data samples. It\textquotesingle{}s a sporadic thread triggered by the end of sampling (sampling thread). After processing triggers the actuation task. \mbox{\Hypertarget{main_8c_a9dd5adc8098fcc8d9bd5eeb53ad776b3}\label{main_8c_a9dd5adc8098fcc8d9bd5eeb53ad776b3}} 
+This thread implements the task of processing. It filters the data samples and updates the average of the filtered data samples. It\textquotesingle{}s a sporadic thread triggered by the end of sampling (sampling thread). After processing triggers the actuation task.
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{main_8c_a483c2ceff406d289c99c650cda7a7790}{filter(uint16\+\_\+t $\ast$data)}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{main_8c_a9dd5adc8098fcc8d9bd5eeb53ad776b3}\label{main_8c_a9dd5adc8098fcc8d9bd5eeb53ad776b3}} 
 \index{main.c@{main.c}!thread\_sampling@{thread\_sampling}}
 \index{thread\_sampling@{thread\_sampling}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{thread\_sampling()}{thread\_sampling()}}
@@ -284,6 +289,9 @@ Sampling thread.
 
 This thread implements the sampling task. It\textquotesingle{}s a periodic thread that reads the adc with period S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS and stores it in the sample buffer. After sampling triggers the processing task.
 
+\begin{DoxyPrecond}{Precondition}
+\mbox{\hyperlink{ADC_8c_a5f5884b69950f439de5d6c472366c3af}{adc\+\_\+sample()}}
+\end{DoxyPrecond}
 \begin{DoxySeeAlso}{See also}
 \mbox{\hyperlink{main_8c_a7829e7c5c37ea8a78e879aa2028dfb21}{S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS}} 
 \end{DoxySeeAlso}

@@ -135,7 +135,7 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a7829e7c5c37ea8a78e879aa2028dfb21"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a7829e7c5c37ea8a78e879aa2028dfb21">SAMP_PERIOD_MS</a>&#160;&#160;&#160;500</td></tr>
+<tr class="memitem:a7829e7c5c37ea8a78e879aa2028dfb21"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a7829e7c5c37ea8a78e879aa2028dfb21">SAMP_PERIOD_MS</a>&#160;&#160;&#160;1000</td></tr>
 <tr class="separator:a7829e7c5c37ea8a78e879aa2028dfb21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70ed59adcb4159ac551058053e649640"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a70ed59adcb4159ac551058053e649640">SIZE</a>&#160;&#160;&#160;10</td></tr>
 <tr class="separator:a70ed59adcb4159ac551058053e649640"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -250,7 +250,7 @@ Emanuel Pereira </dd></dl>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define SAMP_PERIOD_MS&#160;&#160;&#160;500</td>
+          <td class="memname">#define SAMP_PERIOD_MS&#160;&#160;&#160;1000</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -618,7 +618,8 @@ Emanuel Pereira </dd></dl>
 </div><div class="memdoc">
 
 <p>Processing thread. </p>
-<p>This thread implements the task of processing. It filters the data samples and updates the average of the filtered data samples. It's a sporadic thread triggered by the end of sampling (sampling thread). After processing triggers the actuation task. </p>
+<p>This thread implements the task of processing. It filters the data samples and updates the average of the filtered data samples. It's a sporadic thread triggered by the end of sampling (sampling thread). After processing triggers the actuation task.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="main_8c.html#a483c2ceff406d289c99c650cda7a7790" title="Function to implement a digital filter.">filter(uint16_t *data)</a> </dd></dl>
 
 </div>
 </div>
@@ -656,6 +657,7 @@ Emanuel Pereira </dd></dl>
 
 <p>Sampling thread. </p>
 <p>This thread implements the sampling task. It's a periodic thread that reads the adc with period SAMP_PERIOD_MS and stores it in the sample buffer. After sampling triggers the processing task.</p>
+<dl class="section pre"><dt>Precondition</dt><dd><a class="el" href="ADC_8c.html#a5f5884b69950f439de5d6c472366c3af" title="Function to get samples from ADC.">adc_sample()</a></dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="main_8c.html#a7829e7c5c37ea8a78e879aa2028dfb21">SAMP_PERIOD_MS</a> </dd></dl>
 
 </div>
