@@ -66,7 +66,7 @@ uint16_t adc_sample(void)
             printk("adc_read() failed with code %d\n", ret);
 	}	
 	
-         if(adc_sample_buffer[0] > 1023)	// Out of range
+        if(adc_sample_buffer[0] > 1023)	// Out of range
                 adc_sample_buffer[0] = 0;
 
 	return (uint16_t)(1000*adc_sample_buffer[0]*((float)3/1023)); // Convert the sample to millivolts
