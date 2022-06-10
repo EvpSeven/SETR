@@ -30,6 +30,10 @@
 #define thread_sampling_prio 1      /**< Scheduling priority of sampling thread */
 #define thread_processing_prio 1    /**< Scheduling processing of sampling thread */
 #define thread_actuation_prio 1     /**< Scheduling actuation of sampling thread */
+#define thread_timer_prio 1         /**< Scheduling timer of sampling thread */
+
+/* Therad periodicity (in ms)*/
+#define thread_timer_period 60000
 
 #define GPIO0_NID DT_NODELABEL(gpio0)   /**< gpio0 Node Label from device tree (refer to dts file) */
 #define PWM0_NID DT_NODELABEL(pwm0)     /**< pwm0 Node Label from device tree (refer to dts file) */
@@ -38,14 +42,17 @@
 K_THREAD_STACK_DEFINE(thread_sampling_stack, STACK_SIZE);   /**< Create sampling thread stack space */
 K_THREAD_STACK_DEFINE(thread_processing_stack, STACK_SIZE); /**< Create processing thread stack space */
 K_THREAD_STACK_DEFINE(thread_actuation_stack, STACK_SIZE);  /**< Create actuation thread stack space */
+K_THREAD_STACK_DEFINE(thread_timer_stack, STACK_SIZE);      /**< Create timer(calender) thread stack space */
   
 struct k_thread thread_sampling_data;   /**< Sampling thread data */
 struct k_thread thread_processing_data; /**< Processing thread data */
 struct k_thread thread_actuation_data;  /**< Actuation thread data */
+struct k_thread thread_timer_data;  /**< Timer thread data */
 
 k_tid_t thread_sampling_tid;    /**< Sampling thread task ID */
 k_tid_t thread_processing_tid;  /**< Processing thread task ID */
 k_tid_t thread_actuation_tid;   /**< Actuation thread task ID */
+k_tid_t thread_timer_tid;       /**< Timer thread task ID */
 
 // Buttons callback structures
 static struct gpio_callback button_cb_data;
@@ -60,15 +67,18 @@ typedef struct {
 buffer sample_buffer;   /**< Buffer to store samples to communicate between tasks*/ 
 
 int mode = MANUAL;
-int intensity = 100;
+int intensity = 1;
 
 // Semaphores for task synch
 struct k_sem sem_adc;   /**< Semaphore to synch sample and actuation tasks (signals end of sampling)*/
 struct k_sem sem_proc;
+struct k_sem sem_timer;
 
+/* Thread code prototypes */
 void thread_sampling(void *argA, void *argB, void *argC);
 void thread_processing(void *argA, void *argB, void *argC);
 void thread_actuation(void *argA, void *argB, void *argC);
+void thread_timer(void *argA, void *argB, void *argC);
 
 int filter(int*);
 void array_init(int*, int);
@@ -136,6 +146,10 @@ void main(void)
     thread_actuation_tid = k_thread_create(&thread_actuation_data, thread_actuation_stack,
         K_THREAD_STACK_SIZEOF(thread_actuation_stack), thread_actuation,
         NULL, NULL, NULL, thread_actuation_prio, 0, K_NO_WAIT);
+
+    thread_timer_tid = k_thread_create(&thread_timer_data, thread_timer_stack,
+        K_THREAD_STACK_SIZEOF(thread_timer_stack), thread_timer,
+        NULL, NULL, NULL, thread_timer_prio, 0, K_NO_WAIT);
 
     return;
 }
@@ -222,6 +236,53 @@ void thread_actuation(void *argA , void *argB, void *argC)
     }
 }
 
+void thread_timer(void *argA, void *argB, void *argC){
+
+    int hour=0, minute=0, day=0;
+
+    printk("Thread timer init (not quite periodic!)\n"); //................................
+    while(1) {
+        printk("Thread timer instance released at time: %lld (ms) \n",k_uptime_get()); 
+         
+        if(day==0)
+          printk("Domingo ");
+        if(day==1)
+          printk("Segunda-Feira ");
+        if(day==2)
+          printk("Terça-Feira ");
+        if(day==3)
+          printk("Quarta-Feira ");          
+        if(day==4)
+          printk("Quinta-Feira ");
+        if(day==5)
+          printk("Sexta-Feira ");          
+        if(day==6)
+          printk("Sabado-Feira ");
+                                          
+        //print time in HH : MM : SS format
+        printk("DAY = %01d , %02d h : %02d min ",day, hour,minute);
+        
+        //increase second
+        minute++;
+ 
+        //update hour, minute and second
+        if(minute==60){
+            hour+=1;
+            minute=0;
+        }
+        if(hour==24){
+            hour=0;
+            minute=0;
+            day++;
+        }
+        if(day==6){
+          day=0;
+        }       
+
+        k_msleep(thread_timer_period);
+  }
+
+}
 /** \brief Function to implement a digital filter
  *  
  *  This function implements a digital filter that removes the outliers
