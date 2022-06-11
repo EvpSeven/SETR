@@ -2,6 +2,7 @@
 #include <device.h>
 #include <drivers/gpio.h>
 #include <drivers/pwm.h>
+#include <drivers/uart.h>
 #include <sys/printk.h>
 #include <sys/__assert.h>
 #include <string.h>
@@ -13,6 +14,7 @@
 #include <ADC.h>
 
 #define SAMP_PERIOD_MS  1000 /**< Sample period (ms) */
+#define TIMER_PERIOD_MS 60000 /**< Timer thread period - 1 minute */
 
 #define MANUAL 0      /**< Flag that indicates Manual mode is selected */ 
 #define AUTOMATIC 1   /**< Flag that indicates Automatic mode is selected */ 
@@ -28,9 +30,10 @@
 #define BOARDBUT4 0x19  /**< Address of Board button 4 used to decrease light intensity on manual mode */
 
 #define thread_sampling_prio 1      /**< Scheduling priority of sampling thread */
-#define thread_processing_prio 1    /**< Scheduling processing of sampling thread */
-#define thread_actuation_prio 1     /**< Scheduling actuation of sampling thread */
-#define thread_timer_prio 1         /**< Scheduling timer of sampling thread */
+#define thread_processing_prio 1    /**< Scheduling priority of processing thread */
+#define thread_actuation_prio 1     /**< Scheduling priority of actuation thread */
+#define thread_timer_prio 1         /**< Scheduling priority of timer thread */
+#define thread_interface_prio 1     /**< Scheduling priority of interface thread */
 
 /* Therad periodicity (in ms)*/
 #define thread_timer_period 60000
@@ -39,23 +42,46 @@
 #define PWM0_NID DT_NODELABEL(pwm0)     /**< pwm0 Node Label from device tree (refer to dts file) */
 #define PWM_PIN 0x0e   /**< Address of the pin used to output pwm */ 
 
+#define UART_NID DT_NODELABEL(uart0)    /* UART Node label, see dts */
+#define RXBUF_SIZE 60                   /* RX buffer size */
+#define TXBUF_SIZE 60                   /* TX buffer size */
+#define RX_TIMEOUT 1000                  /* Inactivity period after the instant when last char was received that triggers an rx event (in us) */
+
 K_THREAD_STACK_DEFINE(thread_sampling_stack, STACK_SIZE);   /**< Create sampling thread stack space */
 K_THREAD_STACK_DEFINE(thread_processing_stack, STACK_SIZE); /**< Create processing thread stack space */
 K_THREAD_STACK_DEFINE(thread_actuation_stack, STACK_SIZE);  /**< Create actuation thread stack space */
-K_THREAD_STACK_DEFINE(thread_timer_stack, STACK_SIZE);      /**< Create timer(calender) thread stack space */
+K_THREAD_STACK_DEFINE(thread_timer_stack, STACK_SIZE);      /**< Create timer (calendar) thread stack space */
+K_THREAD_STACK_DEFINE(thread_interface_stack, STACK_SIZE);      /**< Create interface thread stack space */
+
   
 struct k_thread thread_sampling_data;   /**< Sampling thread data */
 struct k_thread thread_processing_data; /**< Processing thread data */
 struct k_thread thread_actuation_data;  /**< Actuation thread data */
-struct k_thread thread_timer_data;  /**< Timer thread data */
+struct k_thread thread_timer_data;      /**< Timer thread data */
+struct k_thread thread_interface_data;  /**< Interface thread data */
 
 k_tid_t thread_sampling_tid;    /**< Sampling thread task ID */
 k_tid_t thread_processing_tid;  /**< Processing thread task ID */
 k_tid_t thread_actuation_tid;   /**< Actuation thread task ID */
 k_tid_t thread_timer_tid;       /**< Timer thread task ID */
+k_tid_t thread_interface_tid;   /**< Interface thread task ID */
 
 // Buttons callback structures
 static struct gpio_callback button_cb_data;
+
+/* Struct for UART configuration (if using default valuies is not needed) */
+const struct uart_config uart_cfg = {
+		.baudrate = 115200,
+		.parity = UART_CFG_PARITY_NONE,
+		.stop_bits = UART_CFG_STOP_BITS_1,
+		.data_bits = UART_CFG_DATA_BITS_8,
+		.flow_ctrl = UART_CFG_FLOW_CTRL_NONE
+};
+
+/* UART related variables */
+const struct device *uart_dev;          /* Pointer to device struct */ 
+static uint8_t rx_buf[RXBUF_SIZE];      /* RX buffer, to store received data */
+static uint8_t rx_chars[RXBUF_SIZE];    /* chars actually received  */
 
 /** Circular array to store data */
 typedef struct {
@@ -71,19 +97,21 @@ int intensity = 1;
 
 // Semaphores for task synch
 struct k_sem sem_adc;   /**< Semaphore to synch sample and actuation tasks (signals end of sampling)*/
-struct k_sem sem_proc;
-struct k_sem sem_timer;
+struct k_sem sem_proc;  
+struct k_sem sem_uart;
 
 /* Thread code prototypes */
 void thread_sampling(void *argA, void *argB, void *argC);
 void thread_processing(void *argA, void *argB, void *argC);
 void thread_actuation(void *argA, void *argB, void *argC);
 void thread_timer(void *argA, void *argB, void *argC);
+void thread_interface(void *argA, void *argB, void *argC);
 
 int filter(int*);
 void array_init(int*, int);
 int array_average(int*, int);
 void input_output_config(void);
+void uart_config(void);
 
 void buttons_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
@@ -125,14 +153,67 @@ void buttons_cbfunction(const struct device *dev, struct gpio_callback *cb, uint
     }
 }
 
+static void uart_cb(const struct device *dev, struct uart_event *evt, void *user_data)
+{
+    int err;
+
+    switch (evt->type) {
+	
+        case UART_TX_DONE:
+		printk("UART_TX_DONE event \n\r");
+                break;
+
+	case UART_TX_ABORTED:
+		printk("UART_TX_ABORTED event \n\r");
+		break;
+		
+	case UART_RX_RDY:
+		printk("UART_RX_RDY event \n\r");
+                /* Just copy data to a buffer. Usually it is preferable to use e.g. a FIFO to communicate with a task that shall process the messages*/
+                memcpy(rx_chars,&(rx_buf[evt->data.rx.offset]),evt->data.rx.len); 
+                rx_chars[evt->data.rx.len]=0; /* Terminate the string */
+                k_sem_give(&sem_uart);
+		break;
+
+	case UART_RX_BUF_REQUEST:
+		printk("UART_RX_BUF_REQUEST event \n\r");
+		break;
+
+	case UART_RX_BUF_RELEASED:
+		printk("UART_RX_BUF_RELEASED event \n\r");
+		break;
+		
+	case UART_RX_DISABLED: 
+                /* When the RX_BUFF becomes full RX is is disabled automaticaly.  */
+                /* It must be re-enabled manually for continuous reception */
+                printk("UART_RX_DISABLED event \n\r");
+		err =  uart_rx_enable(uart_dev ,rx_buf,sizeof(rx_buf),RX_TIMEOUT);
+                if (err) {
+                    printk("uart_rx_enable() error. Error code:%d\n\r",err);
+                    //exit(FATAL_ERR);                
+                }
+		break;
+
+	case UART_RX_STOPPED:
+		printk("UART_RX_STOPPED event \n\r");
+		break;
+		
+	default:
+                printk("UART: unknown event \n\r");
+		break;
+    }
+
+}
+
 void main(void)
 {
-    
     input_output_config();
+    uart_config();
     
     /* Create and init semaphores */
     k_sem_init(&sem_adc, 0, 1);
     k_sem_init(&sem_proc, 0, 1);
+    k_sem_init(&sem_uart, 0, 1);
 
     /* Create tasks */
     thread_sampling_tid = k_thread_create(&thread_sampling_data, thread_sampling_stack,
@@ -150,6 +231,10 @@ void main(void)
     thread_timer_tid = k_thread_create(&thread_timer_data, thread_timer_stack,
         K_THREAD_STACK_SIZEOF(thread_timer_stack), thread_timer,
         NULL, NULL, NULL, thread_timer_prio, 0, K_NO_WAIT);
+    
+    thread_interface_tid = k_thread_create(&thread_interface_data, thread_interface_stack,
+        K_THREAD_STACK_SIZEOF(thread_interface_stack), thread_interface,
+        NULL, NULL, NULL, thread_interface_prio, 0, K_NO_WAIT);
 
     return;
 }
@@ -238,13 +323,20 @@ void thread_actuation(void *argA , void *argB, void *argC)
 
 void thread_timer(void *argA, void *argB, void *argC){
 
-    int hour=0, minute=0, day=0;
+    /* Timing variables to control task periodicity */
+    int64_t fin_time=0, release_time=0;
+    
+    static char *week_days[7] = {"Domingo", "Segunda-feira", "Terça-feira", "Quarta-Feira", "Quinta-Feira",
+                                 "Sexta-Feira", "Sábado"};
 
-    printk("Thread timer init (not quite periodic!)\n"); //................................
-    while(1) {
-        printk("Thread timer instance released at time: %lld (ms) \n",k_uptime_get()); 
-         
-        if(day==0)
+    int hour=0, minute=0, day=0;
+    
+    /* Compute next release instant */
+    release_time = k_uptime_get() + TIMER_PERIOD_MS;
+
+    while(1)
+    {
+        /*if(day==0)
           printk("Domingo ");
         if(day==1)
           printk("Segunda-Feira ");
@@ -257,32 +349,50 @@ void thread_timer(void *argA, void *argB, void *argC){
         if(day==5)
           printk("Sexta-Feira ");          
         if(day==6)
-          printk("Sabado-Feira ");
+          printk("Sabado-Feira ");*/
                                           
-        //print time in HH : MM : SS format
-        printk("DAY = %01d , %02d h : %02d min ",day, hour,minute);
+        //print day and time in HH : MM format
+        printk("DAY = %s , %02d h : %02d min ", week_days[day], hour, minute);
         
-        //increase second
+        //increase minutes
         minute++;
  
         //update hour, minute and second
-        if(minute==60){
-            hour+=1;
-            minute=0;
+        if(minute == 60)
+        {
+            hour += 1;
+            minute = 0;
         }
-        if(hour==24){
-            hour=0;
-            minute=0;
-            day++;
+        
+        if(hour == 24)
+        {
+            hour = 0;
+            minute = 0;
+            day = (day + 1) % 7;
         }
-        if(day==6){
-          day=0;
-        }       
-
-        k_msleep(thread_timer_period);
+                  
+        /* Wait for next release instant */ 
+        fin_time = k_uptime_get();
+        if(fin_time < release_time)
+        {
+            k_msleep(release_time - fin_time);
+            release_time += TIMER_PERIOD_MS;
+        }
   }
 
 }
+
+void thread_interface(void *argA , void *argB, void *argC)
+{
+    while(1)
+    {
+        k_sem_take(&sem_uart, K_FOREVER);   // Wait for new sample
+
+        printf("type: %s", rx_chars);
+        // INTERFACE
+    }
+}
+
 /** \brief Function to implement a digital filter
  *  
  *  This function implements a digital filter that removes the outliers
@@ -390,4 +500,19 @@ void input_output_config(void)
     gpio_init_callback(&button_cb_data, buttons_cbfunction, BIT(BOARDBUT1)| BIT(BOARDBUT2)| BIT(BOARDBUT3) | BIT(BOARDBUT4));
     gpio_add_callback(gpio0_dev, &button_cb_data);
 
+}
+
+void uart_config(void)
+{
+    /* Bind to UART */
+    uart_dev = device_get_binding(DT_LABEL(UART_NID));
+
+    /* Configure UART */
+    uart_configure(uart_dev, &uart_cfg);
+
+    /* Register callback */
+    uart_callback_set(uart_dev, uart_cb, NULL);
+
+    /* Enable data reception */
+    uart_rx_enable(uart_dev ,rx_buf,sizeof(rx_buf),RX_TIMEOUT);
 }
