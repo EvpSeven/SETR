@@ -9,6 +9,7 @@
 #include <timing/timing.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <console/console.h>
 
 /* import ADC file */
 #include <ADC.h>
@@ -20,6 +21,7 @@
 #define AUTOMATIC 1   /**< Flag that indicates Automatic mode is selected */ 
 
 #define SIZE 10 /**< Window Size of samples (digital filter) */
+#define MEM_SIZE 10
 
 #define STACK_SIZE 1024 /**< Size of stack area used by each thread */
     
@@ -34,9 +36,6 @@
 #define thread_actuation_prio 1     /**< Scheduling priority of actuation thread */
 #define thread_timer_prio 1         /**< Scheduling priority of timer thread */
 #define thread_interface_prio 1     /**< Scheduling priority of interface thread */
-
-/* Therad periodicity (in ms)*/
-#define thread_timer_period 60000
 
 #define GPIO0_NID DT_NODELABEL(gpio0)   /**< gpio0 Node Label from device tree (refer to dts file) */
 #define PWM0_NID DT_NODELABEL(pwm0)     /**< pwm0 Node Label from device tree (refer to dts file) */
@@ -89,11 +88,33 @@ typedef struct {
     int head;    /**< Index of next position to store data */   
 }buffer;
 
+typedef struct {
+    int week_day;
+    int hour;
+    int minute;
+    int intensity;
+}memory;
+
+typedef struct {
+    int day;
+    int hour;
+    int minute;
+}Calendar;
+
+
 // Global variables (shared memory) to communicate between tasks
 buffer sample_buffer;   /**< Buffer to store samples to communicate between tasks*/ 
 
 int mode = MANUAL;
-int intensity = 1;
+int intensity = 100;
+
+memory mem[MEM_SIZE];
+int mem_idx;
+
+Calendar calendar;
+
+static char *week_days[7] = {"Domingo", "Segunda-feira", "Terça-feira", "Quarta-Feira", "Quinta-Feira",
+                             "Sexta-Feira", "Sábado"};
 
 // Semaphores for task synch
 struct k_sem sem_adc;   /**< Semaphore to synch sample and actuation tasks (signals end of sampling)*/
@@ -189,8 +210,7 @@ static void uart_cb(const struct device *dev, struct uart_event *evt, void *user
                 printk("UART_RX_DISABLED event \n\r");
 		err =  uart_rx_enable(uart_dev ,rx_buf,sizeof(rx_buf),RX_TIMEOUT);
                 if (err) {
-                    printk("uart_rx_enable() error. Error code:%d\n\r",err);
-                    //exit(FATAL_ERR);                
+                    printk("uart_rx_enable() error. Error code:%d\n\r",err);              
                 }
 		break;
 
@@ -232,9 +252,9 @@ void main(void)
         K_THREAD_STACK_SIZEOF(thread_timer_stack), thread_timer,
         NULL, NULL, NULL, thread_timer_prio, 0, K_NO_WAIT);
     
-    thread_interface_tid = k_thread_create(&thread_interface_data, thread_interface_stack,
+   /* thread_interface_tid = k_thread_create(&thread_interface_data, thread_interface_stack,
         K_THREAD_STACK_SIZEOF(thread_interface_stack), thread_interface,
-        NULL, NULL, NULL, thread_interface_prio, 0, K_NO_WAIT);
+        NULL, NULL, NULL, thread_interface_prio, 0, K_NO_WAIT);*/
 
     return;
 }
@@ -286,6 +306,12 @@ void thread_processing(void *argA , void *argB, void *argC)
     {
         k_sem_take(&sem_adc, K_FOREVER);   // Wait for new sample
         
+        for(unsigned int i=0; i < mem_idx; i++)
+        {
+            if(mem[i].week_day == calendar.day && mem[i].hour && mem[i].minute)
+                intensity = mem[i].intensity;
+        }
+
         data = filter(sample_buffer.data);   // Filter data
         
         current = data / R;
@@ -315,7 +341,7 @@ void thread_actuation(void *argA , void *argB, void *argC)
     {
         k_sem_take(&sem_proc, K_FOREVER);   // Wait for new sample
 
-        ton = pwmPeriod_us - (intensity*pwmPeriod_us)/100;    // Compute ton of PWM
+        ton = pwmPeriod_us - (intensity*pwmPeriod_us)/100;    // Compute ton of PWM considering that the OUT pin is negative logic
         
         pwm_pin_set_usec(pwm0_dev, PWM_PIN, pwmPeriod_us, ton, PWM_POLARITY_NORMAL);   // Update PWM
     }
@@ -326,49 +352,30 @@ void thread_timer(void *argA, void *argB, void *argC){
     /* Timing variables to control task periodicity */
     int64_t fin_time=0, release_time=0;
     
-    static char *week_days[7] = {"Domingo", "Segunda-feira", "Terça-feira", "Quarta-Feira", "Quinta-Feira",
-                                 "Sexta-Feira", "Sábado"};
-
-    int hour=0, minute=0, day=0;
-    
     /* Compute next release instant */
     release_time = k_uptime_get() + TIMER_PERIOD_MS;
 
     while(1)
-    {
-        /*if(day==0)
-          printk("Domingo ");
-        if(day==1)
-          printk("Segunda-Feira ");
-        if(day==2)
-          printk("Terça-Feira ");
-        if(day==3)
-          printk("Quarta-Feira ");          
-        if(day==4)
-          printk("Quinta-Feira ");
-        if(day==5)
-          printk("Sexta-Feira ");          
-        if(day==6)
-          printk("Sabado-Feira ");*/
-                                          
-        //print day and time in HH : MM format
-        printk("DAY = %s , %02d h : %02d min ", week_days[day], hour, minute);
+    { 
+        // print day and time in HH : MM format
+        printk("DAY = %s , %02d h : %02d min ", week_days[calendar.day], calendar.hour, calendar.minute);
         
-        //increase minutes
-        minute++;
+        // increase minutes
+        calendar.minute++;
  
-        //update hour, minute and second
-        if(minute == 60)
+        // update hour
+        if(calendar.minute == 60)
         {
-            hour += 1;
-            minute = 0;
+            calendar.hour += 1;
+            calendar.minute = 0;
         }
         
-        if(hour == 24)
+        // update day
+        if(calendar.hour == 24)
         {
-            hour = 0;
-            minute = 0;
-            day = (day + 1) % 7;
+            calendar.hour = 0;
+            calendar.minute = 0;
+            calendar.day = (calendar.day + 1) % 7;
         }
                   
         /* Wait for next release instant */ 
@@ -382,16 +389,44 @@ void thread_timer(void *argA, void *argB, void *argC){
 
 }
 
-void thread_interface(void *argA , void *argB, void *argC)
-{
+/*void thread_interface(void *argA , void *argB, void *argC)
+{    
     while(1)
     {
-        k_sem_take(&sem_uart, K_FOREVER);   // Wait for new sample
+        k_sem_take(&sem_uart, K_FOREVER);   // Wait for character (UART)
 
-        printf("type: %s", rx_chars);
-        // INTERFACE
+        switch(rx_chars[0])
+        {
+            case '1':
+
+                printk("Week Day: ");
+                mem[mem_idx].week_day = console_getchar();
+               
+                printk("Hour: ");
+                mem[mem_idx].hour = console_getchar();
+
+                printk("Minute: ");
+                mem[mem_idx].minute = console_getchar();
+
+                printk("Intensity: ");
+                mem[mem_idx].intensity = console_getchar();
+
+                mem_idx += 1;
+
+                break;
+
+            case '2':
+
+                for(unsigned int i=0; i < MEM_SIZE; i++)
+        	        printk("%d: %s, %02d:%02d, %d\n", i, week_days[mem[i].week_day], mem[i].hour, mem[i].minute, mem[i].intensity);
+            
+                break;
+            
+            default:
+                break;
+        }
     }
-}
+}*/
 
 /** \brief Function to implement a digital filter
  *  
