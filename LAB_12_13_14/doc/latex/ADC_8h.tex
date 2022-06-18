@@ -1,0 +1,152 @@
+\hypertarget{ADC_8h}{}\doxysection{src/\+A\+D\+C/\+A\+DC.h File Reference}
+\label{ADC_8h}\index{src/ADC/ADC.h@{src/ADC/ADC.h}}
+
+
+Module that implements A\+DC operations in n\+R\+F52840\+D\+K\+\_\+n\+R\+F52840 board.  
+
+
+{\ttfamily \#include $<$drivers/adc.\+h$>$}\newline
+{\ttfamily \#include $<$hal/nrf\+\_\+saadc.\+h$>$}\newline
+Include dependency graph for A\+D\+C.\+h\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=270pt]{ADC_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=252pt]{ADC_8h__dep__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{ADC_8h_a667158ed9af1b72bf062e54bda71dd4f}{A\+D\+C\+\_\+\+N\+ID}}~D\+T\+\_\+\+N\+O\+D\+E\+L\+A\+B\+EL(adc)
+\item 
+\#define \mbox{\hyperlink{ADC_8h_a00978ca9e8220475258dcbbbb7d29129}{A\+D\+C\+\_\+\+R\+E\+S\+O\+L\+U\+T\+I\+ON}}~10
+\item 
+\#define \mbox{\hyperlink{ADC_8h_a2bbc7e1578f01928d36ef7fa94ac4905}{A\+D\+C\+\_\+\+G\+A\+IN}}~A\+D\+C\+\_\+\+G\+A\+I\+N\+\_\+1\+\_\+4
+\item 
+\#define \mbox{\hyperlink{ADC_8h_a317868c528ebe27fbca094a8bc2d910c}{A\+D\+C\+\_\+\+R\+E\+F\+E\+R\+E\+N\+CE}}~A\+D\+C\+\_\+\+R\+E\+F\+\_\+\+V\+D\+D\+\_\+1\+\_\+4
+\item 
+\#define \mbox{\hyperlink{ADC_8h_aeb8de5967ac4465f35317d818eeb129b}{A\+D\+C\+\_\+\+A\+C\+Q\+U\+I\+S\+I\+T\+I\+O\+N\+\_\+\+T\+I\+ME}}~A\+D\+C\+\_\+\+A\+C\+Q\+\_\+\+T\+I\+ME(A\+D\+C\+\_\+\+A\+C\+Q\+\_\+\+T\+I\+M\+E\+\_\+\+M\+I\+C\+R\+O\+S\+E\+C\+O\+N\+DS, 40)
+\item 
+\#define \mbox{\hyperlink{ADC_8h_a8bfca74ee546715af6682194ea92286a}{A\+D\+C\+\_\+\+C\+H\+A\+N\+N\+E\+L\+\_\+\+ID}}~1
+\item 
+\#define \mbox{\hyperlink{ADC_8h_a5508ef7e762284248c2e87e16865522e}{A\+D\+C\+\_\+\+C\+H\+A\+N\+N\+E\+L\+\_\+\+I\+N\+P\+UT}}~N\+R\+F\+\_\+\+S\+A\+A\+D\+C\+\_\+\+I\+N\+P\+U\+T\+\_\+\+A\+I\+N1
+\item 
+\#define \mbox{\hyperlink{ADC_8h_a6b20d41d6252e9871430c242cb1a56e7}{B\+U\+F\+F\+E\+R\+\_\+\+S\+I\+ZE}}~1
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{ADC_8h_aee048884c2964f15cb0b0d0b067ba0d0}{adc\+\_\+config}} (void)
+\begin{DoxyCompactList}\small\item\em Function to configure A\+DC. \end{DoxyCompactList}\item 
+uint16\+\_\+t \mbox{\hyperlink{ADC_8h_a5f5884b69950f439de5d6c472366c3af}{adc\+\_\+sample}} (void)
+\begin{DoxyCompactList}\small\item\em Function to get samples from A\+DC. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Module that implements A\+DC operations in n\+R\+F52840\+D\+K\+\_\+n\+R\+F52840 board. 
+
+\begin{DoxyAuthor}{Author}
+André Brandão 
+
+Emanuel Pereira 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+26/05/2022 
+\end{DoxyDate}
+
+
+\doxysubsection{Macro Definition Documentation}
+\mbox{\Hypertarget{ADC_8h_aeb8de5967ac4465f35317d818eeb129b}\label{ADC_8h_aeb8de5967ac4465f35317d818eeb129b}} 
+\index{ADC.h@{ADC.h}!ADC\_ACQUISITION\_TIME@{ADC\_ACQUISITION\_TIME}}
+\index{ADC\_ACQUISITION\_TIME@{ADC\_ACQUISITION\_TIME}!ADC.h@{ADC.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_ACQUISITION\_TIME}{ADC\_ACQUISITION\_TIME}}
+{\footnotesize\ttfamily \#define A\+D\+C\+\_\+\+A\+C\+Q\+U\+I\+S\+I\+T\+I\+O\+N\+\_\+\+T\+I\+ME~A\+D\+C\+\_\+\+A\+C\+Q\+\_\+\+T\+I\+ME(A\+D\+C\+\_\+\+A\+C\+Q\+\_\+\+T\+I\+M\+E\+\_\+\+M\+I\+C\+R\+O\+S\+E\+C\+O\+N\+DS, 40)}
+
+A\+DC Acquisition Time \mbox{\Hypertarget{ADC_8h_a8bfca74ee546715af6682194ea92286a}\label{ADC_8h_a8bfca74ee546715af6682194ea92286a}} 
+\index{ADC.h@{ADC.h}!ADC\_CHANNEL\_ID@{ADC\_CHANNEL\_ID}}
+\index{ADC\_CHANNEL\_ID@{ADC\_CHANNEL\_ID}!ADC.h@{ADC.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_CHANNEL\_ID}{ADC\_CHANNEL\_ID}}
+{\footnotesize\ttfamily \#define A\+D\+C\+\_\+\+C\+H\+A\+N\+N\+E\+L\+\_\+\+ID~1}
+
+A\+DC Channel ID \mbox{\Hypertarget{ADC_8h_a5508ef7e762284248c2e87e16865522e}\label{ADC_8h_a5508ef7e762284248c2e87e16865522e}} 
+\index{ADC.h@{ADC.h}!ADC\_CHANNEL\_INPUT@{ADC\_CHANNEL\_INPUT}}
+\index{ADC\_CHANNEL\_INPUT@{ADC\_CHANNEL\_INPUT}!ADC.h@{ADC.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_CHANNEL\_INPUT}{ADC\_CHANNEL\_INPUT}}
+{\footnotesize\ttfamily \#define A\+D\+C\+\_\+\+C\+H\+A\+N\+N\+E\+L\+\_\+\+I\+N\+P\+UT~N\+R\+F\+\_\+\+S\+A\+A\+D\+C\+\_\+\+I\+N\+P\+U\+T\+\_\+\+A\+I\+N1}
+
+A\+DC I\+N\+P\+UT P\+IN \mbox{\Hypertarget{ADC_8h_a2bbc7e1578f01928d36ef7fa94ac4905}\label{ADC_8h_a2bbc7e1578f01928d36ef7fa94ac4905}} 
+\index{ADC.h@{ADC.h}!ADC\_GAIN@{ADC\_GAIN}}
+\index{ADC\_GAIN@{ADC\_GAIN}!ADC.h@{ADC.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_GAIN}{ADC\_GAIN}}
+{\footnotesize\ttfamily \#define A\+D\+C\+\_\+\+G\+A\+IN~A\+D\+C\+\_\+\+G\+A\+I\+N\+\_\+1\+\_\+4}
+
+A\+DC Gain \mbox{\Hypertarget{ADC_8h_a667158ed9af1b72bf062e54bda71dd4f}\label{ADC_8h_a667158ed9af1b72bf062e54bda71dd4f}} 
+\index{ADC.h@{ADC.h}!ADC\_NID@{ADC\_NID}}
+\index{ADC\_NID@{ADC\_NID}!ADC.h@{ADC.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_NID}{ADC\_NID}}
+{\footnotesize\ttfamily \#define A\+D\+C\+\_\+\+N\+ID~D\+T\+\_\+\+N\+O\+D\+E\+L\+A\+B\+EL(adc)}
+
+A\+DC Node Label from device tree (refer to dts file) \mbox{\Hypertarget{ADC_8h_a317868c528ebe27fbca094a8bc2d910c}\label{ADC_8h_a317868c528ebe27fbca094a8bc2d910c}} 
+\index{ADC.h@{ADC.h}!ADC\_REFERENCE@{ADC\_REFERENCE}}
+\index{ADC\_REFERENCE@{ADC\_REFERENCE}!ADC.h@{ADC.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_REFERENCE}{ADC\_REFERENCE}}
+{\footnotesize\ttfamily \#define A\+D\+C\+\_\+\+R\+E\+F\+E\+R\+E\+N\+CE~A\+D\+C\+\_\+\+R\+E\+F\+\_\+\+V\+D\+D\+\_\+1\+\_\+4}
+
+A\+DC Reference Tension \mbox{\Hypertarget{ADC_8h_a00978ca9e8220475258dcbbbb7d29129}\label{ADC_8h_a00978ca9e8220475258dcbbbb7d29129}} 
+\index{ADC.h@{ADC.h}!ADC\_RESOLUTION@{ADC\_RESOLUTION}}
+\index{ADC\_RESOLUTION@{ADC\_RESOLUTION}!ADC.h@{ADC.h}}
+\doxysubsubsection{\texorpdfstring{ADC\_RESOLUTION}{ADC\_RESOLUTION}}
+{\footnotesize\ttfamily \#define A\+D\+C\+\_\+\+R\+E\+S\+O\+L\+U\+T\+I\+ON~10}
+
+A\+DC Resolution \mbox{\Hypertarget{ADC_8h_a6b20d41d6252e9871430c242cb1a56e7}\label{ADC_8h_a6b20d41d6252e9871430c242cb1a56e7}} 
+\index{ADC.h@{ADC.h}!BUFFER\_SIZE@{BUFFER\_SIZE}}
+\index{BUFFER\_SIZE@{BUFFER\_SIZE}!ADC.h@{ADC.h}}
+\doxysubsubsection{\texorpdfstring{BUFFER\_SIZE}{BUFFER\_SIZE}}
+{\footnotesize\ttfamily \#define B\+U\+F\+F\+E\+R\+\_\+\+S\+I\+ZE~1}
+
+A\+DC sampling Buffer Size A\+DC channel configuration 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{ADC_8h_aee048884c2964f15cb0b0d0b067ba0d0}\label{ADC_8h_aee048884c2964f15cb0b0d0b067ba0d0}} 
+\index{ADC.h@{ADC.h}!adc\_config@{adc\_config}}
+\index{adc\_config@{adc\_config}!ADC.h@{ADC.h}}
+\doxysubsubsection{\texorpdfstring{adc\_config()}{adc\_config()}}
+{\footnotesize\ttfamily void adc\+\_\+config (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Function to configure A\+DC. 
+
+A\+DC driver\textquotesingle{}s configuration
+
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{ADC_8c_a5f5884b69950f439de5d6c472366c3af}{adc\+\_\+sample()}} 
+\end{DoxySeeAlso}
+\mbox{\Hypertarget{ADC_8h_a5f5884b69950f439de5d6c472366c3af}\label{ADC_8h_a5f5884b69950f439de5d6c472366c3af}} 
+\index{ADC.h@{ADC.h}!adc\_sample@{adc\_sample}}
+\index{adc\_sample@{adc\_sample}!ADC.h@{ADC.h}}
+\doxysubsubsection{\texorpdfstring{adc\_sample()}{adc\_sample()}}
+{\footnotesize\ttfamily uint16\+\_\+t adc\+\_\+sample (\begin{DoxyParamCaption}\item[{void}]{ }\end{DoxyParamCaption})}
+
+
+
+Function to get samples from A\+DC. 
+
+This function performs an A\+DC conversion and converts it to the corresponfing tension.
+
+\begin{DoxyPrecond}{Precondition}
+adc\+\_\+read() has been called
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+tension in millivolts from A\+DC.
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\mbox{\hyperlink{ADC_8c_a72e978258f999c12c65075da36a63175}{adc\+\_\+config()}} 
+\end{DoxySeeAlso}

@@ -1,40 +1,38 @@
-/** \file main.c
- * 	\brief Program implementing PI Controller
+/** \file PI_controller.c
+ * 	\brief Module implementing PI Controller
  * 
- * \author André Brandão
- * \author Emanuel Pereira
- * \date 03/06/2022
+ *  \author André Brandão
+ *  \author Emanuel Pereira
+ *  \date 15/06/2022
  */
- 
-#include <zephyr.h>
-#include <device.h>
-#include <drivers/gpio.h>
-#include <drivers/pwm.h>
-#include <sys/printk.h>
-#include <sys/__assert.h>
-#include <string.h>
-#include <timing/timing.h>
-#include <stdlib.h>
-#include <stdio.h>
- 
- /* import PI_COntroller file */
-#include <PI_Controller.h>
 
- // Proportional Integral controller - Struct 
+#include <PI_controller.h>
+
+/** Proportional Integral controller - Struct */
 typedef struct PI {
-    double error;   // Error Signal
-    double up;      // Proportional Component    
-    double ui;      // Integral Component
-    double Kp;      // Constant of the Proportional part of the controller
-    double Ti;      // Constant of the Integral part of the controller
-    int ULow;       // Integral LOW Limit
-    int UHigh;      // Integral HIGH Limit
+    float error;   /**< Error Signal */
+    float up;      /**< Proportional Component */
+    float ui;      /**< Integral Component */
+    float Kp;      /**< Constant of the Proportional part of the controller */
+    float Ti;      /**< Constant of the Integral part of the controller */
+    int ULow;      /**< Integral LOW Limit */
+    int UHigh;     /**< Integral HIGH Limit */
 } PI;
 
-PI pi;  // PI controller definition
+PI pi;  /**< PI controller variable */
 
-// Function to initialze PI Controller Parameters
-void PI_init(int Kp, int Ti)
+/** \brief Function to initialze PI Controller
+ *  
+ *  This function initializes the parameters of the PI controller,
+ * the proportional and the integral gain with the values passed in
+ * the arguments and the signals with zero. The integral limits are
+ * initialized with -14 and 14, may be changed for better control
+ * behavior in other systems.
+ * 
+ *  \param[in] Kp Proportional Gain
+ *  \param[in] Ti Integral Gain
+ */
+void PI_init(float Kp, float Ti)
 {
     pi.error = 0;   // Error Component
     pi.up = 0;      // Proportional Component    
@@ -45,7 +43,22 @@ void PI_init(int Kp, int Ti)
     pi.UHigh = 14;  // Integral HIGH Limit
 }
 
-double PI_controller(int ref, int y, double dutycycle)
+/** \brief PI Controller control function
+ *  
+ *  This function the control function of the controller.
+ * It must be passed, for a given instant (k-1), the reference point,
+ * the system output, and the control signal value (dutycycle).
+ *  Based on this parameters computes and returns the control signal.
+ *  The control signal is considered as the dutycycle of a PWM signal therefor 
+ * is limited within the interval [0 100]. 
+ * 
+ *  \param[in] ref Reference point (instant k-1)
+ *  \param[in] y System output (instant k-1)
+ *  \param[in] dutycycle control signal (instant k-1)
+ *
+ *  \return control signal (dutycycle) on instant k
+ */
+int PI_controller(int ref, int y, int dutycycle)
 {
     // Compute error
     pi.error = ref - y;

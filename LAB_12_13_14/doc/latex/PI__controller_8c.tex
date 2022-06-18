@@ -1,0 +1,115 @@
+\hypertarget{PI__controller_8c}{}\doxysection{src/\+P\+I\+\_\+\+Controller/\+P\+I\+\_\+controller.c File Reference}
+\label{PI__controller_8c}\index{src/PI\_Controller/PI\_controller.c@{src/PI\_Controller/PI\_controller.c}}
+
+
+Module implementing \mbox{\hyperlink{structPI}{PI}} Controller.  
+
+
+{\ttfamily \#include $<$P\+I\+\_\+controller.\+h$>$}\newline
+Include dependency graph for P\+I\+\_\+controller.\+c\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=188pt]{PI__controller_8c__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structPI}{PI}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \mbox{\hyperlink{structPI}{PI}} \mbox{\hyperlink{PI__controller_8c_a5f39f6bfdc184c05de331b2df3ecef74}{PI}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{PI__controller_8c_acadb6bdc0947859ced30af6bff9c83a8}{P\+I\+\_\+init}} (float Kp, float Ti)
+\begin{DoxyCompactList}\small\item\em Function to initialze \mbox{\hyperlink{structPI}{PI}} Controller. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{PI__controller_8c_ab8d0dbbe6b7c8e4df02adb1bece3fb9a}{P\+I\+\_\+controller}} (int ref, int y, int \mbox{\hyperlink{main_8c_aad387ea7ef87850d0f52146fd98ae08d}{dutycycle}})
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{structPI}{PI}} Controller control function. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structPI}{PI}} \mbox{\hyperlink{PI__controller_8c_a157b53b7e71fcc6afe0a4c664d7adb60}{pi}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Module implementing \mbox{\hyperlink{structPI}{PI}} Controller. 
+
+\begin{DoxyAuthor}{Author}
+André Brandão 
+
+Emanuel Pereira 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+15/06/2022 
+\end{DoxyDate}
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{PI__controller_8c_a5f39f6bfdc184c05de331b2df3ecef74}\label{PI__controller_8c_a5f39f6bfdc184c05de331b2df3ecef74}} 
+\index{PI\_controller.c@{PI\_controller.c}!PI@{PI}}
+\index{PI@{PI}!PI\_controller.c@{PI\_controller.c}}
+\doxysubsubsection{\texorpdfstring{PI}{PI}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structPI}{PI}} \mbox{\hyperlink{structPI}{PI}}}
+
+Proportional Integral controller -\/ Struct 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{PI__controller_8c_ab8d0dbbe6b7c8e4df02adb1bece3fb9a}\label{PI__controller_8c_ab8d0dbbe6b7c8e4df02adb1bece3fb9a}} 
+\index{PI\_controller.c@{PI\_controller.c}!PI\_controller@{PI\_controller}}
+\index{PI\_controller@{PI\_controller}!PI\_controller.c@{PI\_controller.c}}
+\doxysubsubsection{\texorpdfstring{PI\_controller()}{PI\_controller()}}
+{\footnotesize\ttfamily int P\+I\+\_\+controller (\begin{DoxyParamCaption}\item[{int}]{ref,  }\item[{int}]{y,  }\item[{int}]{dutycycle }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{structPI}{PI}} Controller control function. 
+
+This function the control function of the controller. It must be passed, for a given instant (k-\/1), the reference point, the system output, and the control signal value (dutycycle). Based on this parameters computes and returns the control signal. The control signal is considered as the dutycycle of a P\+WM signal therefor is limited within the interval \mbox{[}0 100\mbox{]}.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em ref} & Reference point (instant k-\/1) \\
+\hline
+\mbox{\texttt{ in}}  & {\em y} & System output (instant k-\/1) \\
+\hline
+\mbox{\texttt{ in}}  & {\em dutycycle} & control signal (instant k-\/1)\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+control signal (dutycycle) on instant k 
+\end{DoxyReturn}
+\mbox{\Hypertarget{PI__controller_8c_acadb6bdc0947859ced30af6bff9c83a8}\label{PI__controller_8c_acadb6bdc0947859ced30af6bff9c83a8}} 
+\index{PI\_controller.c@{PI\_controller.c}!PI\_init@{PI\_init}}
+\index{PI\_init@{PI\_init}!PI\_controller.c@{PI\_controller.c}}
+\doxysubsubsection{\texorpdfstring{PI\_init()}{PI\_init()}}
+{\footnotesize\ttfamily void P\+I\+\_\+init (\begin{DoxyParamCaption}\item[{float}]{Kp,  }\item[{float}]{Ti }\end{DoxyParamCaption})}
+
+
+
+Function to initialze \mbox{\hyperlink{structPI}{PI}} Controller. 
+
+This function initializes the parameters of the \mbox{\hyperlink{structPI}{PI}} controller, the proportional and the integral gain with the values passed in the arguments and the signals with zero. The integral limits are initialized with -\/14 and 14, may be changed for better control behavior in other systems.
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em Kp} & Proportional Gain \\
+\hline
+\mbox{\texttt{ in}}  & {\em Ti} & Integral Gain \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{PI__controller_8c_a157b53b7e71fcc6afe0a4c664d7adb60}\label{PI__controller_8c_a157b53b7e71fcc6afe0a4c664d7adb60}} 
+\index{PI\_controller.c@{PI\_controller.c}!pi@{pi}}
+\index{pi@{pi}!PI\_controller.c@{PI\_controller.c}}
+\doxysubsubsection{\texorpdfstring{pi}{pi}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structPI}{PI}} pi}
+
+\mbox{\hyperlink{structPI}{PI}} controller variable 

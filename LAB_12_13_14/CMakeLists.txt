@@ -5,8 +5,12 @@ find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(assigment_4_shmem_threads)
 
 zephyr_include_directories(ADC)
+zephyr_include_directories(PI_Controller)
 
 target_sources(app PRIVATE src/main.c)
 
 target_include_directories(app PRIVATE src/ADC)
 target_sources(app PRIVATE src/ADC/ADC.c)
+
+target_include_directories(app PRIVATE src/PI_Controller)
+target_sources(app PRIVATE src/PI_Controller/PI_controller.c)
