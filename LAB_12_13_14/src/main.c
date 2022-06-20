@@ -32,7 +32,7 @@
 #include <ADC.h>
 #include <PI_controller.h>
 
-#define SAMP_PERIOD_MS  1000    /**< Sample period (ms) */
+#define SAMP_PERIOD_MS  250    /**< Sample period (ms) */
 #define TIMER_PERIOD_MS 60000   /**< Timer (calendar) thread period (ms) - 1 minute */
 
 #define MANUAL 0    /**< Flag that indicates Manual mode is selected */ 
@@ -106,7 +106,7 @@ typedef struct {
 buffer sample_buffer;   /**< Buffer to store samples to communicate between tasks*/ 
 
 int mode = MANUAL;  /**< System operation mode (MANUAL or AUTOMATIC) */
-int intensity = 10; /**< Light intensity */ 
+int intensity = 0; /**< Light intensity */ 
 int dutycycle = 0;  /**< PWM dutycycle */
 
 memory mem[MEM_SIZE];   /**< Memory to store user data */ 
@@ -121,6 +121,7 @@ static char *week_days[7] = {"Domingo", "Segunda-feira", "Terça-feira", "Quarta
 // Semaphores for task synch
 struct k_sem sem_adc;   /**< Semaphore to synch sample and actuation tasks (signals end of sampling)*/
 struct k_sem sem_act;  /**< Semaphore to trigger actuation thread */
+struct k_sem sem_mut;  /**< Semaphore to mutual exclusion on calendar */
 
 // Thread code prototypes
 void thread_sampling(void *argA, void *argB, void *argC);
@@ -193,6 +194,7 @@ void main(void)
     // Create and init semaphores
     k_sem_init(&sem_adc, 0, 1);
     k_sem_init(&sem_act, 0, 1);
+    k_sem_init(&sem_mut, 1, 1);
 
     // Create tasks
     thread_sampling_tid = k_thread_create(&thread_sampling_data, thread_sampling_stack,
@@ -244,8 +246,8 @@ void thread_sampling(void *argA , void *argB, void *argC)
         {
             sample_buffer.data[sample_buffer.head] = adc_sample();  // Get adc sample and store it in sample buffer
         
-            printk("\n----------------------------\n");
-            printk("\nsample = %d\n", sample_buffer.data[sample_buffer.head]);
+            /*printk("\n----------------------------\n");
+            printk("\nsample = %d\n", sample_buffer.data[sample_buffer.head]);*/
 
             sample_buffer.head = (sample_buffer.head + 1) % FILTER_SIZE;   // Increment position to store data
 
@@ -278,12 +280,14 @@ void thread_processing(void *argA , void *argB, void *argC)
     int data=0; // filtered data
     int intensity_real=0;   // real light intensity
     
-    PI_init(0.5, 0);    // PI controller initialization
+    PI_init(0.02, 0);    // PI controller initialization
 
     while(1)
     {
         k_sem_take(&sem_adc, K_FOREVER);   // Wait for new sample
         
+        k_sem_take(&sem_mut, K_FOREVER);
+
         // Check if it's time to change the light intensity based on the user data memory
         for(unsigned int i=0; i < mem_idx; i++)
         {
@@ -293,13 +297,15 @@ void thread_processing(void *argA , void *argB, void *argC)
             }
         }
 
+        k_sem_give(&sem_mut);
+
         data = filter(sample_buffer.data);   // Filter data
     
         intensity_real = (data - 250)*100 / 350; // Compute the real light intensity
         
         dutycycle = PI_controller(intensity, intensity_real, dutycycle);    // PI controller algorithm
-
-        printk("avg: %d intensity_real: %d ton: %d", data, intensity_real, intensity);
+       
+       // printk("avg: %d intensity_real: %d ton: %d", data, intensity_real, intensity);
 
         k_sem_give(&sem_act);   // Trigger actuation thread to update PWM dutycycle
     }
@@ -355,9 +361,8 @@ void thread_timer(void *argA, void *argB, void *argC){
 
     while(1)
     { 
-        // print day and time in HH : MM format
-        printk("DAY = %s , %02d h : %02d min ", week_days[calendar.day], calendar.hour, calendar.minute);
-        
+        k_sem_take(&sem_mut, K_FOREVER);
+
         // increase minutes
         calendar.minute++;
  
@@ -375,7 +380,12 @@ void thread_timer(void *argA, void *argB, void *argC){
             calendar.minute = 0;
             calendar.day = (calendar.day + 1) % 7;
         }
-                  
+        
+        k_sem_give(&sem_mut);
+
+        // print day and time in HH : MM format
+        printk("DAY = %s , %02d h : %02d min ", week_days[calendar.day], calendar.hour, calendar.minute);
+              
         /* Wait for next release instant */ 
         fin_time = k_uptime_get();
         if(fin_time < release_time)
@@ -402,6 +412,7 @@ void thread_interface(void *argA , void *argB, void *argC)
     printk("\nPress 1 to add schedule");
     printk("\nPress 2 to check schedules");
     printk("\nPress 3 to change current date and hour");
+    printk("\nPress 4 to check system time");
 
     while(1)
     {
@@ -438,6 +449,8 @@ void thread_interface(void *argA , void *argB, void *argC)
                 break;
 
             case '3':   // Update Date and Hour
+                k_sem_take(&sem_mut, K_FOREVER);
+                
                 printk("\nSetting New DATE");
                 printk("\nWeek Day: ");
 		        calendar.day = read_int();  // Get Week day
@@ -447,9 +460,15 @@ void thread_interface(void *argA , void *argB, void *argC)
 
 		        printf("\nMinute: ");
 		        calendar.minute = read_int();   // Get Minute 
+                
+                k_sem_give(&sem_mut);
+                break;
+            case '4':   // print system day and time in HH : MM format
+                k_sem_take(&sem_mut, K_FOREVER);
+                printk("DAY = %s , %02d h : %02d min ", week_days[calendar.day], calendar.hour, calendar.minute);
+                k_sem_give(&sem_mut);
 
                 break;
-            
             default:
                 break;
         }
