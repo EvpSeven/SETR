@@ -33,7 +33,7 @@
 #include <PI_controller.h>
 
 #define SAMP_PERIOD_MS  250    /**< Sample period (ms) */
-#define TIMER_PERIOD_MS 60000   /**< Timer (calendar) thread period (ms) - 1 minute */
+#define TIMER_PERIOD_MS 60000  /**< Timer (calendar) thread period (ms) - 1 minute */
 
 #define MANUAL 0    /**< Flag that indicates Manual mode is selected */ 
 #define AUTOMATIC 1 /**< Flag that indicates Automatic mode is selected */ 
@@ -106,7 +106,7 @@ typedef struct {
 buffer sample_buffer;   /**< Buffer to store samples to communicate between tasks*/ 
 
 int mode = MANUAL;  /**< System operation mode (MANUAL or AUTOMATIC) */
-int intensity = 0; /**< Light intensity */ 
+int intensity = 0;  /**< Light intensity */ 
 int dutycycle = 0;  /**< PWM dutycycle */
 
 memory mem[MEM_SIZE];   /**< Memory to store user data */ 
@@ -120,8 +120,8 @@ static char *week_days[7] = {"Domingo", "Segunda-feira", "Terça-feira", "Quarta
 
 // Semaphores for task synch
 struct k_sem sem_adc;   /**< Semaphore to synch sample and actuation tasks (signals end of sampling)*/
-struct k_sem sem_act;  /**< Semaphore to trigger actuation thread */
-struct k_sem sem_mut;  /**< Semaphore to mutual exclusion on calendar */
+struct k_sem sem_act;   /**< Semaphore to trigger actuation thread */
+struct k_sem sem_mut;   /**< Semaphore to mutual exclusion on calendar */
 
 // Thread code prototypes
 void thread_sampling(void *argA, void *argB, void *argC);
@@ -142,10 +142,9 @@ void input_output_config(void);
  *  Interrupt function of four buttons that allow to control the mode of the
  * system operation (MANUAL or AUTOMATIC) and to increase or decrease the light
  * intensity when on manual mode.
-*/
+ */
 void buttons_cbfunction(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
-{
-       
+{    
     if(BIT(BOARDBUT1) & pins)   // Button 1 - change mode to automatic
     {
         mode = AUTOMATIC;
@@ -194,7 +193,7 @@ void main(void)
     // Create and init semaphores
     k_sem_init(&sem_adc, 0, 1);
     k_sem_init(&sem_act, 0, 1);
-    k_sem_init(&sem_mut, 1, 1);
+    k_sem_init(&sem_mut, 1, 1); // semaphore to implement mutual exclusion
 
     // Create tasks
     thread_sampling_tid = k_thread_create(&thread_sampling_data, thread_sampling_stack,
@@ -245,9 +244,6 @@ void thread_sampling(void *argA , void *argB, void *argC)
         if(mode == AUTOMATIC)
         {
             sample_buffer.data[sample_buffer.head] = adc_sample();  // Get adc sample and store it in sample buffer
-        
-            /*printk("\n----------------------------\n");
-            printk("\nsample = %d\n", sample_buffer.data[sample_buffer.head]);*/
 
             sample_buffer.head = (sample_buffer.head + 1) % FILTER_SIZE;   // Increment position to store data
 
@@ -262,7 +258,6 @@ void thread_sampling(void *argA , void *argB, void *argC)
             release_time += SAMP_PERIOD_MS;
         }
     }
-
 }
 
 /** \brief Processing thread
@@ -280,13 +275,13 @@ void thread_processing(void *argA , void *argB, void *argC)
     int data=0; // filtered data
     int intensity_real=0;   // real light intensity
     
-    PI_init(0.02, 0);    // PI controller initialization
+    PI_init(0.5, 0.5);    // PI controller initialization
 
     while(1)
     {
-        k_sem_take(&sem_adc, K_FOREVER);   // Wait for new sample
+        k_sem_take(&sem_adc, K_FOREVER);    // Wait for new sample
         
-        k_sem_take(&sem_mut, K_FOREVER);
+        k_sem_take(&sem_mut, K_FOREVER);    // Mutual exclusion on calendar operations
 
         // Check if it's time to change the light intensity based on the user data memory
         for(unsigned int i=0; i < mem_idx; i++)
@@ -297,16 +292,14 @@ void thread_processing(void *argA , void *argB, void *argC)
             }
         }
 
-        k_sem_give(&sem_mut);
+        k_sem_give(&sem_mut);   // Get out of critical section
 
         data = filter(sample_buffer.data);   // Filter data
     
         intensity_real = (data - 250)*100 / 350; // Compute the real light intensity
         
         dutycycle = PI_controller(intensity, intensity_real, dutycycle);    // PI controller algorithm
-       
-       // printk("avg: %d intensity_real: %d ton: %d", data, intensity_real, intensity);
-
+        
         k_sem_give(&sem_act);   // Trigger actuation thread to update PWM dutycycle
     }
 }
@@ -350,7 +343,7 @@ void thread_actuation(void *argA , void *argB, void *argC)
  *  
  *  This thread is a periodic thread with period 1 minute (TIMER_PERIOD_MS),
  * to update the day, hour and minutes
-*/
+ */
 void thread_timer(void *argA, void *argB, void *argC){
 
     /* Timing variables to control task periodicity */
@@ -361,7 +354,7 @@ void thread_timer(void *argA, void *argB, void *argC){
 
     while(1)
     { 
-        k_sem_take(&sem_mut, K_FOREVER);
+        k_sem_take(&sem_mut, K_FOREVER); // Mutual exclusion on calendar operations
 
         // increase minutes
         calendar.minute++;
@@ -381,10 +374,10 @@ void thread_timer(void *argA, void *argB, void *argC){
             calendar.day = (calendar.day + 1) % 7;
         }
         
-        k_sem_give(&sem_mut);
+        k_sem_give(&sem_mut);   // Get out of critical section
 
         // print day and time in HH : MM format
-        printk("DAY = %s , %02d h : %02d min ", week_days[calendar.day], calendar.hour, calendar.minute);
+        printk("\nDAY = %s , %02d h : %02d min ", week_days[calendar.day], calendar.hour, calendar.minute);
               
         /* Wait for next release instant */ 
         fin_time = k_uptime_get();
@@ -402,7 +395,7 @@ void thread_timer(void *argA, void *argB, void *argC){
  * This thread implements the user interface, let's the user add new schedules
  * configurations, check them and change the current date and hour.
  *
-*/
+ */
 void thread_interface(void *argA , void *argB, void *argC)
 {    
     char command;
@@ -425,10 +418,10 @@ void thread_interface(void *argA , void *argB, void *argC)
 
                 printk("\nSetting new schedules");
                 printk("\nWeek Day: ");
-		        mem[mem_idx].week_day = read_int(); // Get week day
-                    
-		        printk("\nHour: ");
-		        mem[mem_idx].hour = read_int(); // Get Hour
+                mem[mem_idx].week_day = read_int(); // Get week day
+                            
+                printk("\nHour: ");
+                mem[mem_idx].hour = read_int(); // Get Hour
 
                 printf("\nMinute: ");
                 mem[mem_idx].minute = read_int();   // Get Minute
@@ -449,7 +442,7 @@ void thread_interface(void *argA , void *argB, void *argC)
                 break;
 
             case '3':   // Update Date and Hour
-                k_sem_take(&sem_mut, K_FOREVER);
+                k_sem_take(&sem_mut, K_FOREVER);    // Mutual exclusion on calendar operations
                 
                 printk("\nSetting New DATE");
                 printk("\nWeek Day: ");
@@ -461,12 +454,13 @@ void thread_interface(void *argA , void *argB, void *argC)
 		        printf("\nMinute: ");
 		        calendar.minute = read_int();   // Get Minute 
                 
-                k_sem_give(&sem_mut);
+                k_sem_give(&sem_mut);   // Get out of critical section
                 break;
             case '4':   // print system day and time in HH : MM format
-                k_sem_take(&sem_mut, K_FOREVER);
-                printk("DAY = %s , %02d h : %02d min ", week_days[calendar.day], calendar.hour, calendar.minute);
-                k_sem_give(&sem_mut);
+                k_sem_take(&sem_mut, K_FOREVER);    // Mutual exclusion on calendar operations
+                printk("\nSystem Time");
+                printk("\nDAY = %s , %02d h : %02d min ", week_days[calendar.day], calendar.hour, calendar.minute);
+                k_sem_give(&sem_mut);   // Get out of critical section
 
                 break;
             default:
@@ -486,7 +480,7 @@ void thread_interface(void *argA , void *argB, void *argC)
  * \see console_init() 
  * \see console_getchar()
  * 
-*/
+ */
 int read_int()
 {
     char c[6];
@@ -573,7 +567,6 @@ int array_average(int *data, int size)
     for(unsigned int i = 0; i < size; i++)
     {
         sum += data[i];
-        //printk("%d ", data[i]);
     }
     return sum / size;
 }
@@ -583,7 +576,7 @@ int array_average(int *data, int size)
  *  This function makes all the hardware configuration. Configures the input and output pins and
  * the interruptions of the microcontroller.
  * 
-*/
+ */
 void input_output_config(void)
 {
     const struct device *gpio0_dev;         /* Pointer to GPIO device structure */
@@ -610,5 +603,4 @@ void input_output_config(void)
     /* Set callbacks */
     gpio_init_callback(&button_cb_data, buttons_cbfunction, BIT(BOARDBUT1)| BIT(BOARDBUT2)| BIT(BOARDBUT3) | BIT(BOARDBUT4));
     gpio_add_callback(gpio0_dev, &button_cb_data);
-
 }

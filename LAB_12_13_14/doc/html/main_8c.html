@@ -143,7 +143,7 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:a7829e7c5c37ea8a78e879aa2028dfb21"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a7829e7c5c37ea8a78e879aa2028dfb21">SAMP_PERIOD_MS</a>&#160;&#160;&#160;1000</td></tr>
+<tr class="memitem:a7829e7c5c37ea8a78e879aa2028dfb21"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a7829e7c5c37ea8a78e879aa2028dfb21">SAMP_PERIOD_MS</a>&#160;&#160;&#160;250</td></tr>
 <tr class="separator:a7829e7c5c37ea8a78e879aa2028dfb21"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6e9c4cab12b06864c5162252ca67014"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#ad6e9c4cab12b06864c5162252ca67014">TIMER_PERIOD_MS</a>&#160;&#160;&#160;60000</td></tr>
 <tr class="separator:ad6e9c4cab12b06864c5162252ca67014"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -257,7 +257,7 @@ Variables</h2></td></tr>
 <tr class="separator:a34b9caf9a2b0b317320608e2af144e86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ea5d0cb93f22f7d0fdf804bd68c3326"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a1ea5d0cb93f22f7d0fdf804bd68c3326">mode</a> = <a class="el" href="main_8c.html#a8187a9af791c0a44ba67edd9cf266961">MANUAL</a></td></tr>
 <tr class="separator:a1ea5d0cb93f22f7d0fdf804bd68c3326"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a299ec0c42ccc5a2d79d1739428ac3210"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a299ec0c42ccc5a2d79d1739428ac3210">intensity</a> = 10</td></tr>
+<tr class="memitem:a299ec0c42ccc5a2d79d1739428ac3210"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a299ec0c42ccc5a2d79d1739428ac3210">intensity</a> = 0</td></tr>
 <tr class="separator:a299ec0c42ccc5a2d79d1739428ac3210"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad387ea7ef87850d0f52146fd98ae08d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#aad387ea7ef87850d0f52146fd98ae08d">dutycycle</a> = 0</td></tr>
 <tr class="separator:aad387ea7ef87850d0f52146fd98ae08d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -271,6 +271,8 @@ Variables</h2></td></tr>
 <tr class="separator:aa3be317cc13a026ab4ac872eb3e80797"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a429f313334b1a4199142c4fc6af747fc"><td class="memItemLeft" align="right" valign="top">struct k_sem&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a429f313334b1a4199142c4fc6af747fc">sem_act</a></td></tr>
 <tr class="separator:a429f313334b1a4199142c4fc6af747fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0add50012e50d26880c6220a43851426"><td class="memItemLeft" align="right" valign="top">struct k_sem&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="main_8c.html#a0add50012e50d26880c6220a43851426">sem_mut</a></td></tr>
+<tr class="separator:a0add50012e50d26880c6220a43851426"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Program implementing an application that controls the light intensity of a given region. </p>
@@ -452,7 +454,7 @@ Emanuel Pereira </dd></dl>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define SAMP_PERIOD_MS&#160;&#160;&#160;1000</td>
+          <td class="memname">#define SAMP_PERIOD_MS&#160;&#160;&#160;250</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1146,7 +1148,7 @@ console_getchar() </dd></dl>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int intensity = 10</td>
+          <td class="memname">int intensity = 0</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -1241,6 +1243,21 @@ console_getchar() </dd></dl>
       </table>
 </div><div class="memdoc">
 <p>Semaphore to synch sample and actuation tasks (signals end of sampling) </p>
+
+</div>
+</div>
+<a id="a0add50012e50d26880c6220a43851426"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0add50012e50d26880c6220a43851426">&#9670;&nbsp;</a></span>sem_mut</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct k_sem sem_mut</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Semaphore to mutual exclusion on calendar </p>
 
 </div>
 </div>

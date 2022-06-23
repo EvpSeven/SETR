@@ -37,7 +37,7 @@ struct \mbox{\hyperlink{structCalendar}{Calendar}}
 \doxysubsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
-\#define \mbox{\hyperlink{main_8c_a7829e7c5c37ea8a78e879aa2028dfb21}{S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS}}~1000
+\#define \mbox{\hyperlink{main_8c_a7829e7c5c37ea8a78e879aa2028dfb21}{S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS}}~250
 \item 
 \#define \mbox{\hyperlink{main_8c_ad6e9c4cab12b06864c5162252ca67014}{T\+I\+M\+E\+R\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS}}~60000
 \item 
@@ -139,7 +139,7 @@ k\+\_\+tid\+\_\+t \mbox{\hyperlink{main_8c_a4f511736d4814efc5a2858ac5b0712f3}{th
 \item 
 int \mbox{\hyperlink{main_8c_a1ea5d0cb93f22f7d0fdf804bd68c3326}{mode}} = \mbox{\hyperlink{main_8c_a8187a9af791c0a44ba67edd9cf266961}{M\+A\+N\+U\+AL}}
 \item 
-int \mbox{\hyperlink{main_8c_a299ec0c42ccc5a2d79d1739428ac3210}{intensity}} = 10
+int \mbox{\hyperlink{main_8c_a299ec0c42ccc5a2d79d1739428ac3210}{intensity}} = 0
 \item 
 int \mbox{\hyperlink{main_8c_aad387ea7ef87850d0f52146fd98ae08d}{dutycycle}} = 0
 \item 
@@ -152,6 +152,8 @@ int \mbox{\hyperlink{main_8c_a6162da2810386504821c770015997a94}{mem\+\_\+idx}}
 struct k\+\_\+sem \mbox{\hyperlink{main_8c_aa3be317cc13a026ab4ac872eb3e80797}{sem\+\_\+adc}}
 \item 
 struct k\+\_\+sem \mbox{\hyperlink{main_8c_a429f313334b1a4199142c4fc6af747fc}{sem\+\_\+act}}
+\item 
+struct k\+\_\+sem \mbox{\hyperlink{main_8c_a0add50012e50d26880c6220a43851426}{sem\+\_\+mut}}
 \end{DoxyCompactItemize}
 
 
@@ -241,7 +243,7 @@ Address of the pin used to output pwm \mbox{\Hypertarget{main_8c_a7829e7c5c37ea8
 \index{main.c@{main.c}!SAMP\_PERIOD\_MS@{SAMP\_PERIOD\_MS}}
 \index{SAMP\_PERIOD\_MS@{SAMP\_PERIOD\_MS}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{SAMP\_PERIOD\_MS}{SAMP\_PERIOD\_MS}}
-{\footnotesize\ttfamily \#define S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS~1000}
+{\footnotesize\ttfamily \#define S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS~250}
 
 Sample period (ms) \mbox{\Hypertarget{main_8c_a6423a880df59733d2d9b509c7718d3a9}\label{main_8c_a6423a880df59733d2d9b509c7718d3a9}} 
 \index{main.c@{main.c}!STACK\_SIZE@{STACK\_SIZE}}
@@ -512,7 +514,7 @@ P\+WM dutycycle \mbox{\Hypertarget{main_8c_a299ec0c42ccc5a2d79d1739428ac3210}\la
 \index{main.c@{main.c}!intensity@{intensity}}
 \index{intensity@{intensity}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{intensity}{intensity}}
-{\footnotesize\ttfamily int intensity = 10}
+{\footnotesize\ttfamily int intensity = 0}
 
 Light intensity \mbox{\Hypertarget{main_8c_a051712116e4fe87528cf518a135e3634}\label{main_8c_a051712116e4fe87528cf518a135e3634}} 
 \index{main.c@{main.c}!mem@{mem}}
@@ -550,7 +552,13 @@ Semaphore to trigger actuation thread \mbox{\Hypertarget{main_8c_aa3be317cc13a02
 \doxysubsubsection{\texorpdfstring{sem\_adc}{sem\_adc}}
 {\footnotesize\ttfamily struct k\+\_\+sem sem\+\_\+adc}
 
-Semaphore to synch sample and actuation tasks (signals end of sampling) \mbox{\Hypertarget{main_8c_a9a0bf1249db244ace268c06987aa8bc3}\label{main_8c_a9a0bf1249db244ace268c06987aa8bc3}} 
+Semaphore to synch sample and actuation tasks (signals end of sampling) \mbox{\Hypertarget{main_8c_a0add50012e50d26880c6220a43851426}\label{main_8c_a0add50012e50d26880c6220a43851426}} 
+\index{main.c@{main.c}!sem\_mut@{sem\_mut}}
+\index{sem\_mut@{sem\_mut}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{sem\_mut}{sem\_mut}}
+{\footnotesize\ttfamily struct k\+\_\+sem sem\+\_\+mut}
+
+Semaphore to mutual exclusion on calendar \mbox{\Hypertarget{main_8c_a9a0bf1249db244ace268c06987aa8bc3}\label{main_8c_a9a0bf1249db244ace268c06987aa8bc3}} 
 \index{main.c@{main.c}!thread\_actuation\_data@{thread\_actuation\_data}}
 \index{thread\_actuation\_data@{thread\_actuation\_data}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{thread\_actuation\_data}{thread\_actuation\_data}}

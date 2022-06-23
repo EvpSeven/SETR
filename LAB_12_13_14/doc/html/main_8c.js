@@ -48,6 +48,7 @@ var main_8c =
     [ "sample_buffer", "main_8c.html#a34b9caf9a2b0b317320608e2af144e86", null ],
     [ "sem_act", "main_8c.html#a429f313334b1a4199142c4fc6af747fc", null ],
     [ "sem_adc", "main_8c.html#aa3be317cc13a026ab4ac872eb3e80797", null ],
+    [ "sem_mut", "main_8c.html#a0add50012e50d26880c6220a43851426", null ],
     [ "thread_actuation_data", "main_8c.html#a9a0bf1249db244ace268c06987aa8bc3", null ],
     [ "thread_actuation_tid", "main_8c.html#a3dec149768a6eae4f33afb78a0fba16a", null ],
     [ "thread_interface_data", "main_8c.html#af6d2603321c94cea6aaf2350aabf3831", null ],
