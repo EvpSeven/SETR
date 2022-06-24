@@ -33,7 +33,7 @@
 #include <PI_controller.h>
 
 #define SAMP_PERIOD_MS  250    /**< Sample period (ms) */
-#define TIMER_PERIOD_MS 60000  /**< Timer (calendar) thread period (ms) - 1 minute */
+#define TIMER_PERIOD_MS 60000  /**< Calendar Timer thread period (ms) - 1 minute */
 
 #define MANUAL 0    /**< Flag that indicates Manual mode is selected */ 
 #define AUTOMATIC 1 /**< Flag that indicates Automatic mode is selected */ 
@@ -49,10 +49,10 @@
 #define BOARDBUT3 0x18  /**< Address of Board button 3 used to increase light intensity on manual mode */
 #define BOARDBUT4 0x19  /**< Address of Board button 4 used to decrease light intensity on manual mode */
 
-#define thread_sampling_prio 1      /**< Scheduling priority of sampling thread */
-#define thread_processing_prio 1    /**< Scheduling priority of processing thread */
-#define thread_actuation_prio 1     /**< Scheduling priority of actuation thread */
-#define thread_timer_prio 1         /**< Scheduling priority of timer thread */
+#define thread_sampling_prio 2      /**< Scheduling priority of sampling thread */
+#define thread_processing_prio 2    /**< Scheduling priority of processing thread */
+#define thread_actuation_prio 2     /**< Scheduling priority of actuation thread */
+#define thread_calendarTimer_prio 3 /**< Scheduling priority of calendar timer thread */
 #define thread_interface_prio 1     /**< Scheduling priority of interface thread */
 
 #define GPIO0_NID DT_NODELABEL(gpio0)   /**< gpio0 Node Label from device tree (refer to dts file) */
@@ -60,23 +60,23 @@
 
 #define PWM_PIN 0x0e    /**< Address of the pin used to output pwm */ 
 
-K_THREAD_STACK_DEFINE(thread_sampling_stack, STACK_SIZE);   /**< Create sampling thread stack space */
-K_THREAD_STACK_DEFINE(thread_processing_stack, STACK_SIZE); /**< Create processing thread stack space */
-K_THREAD_STACK_DEFINE(thread_actuation_stack, STACK_SIZE);  /**< Create actuation thread stack space */
-K_THREAD_STACK_DEFINE(thread_timer_stack, STACK_SIZE);      /**< Create timer (calendar) thread stack space */
-K_THREAD_STACK_DEFINE(thread_interface_stack, STACK_SIZE);  /**< Create interface thread stack space */
+K_THREAD_STACK_DEFINE(thread_sampling_stack, STACK_SIZE);       /**< Create sampling thread stack space */
+K_THREAD_STACK_DEFINE(thread_processing_stack, STACK_SIZE);     /**< Create processing thread stack space */
+K_THREAD_STACK_DEFINE(thread_actuation_stack, STACK_SIZE);      /**< Create actuation thread stack space */
+K_THREAD_STACK_DEFINE(thread_calendarTimer_stack, STACK_SIZE);  /**< Create calendar timer thread stack space */
+K_THREAD_STACK_DEFINE(thread_interface_stack, STACK_SIZE);      /**< Create interface thread stack space */
 
-struct k_thread thread_sampling_data;   /**< Sampling thread data */
-struct k_thread thread_processing_data; /**< Processing thread data */
-struct k_thread thread_actuation_data;  /**< Actuation thread data */
-struct k_thread thread_timer_data;      /**< Timer (calendar) thread data */
-struct k_thread thread_interface_data;  /**< Interface thread data */
+struct k_thread thread_sampling_data;       /**< Sampling thread data */
+struct k_thread thread_processing_data;     /**< Processing thread data */
+struct k_thread thread_actuation_data;      /**< Actuation thread data */
+struct k_thread thread_calendarTimer_data;  /**< Calendar Timer thread data */
+struct k_thread thread_interface_data;      /**< Interface thread data */
 
-k_tid_t thread_sampling_tid;    /**< Sampling thread task ID */
-k_tid_t thread_processing_tid;  /**< Processing thread task ID */
-k_tid_t thread_actuation_tid;   /**< Actuation thread task ID */
-k_tid_t thread_timer_tid;       /**< Timer thread task ID */
-k_tid_t thread_interface_tid;   /**< Interface thread task ID */
+k_tid_t thread_sampling_tid;        /**< Sampling thread task ID */
+k_tid_t thread_processing_tid;      /**< Processing thread task ID */
+k_tid_t thread_actuation_tid;       /**< Actuation thread task ID */
+k_tid_t thread_calendarTimer_tid;   /**< Calendar Timer thread task ID */
+k_tid_t thread_interface_tid;       /**< Interface thread task ID */
 
 static struct gpio_callback button_cb_data; /**< Buttons callback structures */
 
@@ -127,7 +127,7 @@ struct k_sem sem_mut;   /**< Semaphore to mutual exclusion on calendar */
 void thread_sampling(void *argA, void *argB, void *argC);
 void thread_processing(void *argA, void *argB, void *argC);
 void thread_actuation(void *argA, void *argB, void *argC);
-void thread_timer(void *argA, void *argB, void *argC);
+void thread_calendarTimer(void *argA, void *argB, void *argC);
 void thread_interface(void *argA, void *argB, void *argC);
 
 // Functions prototypes
@@ -208,9 +208,9 @@ void main(void)
         K_THREAD_STACK_SIZEOF(thread_actuation_stack), thread_actuation,
         NULL, NULL, NULL, thread_actuation_prio, 0, K_NO_WAIT);
 
-    thread_timer_tid = k_thread_create(&thread_timer_data, thread_timer_stack,
-        K_THREAD_STACK_SIZEOF(thread_timer_stack), thread_timer,
-        NULL, NULL, NULL, thread_timer_prio, 0, K_NO_WAIT);
+    thread_calendarTimer_tid = k_thread_create(&thread_calendarTimer_data, thread_calendarTimer_stack,
+        K_THREAD_STACK_SIZEOF(thread_calendarTimer_stack), thread_calendarTimer,
+        NULL, NULL, NULL, thread_calendarTimer_prio, 0, K_NO_WAIT);
     
     thread_interface_tid = k_thread_create(&thread_interface_data, thread_interface_stack,
         K_THREAD_STACK_SIZEOF(thread_interface_stack), thread_interface,
@@ -339,12 +339,12 @@ void thread_actuation(void *argA , void *argB, void *argC)
     }
 }
 
-/** \brief Timer thread to implement a calendar 
+/** \brief Calendar Timer thread to implement a calendar 
  *  
  *  This thread is a periodic thread with period 1 minute (TIMER_PERIOD_MS),
  * to update the day, hour and minutes
  */
-void thread_timer(void *argA, void *argB, void *argC){
+void thread_calendarTimer(void *argA, void *argB, void *argC){
 
     /* Timing variables to control task periodicity */
     int64_t fin_time=0, release_time=0;

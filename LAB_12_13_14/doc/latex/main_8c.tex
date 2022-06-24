@@ -59,13 +59,13 @@ struct \mbox{\hyperlink{structCalendar}{Calendar}}
 \item 
 \#define \mbox{\hyperlink{main_8c_abee96e1280405ff973ee2b6b07eec104}{B\+O\+A\+R\+D\+B\+U\+T4}}~0x19
 \item 
-\#define \mbox{\hyperlink{main_8c_a91585133db96440dc6b21718535c5e6b}{thread\+\_\+sampling\+\_\+prio}}~1
+\#define \mbox{\hyperlink{main_8c_a91585133db96440dc6b21718535c5e6b}{thread\+\_\+sampling\+\_\+prio}}~2
 \item 
-\#define \mbox{\hyperlink{main_8c_a5620c118b737fef676e57cb77cc36d64}{thread\+\_\+processing\+\_\+prio}}~1
+\#define \mbox{\hyperlink{main_8c_a5620c118b737fef676e57cb77cc36d64}{thread\+\_\+processing\+\_\+prio}}~2
 \item 
-\#define \mbox{\hyperlink{main_8c_ad74d90eda75d0ad6e39cbd57bd69f194}{thread\+\_\+actuation\+\_\+prio}}~1
+\#define \mbox{\hyperlink{main_8c_ad74d90eda75d0ad6e39cbd57bd69f194}{thread\+\_\+actuation\+\_\+prio}}~2
 \item 
-\#define \mbox{\hyperlink{main_8c_a78c6fe0127b774897c218c031de92822}{thread\+\_\+timer\+\_\+prio}}~1
+\#define \mbox{\hyperlink{main_8c_a56cc10cd6ec30f18b9192d5ca60b93fa}{thread\+\_\+calendar\+Timer\+\_\+prio}}~3
 \item 
 \#define \mbox{\hyperlink{main_8c_a8c3412660bfe383842b2e5cfd2311b7b}{thread\+\_\+interface\+\_\+prio}}~1
 \item 
@@ -84,7 +84,7 @@ struct \mbox{\hyperlink{structCalendar}{Calendar}}
 \item 
 \mbox{\hyperlink{main_8c_a548d30e3288a3adc33006169b3023238}{K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE}} (thread\+\_\+actuation\+\_\+stack, \mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}})
 \item 
-\mbox{\hyperlink{main_8c_af4124be44857968ab478da5cf4830789}{K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE}} (thread\+\_\+timer\+\_\+stack, \mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}})
+\mbox{\hyperlink{main_8c_a6cebfc31708d6ea63724c280e835d29f}{K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE}} (thread\+\_\+calendar\+Timer\+\_\+stack, \mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}})
 \item 
 \mbox{\hyperlink{main_8c_a74e081acfd5bb89595459f375532975f}{K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE}} (thread\+\_\+interface\+\_\+stack, \mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}})
 \item 
@@ -94,8 +94,8 @@ void \mbox{\hyperlink{main_8c_ac6cd5cbb553e2ad23e28ad0a1074c8b0}{thread\+\_\+pro
 \begin{DoxyCompactList}\small\item\em Processing thread. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{main_8c_a116f5dda3e3079992fc8cb4f8f59e11f}{thread\+\_\+actuation}} (void $\ast$argA, void $\ast$argB, void $\ast$argC)
 \begin{DoxyCompactList}\small\item\em Actuation thread. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{main_8c_ad64b132dcdc592a77b0fb25967f3377a}{thread\+\_\+timer}} (void $\ast$argA, void $\ast$argB, void $\ast$argC)
-\begin{DoxyCompactList}\small\item\em Timer thread to implement a calendar. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{main_8c_ae8fdb30eef0b90b0ec83c0baabe093c7}{thread\+\_\+calendar\+Timer}} (void $\ast$argA, void $\ast$argB, void $\ast$argC)
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{structCalendar}{Calendar}} Timer thread to implement a calendar. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{main_8c_a570350429544cf99b11c32e1f6bf0b5a}{thread\+\_\+interface}} (void $\ast$argA, void $\ast$argB, void $\ast$argC)
 \begin{DoxyCompactList}\small\item\em Thread to implement the user interface. \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{main_8c_af310540093ee953c3018bc13bbde3da5}{read\+\_\+int}} ()
@@ -121,7 +121,7 @@ struct k\+\_\+thread \mbox{\hyperlink{main_8c_a0d5266f8e4ee9131f1499bc89f35146a}
 \item 
 struct k\+\_\+thread \mbox{\hyperlink{main_8c_a9a0bf1249db244ace268c06987aa8bc3}{thread\+\_\+actuation\+\_\+data}}
 \item 
-struct k\+\_\+thread \mbox{\hyperlink{main_8c_a42ee5857ab68d7b608277ebfbdfcd873}{thread\+\_\+timer\+\_\+data}}
+struct k\+\_\+thread \mbox{\hyperlink{main_8c_a2c3602187ab60325c824e8da89f8781f}{thread\+\_\+calendar\+Timer\+\_\+data}}
 \item 
 struct k\+\_\+thread \mbox{\hyperlink{main_8c_af6d2603321c94cea6aaf2350aabf3831}{thread\+\_\+interface\+\_\+data}}
 \item 
@@ -131,7 +131,7 @@ k\+\_\+tid\+\_\+t \mbox{\hyperlink{main_8c_ad695b944931709e9377a32f2f67579ae}{th
 \item 
 k\+\_\+tid\+\_\+t \mbox{\hyperlink{main_8c_a3dec149768a6eae4f33afb78a0fba16a}{thread\+\_\+actuation\+\_\+tid}}
 \item 
-k\+\_\+tid\+\_\+t \mbox{\hyperlink{main_8c_a19ca028edd2bfa2ce623d094531be2a8}{thread\+\_\+timer\+\_\+tid}}
+k\+\_\+tid\+\_\+t \mbox{\hyperlink{main_8c_ab85740b770c20e30f04586b75eb48f14}{thread\+\_\+calendar\+Timer\+\_\+tid}}
 \item 
 k\+\_\+tid\+\_\+t \mbox{\hyperlink{main_8c_a4f511736d4814efc5a2858ac5b0712f3}{thread\+\_\+interface\+\_\+tid}}
 \item 
@@ -255,9 +255,15 @@ Size of stack area used by each thread \mbox{\Hypertarget{main_8c_ad74d90eda75d0
 \index{main.c@{main.c}!thread\_actuation\_prio@{thread\_actuation\_prio}}
 \index{thread\_actuation\_prio@{thread\_actuation\_prio}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{thread\_actuation\_prio}{thread\_actuation\_prio}}
-{\footnotesize\ttfamily \#define thread\+\_\+actuation\+\_\+prio~1}
+{\footnotesize\ttfamily \#define thread\+\_\+actuation\+\_\+prio~2}
 
-Scheduling priority of actuation thread \mbox{\Hypertarget{main_8c_a8c3412660bfe383842b2e5cfd2311b7b}\label{main_8c_a8c3412660bfe383842b2e5cfd2311b7b}} 
+Scheduling priority of actuation thread \mbox{\Hypertarget{main_8c_a56cc10cd6ec30f18b9192d5ca60b93fa}\label{main_8c_a56cc10cd6ec30f18b9192d5ca60b93fa}} 
+\index{main.c@{main.c}!thread\_calendarTimer\_prio@{thread\_calendarTimer\_prio}}
+\index{thread\_calendarTimer\_prio@{thread\_calendarTimer\_prio}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_calendarTimer\_prio}{thread\_calendarTimer\_prio}}
+{\footnotesize\ttfamily \#define thread\+\_\+calendar\+Timer\+\_\+prio~3}
+
+Scheduling priority of calendar timer thread \mbox{\Hypertarget{main_8c_a8c3412660bfe383842b2e5cfd2311b7b}\label{main_8c_a8c3412660bfe383842b2e5cfd2311b7b}} 
 \index{main.c@{main.c}!thread\_interface\_prio@{thread\_interface\_prio}}
 \index{thread\_interface\_prio@{thread\_interface\_prio}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{thread\_interface\_prio}{thread\_interface\_prio}}
@@ -267,27 +273,21 @@ Scheduling priority of interface thread \mbox{\Hypertarget{main_8c_a5620c118b737
 \index{main.c@{main.c}!thread\_processing\_prio@{thread\_processing\_prio}}
 \index{thread\_processing\_prio@{thread\_processing\_prio}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{thread\_processing\_prio}{thread\_processing\_prio}}
-{\footnotesize\ttfamily \#define thread\+\_\+processing\+\_\+prio~1}
+{\footnotesize\ttfamily \#define thread\+\_\+processing\+\_\+prio~2}
 
 Scheduling priority of processing thread \mbox{\Hypertarget{main_8c_a91585133db96440dc6b21718535c5e6b}\label{main_8c_a91585133db96440dc6b21718535c5e6b}} 
 \index{main.c@{main.c}!thread\_sampling\_prio@{thread\_sampling\_prio}}
 \index{thread\_sampling\_prio@{thread\_sampling\_prio}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{thread\_sampling\_prio}{thread\_sampling\_prio}}
-{\footnotesize\ttfamily \#define thread\+\_\+sampling\+\_\+prio~1}
+{\footnotesize\ttfamily \#define thread\+\_\+sampling\+\_\+prio~2}
 
-Scheduling priority of sampling thread \mbox{\Hypertarget{main_8c_a78c6fe0127b774897c218c031de92822}\label{main_8c_a78c6fe0127b774897c218c031de92822}} 
-\index{main.c@{main.c}!thread\_timer\_prio@{thread\_timer\_prio}}
-\index{thread\_timer\_prio@{thread\_timer\_prio}!main.c@{main.c}}
-\doxysubsubsection{\texorpdfstring{thread\_timer\_prio}{thread\_timer\_prio}}
-{\footnotesize\ttfamily \#define thread\+\_\+timer\+\_\+prio~1}
-
-Scheduling priority of timer thread \mbox{\Hypertarget{main_8c_ad6e9c4cab12b06864c5162252ca67014}\label{main_8c_ad6e9c4cab12b06864c5162252ca67014}} 
+Scheduling priority of sampling thread \mbox{\Hypertarget{main_8c_ad6e9c4cab12b06864c5162252ca67014}\label{main_8c_ad6e9c4cab12b06864c5162252ca67014}} 
 \index{main.c@{main.c}!TIMER\_PERIOD\_MS@{TIMER\_PERIOD\_MS}}
 \index{TIMER\_PERIOD\_MS@{TIMER\_PERIOD\_MS}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{TIMER\_PERIOD\_MS}{TIMER\_PERIOD\_MS}}
 {\footnotesize\ttfamily \#define T\+I\+M\+E\+R\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS~60000}
 
-Timer (calendar) thread period (ms) -\/ 1 minute 
+\mbox{\hyperlink{structCalendar}{Calendar}} Timer thread period (ms) -\/ 1 minute 
 
 \doxysubsection{Function Documentation}
 \mbox{\Hypertarget{main_8c_a2cfe3ada4d11f7cae109258730b290ae}\label{main_8c_a2cfe3ada4d11f7cae109258730b290ae}} 
@@ -378,31 +378,31 @@ This function makes all the hardware configuration. Configures the input and out
 \doxysubsubsection{\texorpdfstring{K\_THREAD\_STACK\_DEFINE()}{K\_THREAD\_STACK\_DEFINE()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
 {\footnotesize\ttfamily K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE (\begin{DoxyParamCaption}\item[{thread\+\_\+actuation\+\_\+stack}]{,  }\item[{\mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}}}]{ }\end{DoxyParamCaption})}
 
-Create actuation thread stack space \mbox{\Hypertarget{main_8c_a74e081acfd5bb89595459f375532975f}\label{main_8c_a74e081acfd5bb89595459f375532975f}} 
+Create actuation thread stack space \mbox{\Hypertarget{main_8c_a6cebfc31708d6ea63724c280e835d29f}\label{main_8c_a6cebfc31708d6ea63724c280e835d29f}} 
 \index{main.c@{main.c}!K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}}
 \index{K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{K\_THREAD\_STACK\_DEFINE()}{K\_THREAD\_STACK\_DEFINE()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
+{\footnotesize\ttfamily K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE (\begin{DoxyParamCaption}\item[{thread\+\_\+calendar\+Timer\+\_\+stack}]{,  }\item[{\mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}}}]{ }\end{DoxyParamCaption})}
+
+Create calendar timer thread stack space \mbox{\Hypertarget{main_8c_a74e081acfd5bb89595459f375532975f}\label{main_8c_a74e081acfd5bb89595459f375532975f}} 
+\index{main.c@{main.c}!K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}}
+\index{K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{K\_THREAD\_STACK\_DEFINE()}{K\_THREAD\_STACK\_DEFINE()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
 {\footnotesize\ttfamily K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE (\begin{DoxyParamCaption}\item[{thread\+\_\+interface\+\_\+stack}]{,  }\item[{\mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}}}]{ }\end{DoxyParamCaption})}
 
 Create interface thread stack space \mbox{\Hypertarget{main_8c_a60b0d6ae7ba79d10f65ff3dc5ecd1b4a}\label{main_8c_a60b0d6ae7ba79d10f65ff3dc5ecd1b4a}} 
 \index{main.c@{main.c}!K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}}
 \index{K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}!main.c@{main.c}}
-\doxysubsubsection{\texorpdfstring{K\_THREAD\_STACK\_DEFINE()}{K\_THREAD\_STACK\_DEFINE()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+\doxysubsubsection{\texorpdfstring{K\_THREAD\_STACK\_DEFINE()}{K\_THREAD\_STACK\_DEFINE()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
 {\footnotesize\ttfamily K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE (\begin{DoxyParamCaption}\item[{thread\+\_\+processing\+\_\+stack}]{,  }\item[{\mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}}}]{ }\end{DoxyParamCaption})}
 
 Create processing thread stack space \mbox{\Hypertarget{main_8c_aed504b09e3fbdcd75329b4f263f87180}\label{main_8c_aed504b09e3fbdcd75329b4f263f87180}} 
 \index{main.c@{main.c}!K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}}
 \index{K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}!main.c@{main.c}}
-\doxysubsubsection{\texorpdfstring{K\_THREAD\_STACK\_DEFINE()}{K\_THREAD\_STACK\_DEFINE()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+\doxysubsubsection{\texorpdfstring{K\_THREAD\_STACK\_DEFINE()}{K\_THREAD\_STACK\_DEFINE()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
 {\footnotesize\ttfamily K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE (\begin{DoxyParamCaption}\item[{thread\+\_\+sampling\+\_\+stack}]{,  }\item[{\mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}}}]{ }\end{DoxyParamCaption})}
 
-Create sampling thread stack space \mbox{\Hypertarget{main_8c_af4124be44857968ab478da5cf4830789}\label{main_8c_af4124be44857968ab478da5cf4830789}} 
-\index{main.c@{main.c}!K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}}
-\index{K\_THREAD\_STACK\_DEFINE@{K\_THREAD\_STACK\_DEFINE}!main.c@{main.c}}
-\doxysubsubsection{\texorpdfstring{K\_THREAD\_STACK\_DEFINE()}{K\_THREAD\_STACK\_DEFINE()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
-{\footnotesize\ttfamily K\+\_\+\+T\+H\+R\+E\+A\+D\+\_\+\+S\+T\+A\+C\+K\+\_\+\+D\+E\+F\+I\+NE (\begin{DoxyParamCaption}\item[{thread\+\_\+timer\+\_\+stack}]{,  }\item[{\mbox{\hyperlink{main_8c_a6423a880df59733d2d9b509c7718d3a9}{S\+T\+A\+C\+K\+\_\+\+S\+I\+ZE}}}]{ }\end{DoxyParamCaption})}
-
-Create timer (calendar) thread stack space \mbox{\Hypertarget{main_8c_a6288eba0f8e8ad3ab1544ad731eb7667}\label{main_8c_a6288eba0f8e8ad3ab1544ad731eb7667}} 
+Create sampling thread stack space \mbox{\Hypertarget{main_8c_a6288eba0f8e8ad3ab1544ad731eb7667}\label{main_8c_a6288eba0f8e8ad3ab1544ad731eb7667}} 
 \index{main.c@{main.c}!main@{main}}
 \index{main@{main}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{main()}{main()}}
@@ -442,7 +442,17 @@ console\+\_\+getchar()
 
 Actuation thread. 
 
-This thread implements the task of actuation, it\textquotesingle{}s triggered by the change of the required light intensity (buttons 3 or 4) on Manual mode or by the end of the processing thread when on Automatic mode. It computes and updates the pulse width of the pwm signal from the intensity value (when on Manual mode) or from the dutycycle value (when on Automatic mode). It\textquotesingle{}s a sporadic thread triggered by the press of button 3 or button 4 or by the end of processing (processing thread), based on the operation mode. \mbox{\Hypertarget{main_8c_a570350429544cf99b11c32e1f6bf0b5a}\label{main_8c_a570350429544cf99b11c32e1f6bf0b5a}} 
+This thread implements the task of actuation, it\textquotesingle{}s triggered by the change of the required light intensity (buttons 3 or 4) on Manual mode or by the end of the processing thread when on Automatic mode. It computes and updates the pulse width of the pwm signal from the intensity value (when on Manual mode) or from the dutycycle value (when on Automatic mode). It\textquotesingle{}s a sporadic thread triggered by the press of button 3 or button 4 or by the end of processing (processing thread), based on the operation mode. \mbox{\Hypertarget{main_8c_ae8fdb30eef0b90b0ec83c0baabe093c7}\label{main_8c_ae8fdb30eef0b90b0ec83c0baabe093c7}} 
+\index{main.c@{main.c}!thread\_calendarTimer@{thread\_calendarTimer}}
+\index{thread\_calendarTimer@{thread\_calendarTimer}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_calendarTimer()}{thread\_calendarTimer()}}
+{\footnotesize\ttfamily void thread\+\_\+calendar\+Timer (\begin{DoxyParamCaption}\item[{void $\ast$}]{argA,  }\item[{void $\ast$}]{argB,  }\item[{void $\ast$}]{argC }\end{DoxyParamCaption})}
+
+
+
+\mbox{\hyperlink{structCalendar}{Calendar}} Timer thread to implement a calendar. 
+
+This thread is a periodic thread with period 1 minute (T\+I\+M\+E\+R\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS), to update the day, hour and minutes \mbox{\Hypertarget{main_8c_a570350429544cf99b11c32e1f6bf0b5a}\label{main_8c_a570350429544cf99b11c32e1f6bf0b5a}} 
 \index{main.c@{main.c}!thread\_interface@{thread\_interface}}
 \index{thread\_interface@{thread\_interface}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{thread\_interface()}{thread\_interface()}}
@@ -485,17 +495,7 @@ This thread implements the sampling task which only operates in Automatic mode. 
 \begin{DoxySeeAlso}{See also}
 \mbox{\hyperlink{main_8c_a7829e7c5c37ea8a78e879aa2028dfb21}{S\+A\+M\+P\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS}} 
 \end{DoxySeeAlso}
-\mbox{\Hypertarget{main_8c_ad64b132dcdc592a77b0fb25967f3377a}\label{main_8c_ad64b132dcdc592a77b0fb25967f3377a}} 
-\index{main.c@{main.c}!thread\_timer@{thread\_timer}}
-\index{thread\_timer@{thread\_timer}!main.c@{main.c}}
-\doxysubsubsection{\texorpdfstring{thread\_timer()}{thread\_timer()}}
-{\footnotesize\ttfamily void thread\+\_\+timer (\begin{DoxyParamCaption}\item[{void $\ast$}]{argA,  }\item[{void $\ast$}]{argB,  }\item[{void $\ast$}]{argC }\end{DoxyParamCaption})}
 
-
-
-Timer thread to implement a calendar. 
-
-This thread is a periodic thread with period 1 minute (T\+I\+M\+E\+R\+\_\+\+P\+E\+R\+I\+O\+D\+\_\+\+MS), to update the day, hour and minutes 
 
 \doxysubsection{Variable Documentation}
 \mbox{\Hypertarget{main_8c_a78752433f4fe4a459158fefc086335e5}\label{main_8c_a78752433f4fe4a459158fefc086335e5}} 
@@ -570,7 +570,19 @@ Actuation thread data \mbox{\Hypertarget{main_8c_a3dec149768a6eae4f33afb78a0fba1
 \doxysubsubsection{\texorpdfstring{thread\_actuation\_tid}{thread\_actuation\_tid}}
 {\footnotesize\ttfamily k\+\_\+tid\+\_\+t thread\+\_\+actuation\+\_\+tid}
 
-Actuation thread task ID \mbox{\Hypertarget{main_8c_af6d2603321c94cea6aaf2350aabf3831}\label{main_8c_af6d2603321c94cea6aaf2350aabf3831}} 
+Actuation thread task ID \mbox{\Hypertarget{main_8c_a2c3602187ab60325c824e8da89f8781f}\label{main_8c_a2c3602187ab60325c824e8da89f8781f}} 
+\index{main.c@{main.c}!thread\_calendarTimer\_data@{thread\_calendarTimer\_data}}
+\index{thread\_calendarTimer\_data@{thread\_calendarTimer\_data}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_calendarTimer\_data}{thread\_calendarTimer\_data}}
+{\footnotesize\ttfamily struct k\+\_\+thread thread\+\_\+calendar\+Timer\+\_\+data}
+
+\mbox{\hyperlink{structCalendar}{Calendar}} Timer thread data \mbox{\Hypertarget{main_8c_ab85740b770c20e30f04586b75eb48f14}\label{main_8c_ab85740b770c20e30f04586b75eb48f14}} 
+\index{main.c@{main.c}!thread\_calendarTimer\_tid@{thread\_calendarTimer\_tid}}
+\index{thread\_calendarTimer\_tid@{thread\_calendarTimer\_tid}!main.c@{main.c}}
+\doxysubsubsection{\texorpdfstring{thread\_calendarTimer\_tid}{thread\_calendarTimer\_tid}}
+{\footnotesize\ttfamily k\+\_\+tid\+\_\+t thread\+\_\+calendar\+Timer\+\_\+tid}
+
+\mbox{\hyperlink{structCalendar}{Calendar}} Timer thread task ID \mbox{\Hypertarget{main_8c_af6d2603321c94cea6aaf2350aabf3831}\label{main_8c_af6d2603321c94cea6aaf2350aabf3831}} 
 \index{main.c@{main.c}!thread\_interface\_data@{thread\_interface\_data}}
 \index{thread\_interface\_data@{thread\_interface\_data}!main.c@{main.c}}
 \doxysubsubsection{\texorpdfstring{thread\_interface\_data}{thread\_interface\_data}}
@@ -606,16 +618,4 @@ Sampling thread data \mbox{\Hypertarget{main_8c_affec45d15496ae9963fe20d598aee1e
 \doxysubsubsection{\texorpdfstring{thread\_sampling\_tid}{thread\_sampling\_tid}}
 {\footnotesize\ttfamily k\+\_\+tid\+\_\+t thread\+\_\+sampling\+\_\+tid}
 
-Sampling thread task ID \mbox{\Hypertarget{main_8c_a42ee5857ab68d7b608277ebfbdfcd873}\label{main_8c_a42ee5857ab68d7b608277ebfbdfcd873}} 
-\index{main.c@{main.c}!thread\_timer\_data@{thread\_timer\_data}}
-\index{thread\_timer\_data@{thread\_timer\_data}!main.c@{main.c}}
-\doxysubsubsection{\texorpdfstring{thread\_timer\_data}{thread\_timer\_data}}
-{\footnotesize\ttfamily struct k\+\_\+thread thread\+\_\+timer\+\_\+data}
-
-Timer (calendar) thread data \mbox{\Hypertarget{main_8c_a19ca028edd2bfa2ce623d094531be2a8}\label{main_8c_a19ca028edd2bfa2ce623d094531be2a8}} 
-\index{main.c@{main.c}!thread\_timer\_tid@{thread\_timer\_tid}}
-\index{thread\_timer\_tid@{thread\_timer\_tid}!main.c@{main.c}}
-\doxysubsubsection{\texorpdfstring{thread\_timer\_tid}{thread\_timer\_tid}}
-{\footnotesize\ttfamily k\+\_\+tid\+\_\+t thread\+\_\+timer\+\_\+tid}
-
-Timer thread task ID 
+Sampling thread task ID 
